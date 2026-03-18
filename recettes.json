@@ -1,8 +1,8 @@
-[
+﻿[
   {
     "id": "recipe-1773819859117",
     "name": "Tomates Mozza",
-    "category": "Entree",
+    "category": "Entrée",
     "baseServings": 4,
     "ingredients": [
       {
@@ -18,7 +18,7 @@
       {
         "name": "Huile d'olive",
         "quantity": 4,
-        "unit": "cuillières à café"
+        "unit": "cuillères à café"
       },
       {
         "name": "Vinaigre balsamique",
@@ -37,108 +37,6 @@
       "Alterner les tranches de tomate et de mozzarella",
       "Ajouter un filet d'huile d'olive et de vinaigre balsamique",
       "Découper et ajouter de fines tranches de basilic frais"
-    ],
-    "drinks": []
-  },
-  {
-    "id": "recipe-1773820352914",
-    "name": "Pâtes carbonara",
-    "category": "Plat",
-    "baseServings": 4,
-    "ingredients": [
-      {
-        "name": "Pâtes (crues)",
-        "quantity": 320,
-        "unit": "g"
-      },
-      {
-        "name": "Oeuf (jaune)",
-        "quantity": 4,
-        "unit": ""
-      },
-      {
-        "name": "Oeuf (entier)",
-        "quantity": 1,
-        "unit": ""
-      },
-      {
-        "name": "Guanciale",
-        "quantity": 200,
-        "unit": "g"
-      },
-      {
-        "name": "Pecorino",
-        "quantity": 200,
-        "unit": "g"
-      },
-      {
-        "name": "Poivre",
-        "quantity": 1,
-        "unit": ""
-      }
-    ],
-    "steps": [
-      "Lancer la cuisson des pâtes (al dente)",
-      "Faire revenir le guanciale dans une poêle",
-      "Mélanger les jaunes d'oeuf, l'oeuf entier, le pecorino et le poivre jusqu'à obtenir une pâte épaisse",
-      "Ajouter une louche d'eau de cuisson des pâtes",
-      "Ajouter les pâtes dans le mélange et bien remuer",
-      "Servir chaud en ajoutant le guanciale sur l'assiete",
-      "Saupoudrer de pecorino à volonté"
-    ],
-    "drinks": []
-  },
-  {
-    "id": "recipe-1773821209271",
-    "name": "Quiche lorraine (diet)",
-    "category": "Plat",
-    "baseServings": 4,
-    "ingredients": [
-      {
-        "name": "Pâte brisée",
-        "quantity": 1,
-        "unit": ""
-      },
-      {
-        "name": "Oeuf",
-        "quantity": 3,
-        "unit": ""
-      },
-      {
-        "name": "Lardons",
-        "quantity": 200,
-        "unit": "g"
-      },
-      {
-        "name": "Lait",
-        "quantity": 400,
-        "unit": "mL"
-      },
-      {
-        "name": "Gruyère rapé",
-        "quantity": 100,
-        "unit": "g"
-      },
-      {
-        "name": "Muscade",
-        "quantity": 1,
-        "unit": ""
-      },
-      {
-        "name": "Salade",
-        "quantity": 1,
-        "unit": ""
-      }
-    ],
-    "steps": [
-      "Faire revenir les lardons dans une poêle",
-      "Dans un cul de poule, mélanger les oeufs, le lait, un peu de gruyère rapé et une pincée de muscade",
-      "Dans un moule, étaler la pâte et la piquer",
-      "Répartir les lardon sur toute la surface (bonus diet : ne récupérer que les lardons et non le gras de la poêle)",
-      "Ajouter l'appareil à quiche",
-      "Saupoudrer de gruyère rapé",
-      "Enfourner au four pendant 45 à 50 minutes à 180°C",
-      "Servir chaud accompagné d'une salade verte"
     ],
     "drinks": []
   }
