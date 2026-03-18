@@ -38,7 +38,8 @@
       "Ajouter un filet d'huile d'olive et de vinaigre balsamique",
       "Découper et ajouter de fines tranches de basilic frais"
     ],
-    "drinks": []
+    "drinks": [],
+    "_fridgeMatchCount": 0
   },
   {
     "id": "recipe-1773820352914",
@@ -86,7 +87,8 @@
       "Servir chaud en ajoutant le guanciale sur l'assiete",
       "Saupoudrer de pecorino à volonté"
     ],
-    "drinks": []
+    "drinks": [],
+    "_fridgeMatchCount": 0
   },
   {
     "id": "recipe-1773821209271",
@@ -140,7 +142,8 @@
       "Enfourner au four pendant 45 à 50 minutes à 180°C",
       "Servir chaud accompagné d'une salade verte"
     ],
-    "drinks": []
+    "drinks": [],
+    "_fridgeMatchCount": 0
   },
   {
     "id": "recipe-1773836370672",
@@ -188,7 +191,8 @@
       "Découper les poivrons en petits dés",
       "Ajouter les poivrons en fin de cuisson"
     ],
-    "drinks": []
+    "drinks": [],
+    "_fridgeMatchCount": 0
   },
   {
     "id": "recipe-1773836494480",
@@ -235,6 +239,7 @@
       "Faire revenir le poulet dans une poêle",
       "Ajouter les haricots en fin de cuisson"
     ],
-    "drinks": []
+    "drinks": [],
+    "_fridgeMatchCount": 0
   }
 ]
