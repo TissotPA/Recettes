@@ -116,6 +116,44 @@ textarea {
   gap: 0.65rem;
 }
 
+.recipe-category-group {
+  border: 1px solid #e6e9f1;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.72);
+  overflow: hidden;
+}
+
+.recipe-category-group > summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 0.75rem 0.9rem;
+  font-weight: 700;
+  color: #2a3555;
+  background: rgba(244, 236, 221, 0.55);
+  border-bottom: 1px solid #eceff6;
+}
+
+.recipe-category-group > summary::-webkit-details-marker {
+  display: none;
+}
+
+.recipe-category-group > summary::before {
+  content: "▸";
+  margin-right: 0.45rem;
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.recipe-category-group[open] > summary::before {
+  transform: rotate(90deg);
+}
+
+.recipe-category-list {
+  display: grid;
+  gap: 0.65rem;
+  padding: 0.75rem;
+}
+
 .recipe-card {
   border: 1px solid #e6e9f1;
   border-radius: 14px;
