@@ -1,1 +1,43 @@
-[]
+[
+  {
+    "id": "recipe-1773819859117",
+    "name": "Tomates Mozza",
+    "category": "Entree",
+    "baseServings": 4,
+    "ingredients": [
+      {
+        "name": "Tomates",
+        "quantity": 8,
+        "unit": "pièces"
+      },
+      {
+        "name": "Mozzarella",
+        "quantity": 2,
+        "unit": "pièces"
+      },
+      {
+        "name": "Huile d'olive",
+        "quantity": 4,
+        "unit": "cuillières à café"
+      },
+      {
+        "name": "Vinaigre balsamique",
+        "quantity": 4,
+        "unit": "cuillères à café"
+      },
+      {
+        "name": "Basilic frais",
+        "quantity": 12,
+        "unit": "feuilles"
+      }
+    ],
+    "steps": [
+      "Découper les tomates en tranches",
+      "Découper la mozzarella en tranches",
+      "Alterner les tranches de tomate et de mozzarella",
+      "Ajouter un filet d'huile d'olive et de vinaigre balsamique",
+      "Découper et ajouter de fines tranches de basilic frais"
+    ],
+    "drinks": []
+  }
+]
