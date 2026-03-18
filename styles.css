@@ -217,10 +217,26 @@ textarea {
   background: var(--accent-dark);
 }
 
+.btn-success {
+  background: #2e7d52;
+  border-color: transparent;
+  color: #fff;
+}
+
+.btn-success:hover {
+  background: #245f3e;
+}
+
 ul,
 ol {
   margin: 0;
   padding-left: 1.2rem;
+}
+
+.pat-hint {
+  margin: 0 0 0.6rem;
+  font-size: 0.9rem;
+  color: var(--muted);
 }
 
 .match-note {

@@ -17,6 +17,7 @@
       <p>Garde tes fiches, ajuste les quantites, et cuisine avec ce que tu as deja.</p>
       <div class="toolbar">
         <button id="loadBtn" class="btn btn-primary" type="button">Charger</button>
+        <button id="saveBtn" class="btn btn-success" type="button" title="Maj+clic pour changer la clé">Enregistrer</button>
       </div>
       <p id="status" class="status" aria-live="polite"></p>
     </header>
@@ -55,6 +56,25 @@
       </section>
     </section>
   </main>
+
+  <dialog id="patDialog" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Clé d'accès GitHub</h2>
+      </div>
+      <div class="modal-body">
+        <p class="pat-hint">Saisie une seule fois par appareil. Maj+clic sur « Enregistrer » pour la changer.</p>
+        <label>
+          Clé personnelle (GitHub PAT)
+          <input id="patInput" type="password" placeholder="github_pat_..." autocomplete="off" />
+        </label>
+      </div>
+      <div class="modal-footer">
+        <button id="patCancelBtn" class="btn" type="button">Annuler</button>
+        <button id="patConfirmBtn" class="btn btn-primary" type="button">Valider</button>
+      </div>
+    </div>
+  </dialog>
 
   <script src="app.js"></script>
 </body>

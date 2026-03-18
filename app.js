@@ -1,4 +1,10 @@
 const BASE_SERVINGS = 4;
+const GITHUB_OWNER = "TissotPA";
+const GITHUB_REPO = "Recettes";
+const GITHUB_BRANCH = "gh-pages";
+const GITHUB_FILE = "recettes.json";
+const PAT_STORAGE_KEY = "gh_pat";
+
 const CATEGORY_ORDER = ["entree", "plat", "dessert"];
 const CATEGORY_LABELS = {
   entree: "Entrées",
@@ -24,7 +30,12 @@ const refs = {
   fridgeIngredients: document.getElementById("fridgeIngredients"),
   recipeList: document.getElementById("recipeList"),
   recipeDetail: document.getElementById("recipeDetail"),
-  loadBtn: document.getElementById("loadBtn")
+  loadBtn: document.getElementById("loadBtn"),
+  saveBtn: document.getElementById("saveBtn"),
+  patDialog: document.getElementById("patDialog"),
+  patInput: document.getElementById("patInput"),
+  patCancelBtn: document.getElementById("patCancelBtn"),
+  patConfirmBtn: document.getElementById("patConfirmBtn")
 };
 
 function setStatus(message, isError = false) {
@@ -320,6 +331,135 @@ function renderAll() {
   renderRecipeDetail();
 }
 
+function getStoredPat() {
+  return localStorage.getItem(PAT_STORAGE_KEY) || "";
+}
+
+function storePat(pat) {
+  localStorage.setItem(PAT_STORAGE_KEY, pat);
+}
+
+function clearPat() {
+  localStorage.removeItem(PAT_STORAGE_KEY);
+}
+
+function promptPat() {
+  return new Promise((resolve, reject) => {
+    refs.patInput.value = "";
+    refs.patDialog.showModal();
+    refs.patInput.focus();
+
+    function onConfirm() {
+      const pat = refs.patInput.value.trim();
+      cleanup();
+      if (pat) {
+        resolve(pat);
+      } else {
+        reject(new Error("Aucune clé saisie."));
+      }
+    }
+
+    function onCancel() {
+      cleanup();
+      reject(new Error("Annulé."));
+    }
+
+    function onKeydown(e) {
+      if (e.key === "Enter") {
+        onConfirm();
+      } else if (e.key === "Escape") {
+        onCancel();
+      }
+    }
+
+    function cleanup() {
+      refs.patConfirmBtn.removeEventListener("click", onConfirm);
+      refs.patCancelBtn.removeEventListener("click", onCancel);
+      refs.patInput.removeEventListener("keydown", onKeydown);
+      refs.patDialog.close();
+    }
+
+    refs.patConfirmBtn.addEventListener("click", onConfirm);
+    refs.patCancelBtn.addEventListener("click", onCancel);
+    refs.patInput.addEventListener("keydown", onKeydown);
+  });
+}
+
+async function saveRecipesToGitHub(forcePrompt = false) {
+  if (state.recipes.length === 0) {
+    setStatus("Aucune recette à enregistrer.", true);
+    return;
+  }
+
+  let pat = forcePrompt ? "" : getStoredPat();
+
+  if (!pat) {
+    try {
+      pat = await promptPat();
+    } catch (err) {
+      setStatus(err.message, true);
+      return;
+    }
+  }
+
+  setStatus("Enregistrement en cours…");
+
+  try {
+    const shaRes = await fetch(
+      `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}?ref=${GITHUB_BRANCH}`,
+      { headers: { Authorization: `Bearer ${pat}`, Accept: "application/vnd.github+json" } }
+    );
+
+    if (shaRes.status === 401) {
+      clearPat();
+      setStatus("Clé invalide. Clique à nouveau sur Enregistrer pour réessayer.", true);
+      return;
+    }
+
+    if (!shaRes.ok) {
+      throw new Error(`Lecture impossible (code ${shaRes.status})`);
+    }
+
+    const { sha } = await shaRes.json();
+    const jsonStr = JSON.stringify(state.recipes, null, 2) + "\n";
+    const base64 = btoa(unescape(encodeURIComponent(jsonStr)));
+    const now = new Date().toLocaleString("fr-FR");
+
+    const putRes = await fetch(
+      `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${pat}`,
+          Accept: "application/vnd.github+json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          message: `${now} - Modification de recettes.json`,
+          content: base64,
+          sha,
+          branch: GITHUB_BRANCH
+        })
+      }
+    );
+
+    if (putRes.status === 401) {
+      clearPat();
+      setStatus("Clé invalide. Clique à nouveau sur Enregistrer pour réessayer.", true);
+      return;
+    }
+
+    if (!putRes.ok) {
+      throw new Error(`Échec de l'enregistrement (code ${putRes.status})`);
+    }
+
+    storePat(pat);
+    setStatus(`${state.recipes.length} recette(s) enregistrée(s) sur GitHub.`);
+  } catch (error) {
+    setStatus(`Erreur : ${error.message}`, true);
+  }
+}
+
 async function loadRecipesFromRoot(showStatus = true) {
   try {
     const response = await fetch("./recettes.json", { cache: "no-store" });
@@ -351,6 +491,7 @@ async function loadRecipesFromRoot(showStatus = true) {
 
 function bindEvents() {
   refs.loadBtn.addEventListener("click", () => loadRecipesFromRoot(true));
+  refs.saveBtn.addEventListener("click", (e) => saveRecipesToGitHub(e.shiftKey));
 
   refs.searchByName.addEventListener("input", () => {
     state.filters.name = refs.searchByName.value.trim().toLowerCase();
