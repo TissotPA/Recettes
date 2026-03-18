@@ -199,8 +199,8 @@ function createRecipeCard(recipe) {
 
   card.innerHTML = `
       <strong>${recipe.name}</strong>
-      <div class="recipe-meta">${recipe.category} • ${recipe.ingredients.length} ingredient(s)</div>
-      ${state.filters.fridgeIngredients.length > 0 ? `<div class="match-note">${recipe._fridgeMatchCount} ingredient(s) du frigo retrouve(s)</div>` : ""}
+      <div class="recipe-meta">${recipe.category} • ${recipe.ingredients.length} ingrédient(s)</div>
+      ${state.filters.fridgeIngredients.length > 0 ? `<div class="match-note">${recipe._fridgeMatchCount} ingrédient(s) du frigo retrouvé(s)</div>` : ""}
     `;
 
   card.addEventListener("click", () => {
@@ -218,7 +218,7 @@ function renderRecipeList() {
   refs.recipeList.innerHTML = "";
 
   if (filtered.length === 0) {
-    refs.recipeList.innerHTML = '<p class="empty-state">Aucune recette ne correspond a la recherche.</p>';
+    refs.recipeList.innerHTML = '<p class="empty-state">Aucune recette ne correspond à la recherche.</p>';
     return;
   }
 
@@ -263,7 +263,7 @@ function renderRecipeDetail() {
 
   if (!recipe) {
     refs.recipeDetail.classList.add("empty-state");
-    refs.recipeDetail.textContent = "Selectionne une recette pour voir le detail.";
+    refs.recipeDetail.textContent = "Sélectionne une recette pour voir le détail.";
     return;
   }
 
@@ -295,7 +295,7 @@ function renderRecipeDetail() {
   servingsLabel.appendChild(servingsInput);
 
   const ingredientsTitle = document.createElement("h3");
-  ingredientsTitle.textContent = "Ingredients";
+  ingredientsTitle.textContent = "Ingrédients";
   const ingredientsList = document.createElement("ul");
   ingredientsList.className = "ingredients-list";
 
@@ -306,7 +306,7 @@ function renderRecipeDetail() {
   });
 
   const stepsTitle = document.createElement("h3");
-  stepsTitle.textContent = "Etapes";
+  stepsTitle.textContent = "Étapes";
   const stepsList = document.createElement("ol");
 
   recipe.steps.forEach((step) => {
@@ -321,7 +321,7 @@ function renderRecipeDetail() {
 
   if (recipe.drinks.length > 0) {
     const drinksTitle = document.createElement("h3");
-    drinksTitle.textContent = "Boissons conseillees";
+    drinksTitle.textContent = "Boissons conseillées";
     const drinksList = document.createElement("ul");
 
     recipe.drinks.forEach((drink) => {
@@ -338,7 +338,7 @@ function renderRecipeDetail() {
 
   const editBtn = document.createElement("button");
   editBtn.className = "btn btn-primary";
-  editBtn.textContent = "Editer";
+  editBtn.textContent = "Éditer";
   editBtn.addEventListener("click", () => openEditRecipeDialog(recipe.id));
 
   const deleteBtn = document.createElement("button");
@@ -399,7 +399,7 @@ function openEditRecipeDialog(recipeId) {
   }
 
   state.editingRecipeId = recipeId;
-  refs.addRecipeDialog.querySelector("h2").textContent = "Editer la recette";
+  refs.addRecipeDialog.querySelector("h2").textContent = "Éditer la recette";
 
   refs.addRecipeForm.name.value = recipe.name;
   refs.addRecipeForm.category.value = recipe.category;
@@ -441,7 +441,7 @@ function handleAddRecipeSubmit(event) {
     .filter(Boolean);
 
   if (ingredients.length === 0) {
-    setStatus("Ajoute au moins un ingredient.", true);
+    setStatus("Ajoute au moins un ingrédient.", true);
     return;
   }
 
@@ -451,7 +451,7 @@ function handleAddRecipeSubmit(event) {
     .filter(Boolean);
 
   if (steps.length === 0) {
-    setStatus("Ajoute au moins une etape.", true);
+    setStatus("Ajoute au moins une étape.", true);
     return;
   }
 
@@ -478,7 +478,7 @@ function handleAddRecipeSubmit(event) {
     const recipeIndex = state.recipes.findIndex((r) => r.id === state.editingRecipeId);
     if (recipeIndex !== -1) {
       state.recipes[recipeIndex] = { ...state.recipes[recipeIndex], ...recipe };
-      setStatus(`Recette "${recipe.name}" modifiee.`);
+      setStatus(`Recette "${recipe.name}" modifiée.`);
     }
   } else {
     const newRecipe = {
@@ -487,7 +487,7 @@ function handleAddRecipeSubmit(event) {
     };
     state.recipes.push(newRecipe);
     state.selectedRecipeId = newRecipe.id;
-    setStatus(`Recette "${recipe.name}" ajoutee.`);
+    setStatus(`Recette "${recipe.name}" ajoutée.`);
   }
 
   state.editingRecipeId = null;
@@ -511,7 +511,7 @@ function deleteRecipe(recipeId) {
   }
 
   renderAll();
-  setStatus(`Recette "${recipeName}" supprimee.`);
+  setStatus(`Recette "${recipeName}" supprimée.`);
 }
 
 function getStoredPat() {
@@ -663,11 +663,11 @@ async function loadRecipesFromRoot(showStatus = true) {
 
     renderAll();
     if (showStatus) {
-      setStatus(`${state.recipes.length} recette(s) chargee(s) depuis recettes.json.`);
+      setStatus(`${state.recipes.length} recette(s) chargée(s) depuis recettes.json.`);
     }
   } catch (error) {
     if (showStatus) {
-      setStatus(`Chargement impossible: ${error.message}.`, true);
+      setStatus(`Chargement impossible : ${error.message}.`, true);
     }
   }
 }
