@@ -39,5 +39,53 @@
       "Découper et ajouter de fines tranches de basilic frais"
     ],
     "drinks": []
+  },
+  {
+    "id": "recipe-1773820352914",
+    "name": "Pâtes carbonara",
+    "category": "Plat",
+    "baseServings": 4,
+    "ingredients": [
+      {
+        "name": "Pâtes (crues)",
+        "quantity": 320,
+        "unit": "g"
+      },
+      {
+        "name": "Oeuf (jaune)",
+        "quantity": 4,
+        "unit": ""
+      },
+      {
+        "name": "Oeuf (entier)",
+        "quantity": 1,
+        "unit": ""
+      },
+      {
+        "name": "Guanciale",
+        "quantity": 200,
+        "unit": "g"
+      },
+      {
+        "name": "Pecorino",
+        "quantity": 200,
+        "unit": "g"
+      },
+      {
+        "name": "Poivre",
+        "quantity": 1,
+        "unit": ""
+      }
+    ],
+    "steps": [
+      "Lancer la cuisson des pâtes (al dente)",
+      "Faire revenir le guanciale dans une poêle",
+      "Mélanger les jaunes d'oeuf, l'oeuf entier, le pecorino et le poivre jusqu'à obtenir une pâte épaisse",
+      "Ajouter une louche d'eau de cuisson des pâtes",
+      "Ajouter les pâtes dans le mélange et bien remuer",
+      "Servir chaud en ajoutant le guanciale sur l'assiete",
+      "Saupoudrer de pecorino à volonté"
+    ],
+    "drinks": []
   }
 ]
