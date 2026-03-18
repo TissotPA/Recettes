@@ -14,7 +14,7 @@
   <main class="app">
     <header class="hero">
       <h1>Mes Recettes</h1>
-      <p>Garde tes fiches, ajuste les quantites, et cuisine avec ce que tu as deja.</p>
+      <p>Garde tes fiches, ajuste les quantités, et cuisine avec ce que tu as déjà.</p>
       <div class="toolbar">
         <button id="openAddRecipeBtn" class="btn btn-primary" type="button">Ajouter une recette</button>
         <button id="exportBtn" class="btn" type="button">Exporter</button>
@@ -33,13 +33,13 @@
         </label>
 
         <label>
-          Ingredients a inclure (separes par des virgules)
+          Ingrédients à inclure (séparés par des virgules)
           <input id="searchByIngredients" type="text" placeholder="Ex: tomate, basilic" />
         </label>
 
         <label>
-          Ingredients du frigo (separes par des virgules)
-          <input id="fridgeIngredients" type="text" placeholder="Ex: oeufs, farine, lait" />
+          Ingrédients du frigo (séparés par des virgules)
+          <input id="fridgeIngredients" type="text" placeholder="Ex: œufs, farine, lait" />
         </label>
       </div>
     </section>
@@ -53,7 +53,7 @@
       <section class="panel detail-panel">
         <h2>Fiche recette</h2>
         <div id="recipeDetail" class="recipe-detail empty-state">
-          Selectionne une recette pour voir le detail.
+          Sélectionne une recette pour voir le détail.
         </div>
       </section>
     </section>
@@ -72,9 +72,9 @@
         </label>
 
         <label>
-          Categorie
+          Catégorie
           <select name="category" required>
-            <option value="Entree">Entree</option>
+            <option value="Entrée">Entrée</option>
             <option value="Plat">Plat</option>
             <option value="Dessert">Dessert</option>
           </select>
@@ -82,20 +82,20 @@
 
         <section>
           <div class="inline-title-row">
-            <h3>Ingredients (base 4 personnes)</h3>
-            <button id="addIngredientRowBtn" class="btn btn-small" type="button">+ Ingredient</button>
+            <h3>Ingrédients (base 4 personnes)</h3>
+            <button id="addIngredientRowBtn" class="btn btn-small" type="button">+ Ingrédient</button>
           </div>
           <div id="ingredientsRows" class="stack"></div>
         </section>
 
         <label>
-          Etapes (une ligne = une etape)
-          <textarea name="steps" rows="6" required placeholder="Prechauffer le four...\nMelanger...\nCuire..."></textarea>
+          Étapes (une ligne = une étape)
+          <textarea name="steps" rows="6" required placeholder="Préchauffer le four...\nMélanger...\nCuire..."></textarea>
         </label>
 
         <label>
-          Boissons conseillees (optionnel, une par ligne)
-          <textarea name="drinks" rows="4" placeholder="Eau petillante\nVin blanc sec"></textarea>
+          Boissons conseillées (optionnel, une par ligne)
+          <textarea name="drinks" rows="4" placeholder="Eau pétillante\nVin blanc sec"></textarea>
         </label>
       </div>
 
@@ -108,9 +108,9 @@
 
   <template id="ingredientRowTemplate">
     <div class="ingredient-row">
-      <input class="ingredient-name" type="text" placeholder="Ingredient" required />
-      <input class="ingredient-quantity" type="number" step="0.01" min="0" placeholder="Quantite" required />
-      <input class="ingredient-unit" type="text" placeholder="Unite (g, cl, piece...)" />
+      <input class="ingredient-name" type="text" placeholder="Ingrédient" required />
+      <input class="ingredient-quantity" type="number" step="0.01" min="0" placeholder="Quantité" required />
+      <input class="ingredient-unit" type="text" placeholder="Unité (g, cl, pièce...)" />
       <button class="btn btn-small btn-danger remove-ingredient-btn" type="button">Retirer</button>
     </div>
   </template>

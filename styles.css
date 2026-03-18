@@ -190,6 +190,14 @@ textarea {
   border-color: transparent;
 }
 
+.action-buttons {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e6e9f1;
+}
+
 .modal {
   width: min(1040px, 100% - 1rem);
   max-height: calc(100vh - 1rem);

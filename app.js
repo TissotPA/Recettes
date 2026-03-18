@@ -3,6 +3,7 @@ const BASE_SERVINGS = 4;
 const state = {
   recipes: [],
   selectedRecipeId: null,
+  editingRecipeId: null,
   filters: {
     name: "",
     includeIngredients: [],
@@ -139,7 +140,7 @@ function renderRecipeList() {
   refs.recipeList.innerHTML = "";
 
   if (filtered.length === 0) {
-    refs.recipeList.innerHTML = '<p class="empty-state">Aucune recette ne correspond a la recherche.</p>';
+    refs.recipeList.innerHTML = '<p class="empty-state">Aucune recette ne correspond à la recherche.</p>';
     return;
   }
 
@@ -152,8 +153,8 @@ function renderRecipeList() {
 
     card.innerHTML = `
       <strong>${recipe.name}</strong>
-      <div class="recipe-meta">${recipe.category} • ${recipe.ingredients.length} ingredient(s)</div>
-      ${state.filters.fridgeIngredients.length > 0 ? `<div class="match-note">${recipe._fridgeMatchCount} ingredient(s) du frigo retrouve(s)</div>` : ""}
+      <div class="recipe-meta">${recipe.category} • ${recipe.ingredients.length} ingrédient(s)</div>
+      ${state.filters.fridgeIngredients.length > 0 ? `<div class="match-note">${recipe._fridgeMatchCount} ingrédient(s) du frigo retrouvé(s)</div>` : ""}
     `;
 
     card.addEventListener("click", () => {
@@ -206,7 +207,7 @@ function renderRecipeDetail() {
   servingsLabel.appendChild(servingsInput);
 
   const ingredientsTitle = document.createElement("h3");
-  ingredientsTitle.textContent = "Ingredients";
+    ingredientsTitle.textContent = "Ingrédients";
   const ingredientsList = document.createElement("ul");
 
   recipe.ingredients.forEach((ingredient) => {
@@ -218,7 +219,7 @@ function renderRecipeDetail() {
   });
 
   const stepsTitle = document.createElement("h3");
-  stepsTitle.textContent = "Etapes";
+  stepsTitle.textContent = "Étapes";
   const stepsList = document.createElement("ol");
 
   recipe.steps.forEach((step) => {
@@ -231,7 +232,7 @@ function renderRecipeDetail() {
 
   if (recipe.drinks.length > 0) {
     const drinksTitle = document.createElement("h3");
-    drinksTitle.textContent = "Boissons conseillees";
+    drinksTitle.textContent = "Boissons conseillées";
     const drinksList = document.createElement("ul");
 
     recipe.drinks.forEach((drink) => {
@@ -242,6 +243,27 @@ function renderRecipeDetail() {
 
     refs.recipeDetail.append(drinksTitle, drinksList);
   }
+
+  const actionButtons = document.createElement("div");
+  actionButtons.className = "action-buttons";
+
+  const editBtn = document.createElement("button");
+  editBtn.className = "btn btn-primary";
+  editBtn.textContent = "Éditer";
+  editBtn.addEventListener("click", () => openEditRecipeDialog(recipe.id));
+
+  const deleteBtn = document.createElement("button");
+  deleteBtn.className = "btn btn-danger";
+  deleteBtn.textContent = "Supprimer";
+  deleteBtn.addEventListener("click", () => {
+    if (confirm(`Supprimer la recette '${recipe.name}' ?`)) {
+      deleteRecipe(recipe.id);
+    }
+  });
+
+  actionButtons.appendChild(editBtn);
+  actionButtons.appendChild(deleteBtn);
+  refs.recipeDetail.appendChild(actionButtons);
 }
 
 function renderAll() {
@@ -275,7 +297,31 @@ function resetRecipeForm() {
 }
 
 function openAddRecipeDialog() {
+  state.editingRecipeId = null;
   resetRecipeForm();
+  refs.addRecipeDialog.querySelector("h2").textContent = "Nouvelle recette";
+  refs.addRecipeDialog.showModal();
+}
+
+function openEditRecipeDialog(recipeId) {
+  const recipe = state.recipes.find((r) => r.id === recipeId);
+  if (!recipe) {
+    return;
+  }
+
+  state.editingRecipeId = recipeId;
+  refs.addRecipeDialog.querySelector("h2").textContent = "Éditer la recette";
+  
+  refs.addRecipeForm.name.value = recipe.name;
+  refs.addRecipeForm.category.value = recipe.category;
+  refs.addRecipeForm.steps.value = recipe.steps.join("\n");
+  refs.addRecipeForm.drinks.value = recipe.drinks.join("\n");
+  
+  refs.ingredientsRows.innerHTML = "";
+  recipe.ingredients.forEach((ingredient) => {
+    createIngredientRow(ingredient);
+  });
+  
   refs.addRecipeDialog.showModal();
 }
 
@@ -306,7 +352,7 @@ function handleAddRecipeSubmit(event) {
     .filter(Boolean);
 
   if (ingredients.length === 0) {
-    setStatus("Ajoute au moins un ingredient.", true);
+    setStatus("Ajoute au moins un ingrédient.", true);
     return;
   }
 
@@ -316,7 +362,7 @@ function handleAddRecipeSubmit(event) {
     .filter(Boolean);
 
   if (steps.length === 0) {
-    setStatus("Ajoute au moins une etape.", true);
+    setStatus("Ajoute au moins une étape.", true);
     return;
   }
 
@@ -325,8 +371,7 @@ function handleAddRecipeSubmit(event) {
     .map((drink) => drink.trim())
     .filter(Boolean);
 
-  const newRecipe = {
-    id: `recipe-${Date.now()}`,
+  const recipe = {
     name: String(formData.get("name") || "").trim(),
     category: String(formData.get("category") || "Plat").trim(),
     baseServings: BASE_SERVINGS,
@@ -335,18 +380,49 @@ function handleAddRecipeSubmit(event) {
     drinks
   };
 
-  if (!newRecipe.name) {
+  if (!recipe.name) {
     setStatus("Le nom de la recette est obligatoire.", true);
+    return;
+  } // no accent needed
+
+  if (state.editingRecipeId) {
+    const recipeIndex = state.recipes.findIndex((r) => r.id === state.editingRecipeId);
+    if (recipeIndex !== -1) {
+      state.recipes[recipeIndex] = { ...state.recipes[recipeIndex], ...recipe };
+      setStatus(`Recette "${recipe.name}" modifiée.`);
+    }
+  } else {
+    const newRecipe = {
+      id: `recipe-${Date.now()}`,
+      ...recipe
+    };
+    state.recipes.push(newRecipe);
+    state.selectedRecipeId = newRecipe.id;
+    setStatus(`Recette "${recipe.name}" ajoutée.`);
+  }
+
+  state.editingRecipeId = null;
+  state.targetServings = BASE_SERVINGS;
+  closeAddRecipeDialog();
+  renderAll();
+}
+
+function deleteRecipe(recipeId) {
+  const index = state.recipes.findIndex((r) => r.id === recipeId);
+  if (index === -1) {
     return;
   }
 
-  state.recipes.push(newRecipe);
-  state.selectedRecipeId = newRecipe.id;
-  state.targetServings = BASE_SERVINGS;
+  const recipeName = state.recipes[index].name;
+  state.recipes.splice(index, 1);
+  
+  if (state.selectedRecipeId === recipeId) {
+    state.selectedRecipeId = state.recipes.length > 0 ? state.recipes[0].id : null;
+    state.targetServings = BASE_SERVINGS;
+  }
 
-  closeAddRecipeDialog();
   renderAll();
-  setStatus(`Recette "${newRecipe.name}" ajoutee.`);
+  setStatus(`Recette "${recipeName}" supprimée.`);
 }
 
 function exportRecipes() {
@@ -372,7 +448,7 @@ function exportRecipes() {
   link.remove();
   URL.revokeObjectURL(url);
 
-  setStatus("Export termine: recettes.json.");
+  setStatus("Export terminé : recettes.json.");
 }
 
 async function loadRecipesFromRoot(showStatus = true) {
@@ -395,11 +471,11 @@ async function loadRecipesFromRoot(showStatus = true) {
 
     renderAll();
     if (showStatus) {
-      setStatus(`${state.recipes.length} recette(s) chargee(s) depuis recettes.json.`);
+      setStatus(`${state.recipes.length} recette(s) chargée(s) depuis recettes.json.`);
     }
   } catch (error) {
     if (showStatus) {
-      setStatus(`Chargement impossible: ${error.message}.`, true);
+      setStatus(`Chargement impossible : ${error.message}.`, true);
     }
   }
 }
@@ -423,9 +499,9 @@ async function importRecipesFromFile(file) {
     }
 
     renderAll();
-    setStatus(`${state.recipes.length} recette(s) importee(s) depuis ${file.name}.`);
+    setStatus(`${state.recipes.length} recette(s) importée(s) depuis ${file.name}.`);
   } catch (error) {
-    setStatus(`Import impossible: ${error.message}.`, true);
+    setStatus(`Import impossible : ${error.message}.`, true);
   }
 }
 

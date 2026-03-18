@@ -141,5 +141,100 @@
       "Servir chaud accompagné d'une salade verte"
     ],
     "drinks": []
+  },
+  {
+    "id": "recipe-1773836370672",
+    "name": "Midi #1",
+    "category": "Plat",
+    "baseServings": 4,
+    "ingredients": [
+      {
+        "name": "Semoule épicée",
+        "quantity": 1,
+        "unit": "sachet"
+      },
+      {
+        "name": "Beurre",
+        "quantity": 5,
+        "unit": "g"
+      },
+      {
+        "name": "Poivrons",
+        "quantity": 3,
+        "unit": ""
+      },
+      {
+        "name": "Poulet",
+        "quantity": 500,
+        "unit": "g"
+      },
+      {
+        "name": "Paprika",
+        "quantity": 1,
+        "unit": ""
+      },
+      {
+        "name": "Huile d'olive",
+        "quantity": 4,
+        "unit": "c. à café"
+      }
+    ],
+    "steps": [
+      "Faire bouillir 400 mL d'eau non salée",
+      "Dans un saladier, verser la semoule, puis l'eau à ébullition puis couvrir le saladier",
+      "Avec une fourchette, égrainer la semoule en y ajoutant le beurre",
+      "Découper les morceaux de poulet en cube et les faire mariner avec l'huile d'olive et le paprika en mélangeant bien",
+      "Faire revenir le poulet dans une poêle",
+      "Découper les poivrons en petits dés",
+      "Ajouter les poivrons en fin de cuisson"
+    ],
+    "drinks": []
+  },
+  {
+    "id": "recipe-1773836494480",
+    "name": "Midi #2",
+    "category": "Plat",
+    "baseServings": 4,
+    "ingredients": [
+      {
+        "name": "Semoule épicée",
+        "quantity": 1,
+        "unit": "sachet"
+      },
+      {
+        "name": "Beurre",
+        "quantity": 5,
+        "unit": "g"
+      },
+      {
+        "name": "Poulet",
+        "quantity": 500,
+        "unit": "g"
+      },
+      {
+        "name": "Haricots",
+        "quantity": 500,
+        "unit": "g"
+      },
+      {
+        "name": "Curry",
+        "quantity": 1,
+        "unit": ""
+      },
+      {
+        "name": "Huile d'olive",
+        "quantity": 4,
+        "unit": "c. à café"
+      }
+    ],
+    "steps": [
+      "Faire bouillir 400 mL d'eau non salée",
+      "Dans un saladier, verser la semoule, puis l'eau à ébullition puis couvrir le saladier",
+      "Avec une fourchette, égrainer la semoule en y ajoutant le beurre",
+      "Découper les morceaux de poulet en cube et les faire mariner avec l'huile d'olive et le curry en mélangeant bien",
+      "Faire revenir le poulet dans une poêle",
+      "Ajouter les haricots en fin de cuisson"
+    ],
+    "drinks": []
   }
 ]
