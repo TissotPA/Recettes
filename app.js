@@ -25,7 +25,6 @@ const refs = {
   ingredientsRows: document.getElementById("ingredientsRows"),
   ingredientRowTemplate: document.getElementById("ingredientRowTemplate"),
   cancelAddRecipeBtn: document.getElementById("cancelAddRecipeBtn"),
-  exportBtn: document.getElementById("exportBtn"),
   loadBtn: document.getElementById("loadBtn")
 };
 
@@ -348,32 +347,6 @@ function handleAddRecipeSubmit(event) {
   setStatus(`Recette "${newRecipe.name}" ajoutee.`);
 }
 
-function exportRecipes() {
-  const serializable = state.recipes.map((recipe) => ({
-    id: recipe.id,
-    name: recipe.name,
-    category: recipe.category,
-    baseServings: recipe.baseServings,
-    ingredients: recipe.ingredients,
-    steps: recipe.steps,
-    drinks: recipe.drinks
-  }));
-
-  const json = JSON.stringify(serializable, null, 2);
-  const blob = new Blob([json], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-
-  link.href = url;
-  link.download = "recettes.json";
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  URL.revokeObjectURL(url);
-
-  setStatus("Export termine: recettes.json.");
-}
-
 async function loadRecipesFromRoot(showStatus = true) {
   try {
     const response = await fetch("./recettes.json", { cache: "no-store" });
@@ -408,7 +381,6 @@ function bindEvents() {
   refs.cancelAddRecipeBtn.addEventListener("click", closeAddRecipeDialog);
   refs.addIngredientRowBtn.addEventListener("click", () => createIngredientRow());
   refs.addRecipeForm.addEventListener("submit", handleAddRecipeSubmit);
-  refs.exportBtn.addEventListener("click", exportRecipes);
   refs.loadBtn.addEventListener("click", () => loadRecipesFromRoot(true));
 
   refs.searchByName.addEventListener("input", () => {
