@@ -105,6 +105,24 @@ function formatQuantity(quantity) {
   return Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(2);
 }
 
+function updateScaledIngredientQuantities(recipe) {
+  const ingredientsList = refs.recipeDetail.querySelector(".ingredients-list");
+  if (!ingredientsList) {
+    return;
+  }
+
+  const scale = getScaleFactor(recipe);
+  const quantityNodes = ingredientsList.querySelectorAll(".ingredient-scaled-value");
+
+  quantityNodes.forEach((node) => {
+    const baseQuantity = Number(node.dataset.baseQuantity);
+    const unit = node.dataset.unit || "";
+    const suffix = unit ? ` ${unit}` : "";
+    const scaled = (Number.isNaN(baseQuantity) ? 0 : baseQuantity) * scale;
+    node.textContent = `${formatQuantity(scaled)}${suffix}`;
+  });
+}
+
 function getFilteredRecipes() {
   return state.recipes.filter((recipe) => {
     const lowerName = recipe.name.toLowerCase();
@@ -179,8 +197,6 @@ function renderRecipeDetail() {
 
   refs.recipeDetail.classList.remove("empty-state");
 
-  const scale = getScaleFactor(recipe);
-
   const header = document.createElement("div");
   header.innerHTML = `
     <h3>${recipe.name}</h3>
@@ -200,7 +216,7 @@ function renderRecipeDetail() {
     const value = Number(servingsInput.value);
     if (!Number.isNaN(value) && value > 0) {
       state.targetServings = value;
-      renderRecipeDetail();
+      updateScaledIngredientQuantities(recipe);
     }
   });
 
@@ -209,12 +225,11 @@ function renderRecipeDetail() {
   const ingredientsTitle = document.createElement("h3");
     ingredientsTitle.textContent = "Ingrédients";
   const ingredientsList = document.createElement("ul");
+  ingredientsList.className = "ingredients-list";
 
   recipe.ingredients.forEach((ingredient) => {
     const li = document.createElement("li");
-    const qty = ingredient.quantity * scale;
-    const suffix = ingredient.unit ? ` ${ingredient.unit}` : "";
-    li.textContent = `${ingredient.name}: ${formatQuantity(qty)}${suffix}`;
+    li.innerHTML = `${ingredient.name}: <span class="ingredient-scaled-value" data-base-quantity="${ingredient.quantity}" data-unit="${ingredient.unit || ""}"></span>`;
     ingredientsList.appendChild(li);
   });
 
@@ -229,6 +244,7 @@ function renderRecipeDetail() {
   });
 
   refs.recipeDetail.append(header, servingsLabel, ingredientsTitle, ingredientsList, stepsTitle, stepsList);
+  updateScaledIngredientQuantities(recipe);
 
   if (recipe.drinks.length > 0) {
     const drinksTitle = document.createElement("h3");
