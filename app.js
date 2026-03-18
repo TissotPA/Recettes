@@ -1,4 +1,10 @@
 const BASE_SERVINGS = 4;
+const CATEGORY_ORDER = ["entree", "plat", "dessert"];
+const CATEGORY_LABELS = {
+  entree: "Entrées",
+  plat: "Plats",
+  dessert: "Desserts"
+};
 
 const state = {
   recipes: [],
@@ -147,13 +153,58 @@ function getFilteredRecipes() {
   });
 }
 
-function renderRecipeList() {
-  const filtered = getFilteredRecipes().sort((a, b) => {
-    if (state.filters.fridgeIngredients.length > 0) {
-      return b._fridgeMatchCount - a._fridgeMatchCount;
-    }
-    return a.name.localeCompare(b.name, "fr");
+function normalizeCategoryKey(category) {
+  const normalized = String(category || "")
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+
+  if (normalized.startsWith("entree")) {
+    return "entree";
+  }
+
+  if (normalized.startsWith("dessert")) {
+    return "dessert";
+  }
+
+  if (normalized.startsWith("plat")) {
+    return "plat";
+  }
+
+  return normalized || "plat";
+}
+
+function getOrderedCategoryKeys(categoryMap) {
+  const dynamicKeys = Object.keys(categoryMap).filter((key) => !CATEGORY_ORDER.includes(key));
+  dynamicKeys.sort((a, b) => a.localeCompare(b, "fr"));
+  return [...CATEGORY_ORDER.filter((key) => categoryMap[key]), ...dynamicKeys];
+}
+
+function createRecipeCard(recipe) {
+  const card = document.createElement("article");
+  card.className = "recipe-card";
+  if (recipe.id === state.selectedRecipeId) {
+    card.classList.add("active");
+  }
+
+  card.innerHTML = `
+    <strong>${recipe.name}</strong>
+    <div class="recipe-meta">${recipe.category} • ${recipe.ingredients.length} ingrédient(s)</div>
+    ${state.filters.fridgeIngredients.length > 0 ? `<div class="match-note">${recipe._fridgeMatchCount} ingrédient(s) du frigo retrouvé(s)</div>` : ""}
+  `;
+
+  card.addEventListener("click", () => {
+    state.selectedRecipeId = recipe.id;
+    state.targetServings = recipe.baseServings || BASE_SERVINGS;
+    renderAll();
   });
+
+  return card;
+}
+
+function renderRecipeList() {
+  const filtered = getFilteredRecipes();
 
   refs.recipeList.innerHTML = "";
 
@@ -162,26 +213,38 @@ function renderRecipeList() {
     return;
   }
 
+  const categoryMap = {};
+
   filtered.forEach((recipe) => {
-    const card = document.createElement("article");
-    card.className = "recipe-card";
-    if (recipe.id === state.selectedRecipeId) {
-      card.classList.add("active");
+    const key = normalizeCategoryKey(recipe.category);
+    if (!categoryMap[key]) {
+      categoryMap[key] = [];
     }
+    categoryMap[key].push(recipe);
+  });
 
-    card.innerHTML = `
-      <strong>${recipe.name}</strong>
-      <div class="recipe-meta">${recipe.category} • ${recipe.ingredients.length} ingrédient(s)</div>
-      ${state.filters.fridgeIngredients.length > 0 ? `<div class="match-note">${recipe._fridgeMatchCount} ingrédient(s) du frigo retrouvé(s)</div>` : ""}
-    `;
+  const orderedKeys = getOrderedCategoryKeys(categoryMap);
 
-    card.addEventListener("click", () => {
-      state.selectedRecipeId = recipe.id;
-      state.targetServings = recipe.baseServings || BASE_SERVINGS;
-      renderAll();
+  orderedKeys.forEach((key) => {
+    const recipes = categoryMap[key].slice().sort((a, b) => a.name.localeCompare(b.name, "fr"));
+    const categorySection = document.createElement("details");
+    categorySection.className = "recipe-category-group";
+    categorySection.open = true;
+
+    const summary = document.createElement("summary");
+    const label = CATEGORY_LABELS[key] || key.charAt(0).toUpperCase() + key.slice(1);
+    summary.textContent = `${label} (${recipes.length})`;
+    categorySection.appendChild(summary);
+
+    const groupList = document.createElement("div");
+    groupList.className = "recipe-category-list";
+
+    recipes.forEach((recipe) => {
+      groupList.appendChild(createRecipeCard(recipe));
     });
 
-    refs.recipeList.appendChild(card);
+    categorySection.appendChild(groupList);
+    refs.recipeList.appendChild(categorySection);
   });
 }
 
