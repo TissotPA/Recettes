@@ -26,7 +26,8 @@ const refs = {
   ingredientRowTemplate: document.getElementById("ingredientRowTemplate"),
   cancelAddRecipeBtn: document.getElementById("cancelAddRecipeBtn"),
   exportBtn: document.getElementById("exportBtn"),
-  loadBtn: document.getElementById("loadBtn")
+  importBtn: document.getElementById("importBtn"),
+  importFileInput: document.getElementById("importFileInput")
 };
 
 function setStatus(message, isError = false) {
@@ -403,13 +404,43 @@ async function loadRecipesFromRoot(showStatus = true) {
   }
 }
 
+async function importRecipesFromFile(file) {
+  if (!file) {
+    return;
+  }
+
+  try {
+    const rawContent = await file.text();
+    const data = JSON.parse(rawContent);
+    state.recipes = normalizeRecipes(data);
+
+    if (state.recipes.length > 0) {
+      state.selectedRecipeId = state.recipes[0].id;
+      state.targetServings = state.recipes[0].baseServings || BASE_SERVINGS;
+    } else {
+      state.selectedRecipeId = null;
+      state.targetServings = BASE_SERVINGS;
+    }
+
+    renderAll();
+    setStatus(`${state.recipes.length} recette(s) importee(s) depuis ${file.name}.`);
+  } catch (error) {
+    setStatus(`Import impossible: ${error.message}.`, true);
+  }
+}
+
 function bindEvents() {
   refs.openAddRecipeBtn.addEventListener("click", openAddRecipeDialog);
   refs.cancelAddRecipeBtn.addEventListener("click", closeAddRecipeDialog);
   refs.addIngredientRowBtn.addEventListener("click", () => createIngredientRow());
   refs.addRecipeForm.addEventListener("submit", handleAddRecipeSubmit);
   refs.exportBtn.addEventListener("click", exportRecipes);
-  refs.loadBtn.addEventListener("click", () => loadRecipesFromRoot(true));
+  refs.importBtn.addEventListener("click", () => refs.importFileInput.click());
+  refs.importFileInput.addEventListener("change", async () => {
+    const selectedFile = refs.importFileInput.files && refs.importFileInput.files[0];
+    await importRecipesFromFile(selectedFile);
+    refs.importFileInput.value = "";
+  });
 
   refs.searchByName.addEventListener("input", () => {
     state.filters.name = refs.searchByName.value.trim().toLowerCase();
