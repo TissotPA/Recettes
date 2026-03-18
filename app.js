@@ -15,6 +15,7 @@ const CATEGORY_LABELS = {
 const state = {
   recipes: [],
   selectedRecipeId: null,
+  editingRecipeId: null,
   filters: {
     name: "",
     includeIngredients: [],
@@ -30,6 +31,13 @@ const refs = {
   fridgeIngredients: document.getElementById("fridgeIngredients"),
   recipeList: document.getElementById("recipeList"),
   recipeDetail: document.getElementById("recipeDetail"),
+  openAddRecipeBtn: document.getElementById("openAddRecipeBtn"),
+  addRecipeDialog: document.getElementById("addRecipeDialog"),
+  addRecipeForm: document.getElementById("addRecipeForm"),
+  addIngredientRowBtn: document.getElementById("addIngredientRowBtn"),
+  ingredientsRows: document.getElementById("ingredientsRows"),
+  ingredientRowTemplate: document.getElementById("ingredientRowTemplate"),
+  cancelAddRecipeBtn: document.getElementById("cancelAddRecipeBtn"),
   loadBtn: document.getElementById("loadBtn"),
   saveBtn: document.getElementById("saveBtn"),
   patDialog: document.getElementById("patDialog"),
@@ -324,11 +332,186 @@ function renderRecipeDetail() {
 
     refs.recipeDetail.append(drinksTitle, drinksList);
   }
+
+  const actionButtons = document.createElement("div");
+  actionButtons.className = "action-buttons";
+
+  const editBtn = document.createElement("button");
+  editBtn.className = "btn btn-primary";
+  editBtn.textContent = "Editer";
+  editBtn.addEventListener("click", () => openEditRecipeDialog(recipe.id));
+
+  const deleteBtn = document.createElement("button");
+  deleteBtn.className = "btn btn-danger";
+  deleteBtn.textContent = "Supprimer";
+  deleteBtn.addEventListener("click", () => {
+    if (confirm(`Supprimer la recette '${recipe.name}' ?`)) {
+      deleteRecipe(recipe.id);
+    }
+  });
+
+  actionButtons.appendChild(editBtn);
+  actionButtons.appendChild(deleteBtn);
+  refs.recipeDetail.appendChild(actionButtons);
 }
 
 function renderAll() {
   renderRecipeList();
   renderRecipeDetail();
+}
+
+function createIngredientRow(data = { name: "", quantity: "", unit: "" }) {
+  const fragment = refs.ingredientRowTemplate.content.cloneNode(true);
+  const row = fragment.querySelector(".ingredient-row");
+  const nameInput = row.querySelector(".ingredient-name");
+  const quantityInput = row.querySelector(".ingredient-quantity");
+  const unitInput = row.querySelector(".ingredient-unit");
+  const removeBtn = row.querySelector(".remove-ingredient-btn");
+
+  nameInput.value = data.name;
+  quantityInput.value = data.quantity;
+  unitInput.value = data.unit;
+
+  removeBtn.addEventListener("click", () => {
+    row.remove();
+  });
+
+  refs.ingredientsRows.appendChild(row);
+}
+
+function resetRecipeForm() {
+  refs.addRecipeForm.reset();
+  refs.ingredientsRows.innerHTML = "";
+  createIngredientRow();
+}
+
+function openAddRecipeDialog() {
+  state.editingRecipeId = null;
+  resetRecipeForm();
+  refs.addRecipeDialog.querySelector("h2").textContent = "Nouvelle recette";
+  refs.addRecipeDialog.showModal();
+}
+
+function openEditRecipeDialog(recipeId) {
+  const recipe = state.recipes.find((r) => r.id === recipeId);
+  if (!recipe) {
+    return;
+  }
+
+  state.editingRecipeId = recipeId;
+  refs.addRecipeDialog.querySelector("h2").textContent = "Editer la recette";
+
+  refs.addRecipeForm.name.value = recipe.name;
+  refs.addRecipeForm.category.value = recipe.category;
+  refs.addRecipeForm.steps.value = recipe.steps.join("\n");
+  refs.addRecipeForm.drinks.value = recipe.drinks.join("\n");
+
+  refs.ingredientsRows.innerHTML = "";
+  recipe.ingredients.forEach((ingredient) => {
+    createIngredientRow(ingredient);
+  });
+
+  refs.addRecipeDialog.showModal();
+}
+
+function closeAddRecipeDialog() {
+  refs.addRecipeDialog.close();
+}
+
+function handleAddRecipeSubmit(event) {
+  event.preventDefault();
+
+  const formData = new FormData(refs.addRecipeForm);
+  const ingredients = Array.from(refs.ingredientsRows.querySelectorAll(".ingredient-row"))
+    .map((row) => {
+      const name = row.querySelector(".ingredient-name").value.trim();
+      const quantity = Number(row.querySelector(".ingredient-quantity").value);
+      const unit = row.querySelector(".ingredient-unit").value.trim();
+
+      if (!name) {
+        return null;
+      }
+
+      return {
+        name,
+        quantity: Number.isNaN(quantity) ? 0 : quantity,
+        unit
+      };
+    })
+    .filter(Boolean);
+
+  if (ingredients.length === 0) {
+    setStatus("Ajoute au moins un ingredient.", true);
+    return;
+  }
+
+  const steps = String(formData.get("steps") || "")
+    .split("\n")
+    .map((step) => step.trim())
+    .filter(Boolean);
+
+  if (steps.length === 0) {
+    setStatus("Ajoute au moins une etape.", true);
+    return;
+  }
+
+  const drinks = String(formData.get("drinks") || "")
+    .split("\n")
+    .map((drink) => drink.trim())
+    .filter(Boolean);
+
+  const recipe = {
+    name: String(formData.get("name") || "").trim(),
+    category: String(formData.get("category") || "Plat").trim(),
+    baseServings: BASE_SERVINGS,
+    ingredients,
+    steps,
+    drinks
+  };
+
+  if (!recipe.name) {
+    setStatus("Le nom de la recette est obligatoire.", true);
+    return;
+  }
+
+  if (state.editingRecipeId) {
+    const recipeIndex = state.recipes.findIndex((r) => r.id === state.editingRecipeId);
+    if (recipeIndex !== -1) {
+      state.recipes[recipeIndex] = { ...state.recipes[recipeIndex], ...recipe };
+      setStatus(`Recette "${recipe.name}" modifiee.`);
+    }
+  } else {
+    const newRecipe = {
+      id: `recipe-${Date.now()}`,
+      ...recipe
+    };
+    state.recipes.push(newRecipe);
+    state.selectedRecipeId = newRecipe.id;
+    setStatus(`Recette "${recipe.name}" ajoutee.`);
+  }
+
+  state.editingRecipeId = null;
+  state.targetServings = BASE_SERVINGS;
+  closeAddRecipeDialog();
+  renderAll();
+}
+
+function deleteRecipe(recipeId) {
+  const index = state.recipes.findIndex((r) => r.id === recipeId);
+  if (index === -1) {
+    return;
+  }
+
+  const recipeName = state.recipes[index].name;
+  state.recipes.splice(index, 1);
+
+  if (state.selectedRecipeId === recipeId) {
+    state.selectedRecipeId = state.recipes.length > 0 ? state.recipes[0].id : null;
+    state.targetServings = BASE_SERVINGS;
+  }
+
+  renderAll();
+  setStatus(`Recette "${recipeName}" supprimee.`);
 }
 
 function getStoredPat() {
@@ -490,6 +673,10 @@ async function loadRecipesFromRoot(showStatus = true) {
 }
 
 function bindEvents() {
+  refs.openAddRecipeBtn.addEventListener("click", openAddRecipeDialog);
+  refs.cancelAddRecipeBtn.addEventListener("click", closeAddRecipeDialog);
+  refs.addIngredientRowBtn.addEventListener("click", () => createIngredientRow());
+  refs.addRecipeForm.addEventListener("submit", handleAddRecipeSubmit);
   refs.loadBtn.addEventListener("click", () => loadRecipesFromRoot(true));
   refs.saveBtn.addEventListener("click", (e) => saveRecipesToGitHub(e.shiftKey));
 
@@ -511,6 +698,7 @@ function bindEvents() {
 
 function init() {
   bindEvents();
+  resetRecipeForm();
   renderAll();
   loadRecipesFromRoot(false);
 }

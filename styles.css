@@ -227,6 +227,84 @@ textarea {
   background: #245f3e;
 }
 
+.btn-small {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.85rem;
+}
+
+.btn-danger {
+  color: #fff;
+  background: var(--danger);
+  border-color: transparent;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e6e9f1;
+}
+
+.modal {
+  width: min(1040px, 100% - 1rem);
+  max-height: calc(100vh - 1rem);
+  border: none;
+  border-radius: 18px;
+  padding: 0;
+  overflow: auto;
+}
+
+.modal::backdrop {
+  background: rgba(18, 20, 34, 0.35);
+}
+
+.modal-content {
+  display: grid;
+  gap: 1rem;
+}
+
+.modal-header,
+.modal-body,
+.modal-footer {
+  padding: 1rem;
+}
+
+.modal-header {
+  border-bottom: 1px solid #ebedf5;
+}
+
+.modal-body {
+  display: grid;
+  gap: 1rem;
+}
+
+.modal-footer {
+  border-top: 1px solid #ebedf5;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+}
+
+.inline-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.stack {
+  margin-top: 0.6rem;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.ingredient-row {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr auto;
+  gap: 0.5rem;
+}
+
 ul,
 ol {
   margin: 0;
@@ -247,6 +325,10 @@ ol {
 
 @media (max-width: 900px) {
   .content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ingredient-row {
     grid-template-columns: 1fr;
   }
 }

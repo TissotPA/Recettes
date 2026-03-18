@@ -16,6 +16,7 @@
       <h1>Mes Recettes</h1>
       <p>Garde tes fiches, ajuste les quantites, et cuisine avec ce que tu as deja.</p>
       <div class="toolbar">
+        <button id="openAddRecipeBtn" class="btn btn-primary" type="button">Ajouter une recette</button>
         <button id="loadBtn" class="btn btn-primary" type="button">Charger</button>
         <button id="saveBtn" class="btn btn-success" type="button" title="Maj+clic pour changer la clé">Enregistrer</button>
       </div>
@@ -56,6 +57,62 @@
       </section>
     </section>
   </main>
+
+  <dialog id="addRecipeDialog" class="modal">
+    <form id="addRecipeForm" method="dialog" class="modal-content">
+      <header class="modal-header">
+        <h2>Nouvelle recette</h2>
+      </header>
+
+      <div class="modal-body">
+        <label>
+          Nom
+          <input name="name" type="text" required />
+        </label>
+
+        <label>
+          Catégorie
+          <select name="category" required>
+            <option value="Entrée">Entrée</option>
+            <option value="Plat">Plat</option>
+            <option value="Dessert">Dessert</option>
+          </select>
+        </label>
+
+        <section>
+          <div class="inline-title-row">
+            <h3>Ingrédients (base 4 personnes)</h3>
+            <button id="addIngredientRowBtn" class="btn btn-small" type="button">+ Ingrédient</button>
+          </div>
+          <div id="ingredientsRows" class="stack"></div>
+        </section>
+
+        <label>
+          Étapes (une ligne = une étape)
+          <textarea name="steps" rows="6" required placeholder="Préchauffer le four...&#10;Mélanger...&#10;Cuire..."></textarea>
+        </label>
+
+        <label>
+          Boissons conseillées (optionnel, une par ligne)
+          <textarea name="drinks" rows="4" placeholder="Eau pétillante&#10;Vin blanc sec"></textarea>
+        </label>
+      </div>
+
+      <footer class="modal-footer">
+        <button id="cancelAddRecipeBtn" class="btn" type="button">Annuler</button>
+        <button class="btn btn-primary" type="submit">Enregistrer</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <template id="ingredientRowTemplate">
+    <div class="ingredient-row">
+      <input class="ingredient-name" type="text" placeholder="Ingrédient" required />
+      <input class="ingredient-quantity" type="number" step="0.01" min="0" placeholder="Quantité" required />
+      <input class="ingredient-unit" type="text" placeholder="Unité (g, cl, pièce...)" />
+      <button class="btn btn-small btn-danger remove-ingredient-btn" type="button">Retirer</button>
+    </div>
+  </template>
 
   <dialog id="patDialog" class="modal">
     <div class="modal-content">
