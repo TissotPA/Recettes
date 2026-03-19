@@ -6,33 +6,53 @@
     "baseServings": 4,
     "ingredients": [
       {
-        "name": "Tomates",
+        "alimentId": "aliment-67",
+        "measureId": "aliment-67-measure-1-tomate-moyenne",
+        "measureLabel": "1 tomate moyenne",
+        "name": "Tomate",
         "quantity": 8,
-        "unit": "pièces"
+        "unit": "pièce",
+        "kcal": 176
       },
       {
+        "alimentId": "aliment-14",
+        "measureId": "aliment-14-measure-100-g",
+        "measureLabel": "100 g",
         "name": "Mozzarella",
-        "quantity": 2,
-        "unit": "pièces"
+        "quantity": 400,
+        "unit": "g",
+        "kcal": 1120
       },
       {
+        "alimentId": "aliment-6",
+        "measureId": "aliment-6-measure-1-cuillere-a-cafe",
+        "measureLabel": "1 cuillère à café",
         "name": "Huile d'olive",
         "quantity": 4,
-        "unit": "cuillières à café"
+        "unit": "cuillère à café",
+        "kcal": 160
       },
       {
+        "alimentId": "aliment-1773908881622",
+        "measureId": "aliment-1773908881622-measure-1-cuillere-a-cafe",
+        "measureLabel": "1 cuillère à café",
         "name": "Vinaigre balsamique",
         "quantity": 4,
-        "unit": "cuillères à café"
+        "unit": "cuillère à café",
+        "kcal": 20
       },
       {
-        "name": "Basilic frais",
+        "alimentId": "aliment-1773908897842",
+        "measureId": "aliment-1773908897842-measure-1-piece",
+        "measureLabel": "1 pièce",
+        "name": "Basilic",
         "quantity": 12,
-        "unit": "feuilles"
+        "unit": "pièce",
+        "kcal": 0
       }
     ],
     "steps": [
-      "Découper les tomates en fines tranches",
+      "Découper les tomates en tranches",
       "Découper la mozzarella en tranches",
       "Alterner les tranches de tomate et de mozzarella",
       "Ajouter un filet d'huile d'olive et de vinaigre balsamique",
@@ -48,34 +68,58 @@
     "baseServings": 4,
     "ingredients": [
       {
-        "name": "Pâtes (crues)",
+        "alimentId": "",
+        "measureId": "",
+        "measureLabel": "",
         "quantity": 320,
-        "unit": "g"
+        "unit": "g",
+        "kcal": 0,
+        "name": "Pâtes (crues)"
       },
       {
-        "name": "Oeuf (jaune)",
+        "alimentId": "",
+        "measureId": "",
+        "measureLabel": "",
         "quantity": 4,
-        "unit": ""
+        "unit": "",
+        "kcal": 0,
+        "name": "Oeuf (jaune)"
       },
       {
-        "name": "Oeuf (entier)",
+        "alimentId": "",
+        "measureId": "",
+        "measureLabel": "",
         "quantity": 1,
-        "unit": ""
+        "unit": "",
+        "kcal": 0,
+        "name": "Oeuf (entier)"
       },
       {
-        "name": "Guanciale",
+        "alimentId": "",
+        "measureId": "",
+        "measureLabel": "",
         "quantity": 200,
-        "unit": "g"
+        "unit": "g",
+        "kcal": 0,
+        "name": "Guanciale"
       },
       {
-        "name": "Pecorino",
+        "alimentId": "",
+        "measureId": "",
+        "measureLabel": "",
         "quantity": 200,
-        "unit": "g"
+        "unit": "g",
+        "kcal": 0,
+        "name": "Pecorino"
       },
       {
-        "name": "Poivre",
+        "alimentId": "",
+        "measureId": "",
+        "measureLabel": "",
         "quantity": 1,
-        "unit": ""
+        "unit": "",
+        "kcal": 0,
+        "name": "Poivre"
       }
     ],
     "steps": [
@@ -97,39 +141,67 @@
     "baseServings": 4,
     "ingredients": [
       {
-        "name": "Pâte brisée",
+        "alimentId": "",
+        "measureId": "",
+        "measureLabel": "",
         "quantity": 1,
-        "unit": ""
+        "unit": "",
+        "kcal": 0,
+        "name": "Pâte brisée"
       },
       {
-        "name": "Oeuf",
+        "alimentId": "",
+        "measureId": "",
+        "measureLabel": "",
         "quantity": 3,
-        "unit": ""
+        "unit": "",
+        "kcal": 0,
+        "name": "Oeuf"
       },
       {
-        "name": "Lardons",
+        "alimentId": "",
+        "measureId": "",
+        "measureLabel": "",
         "quantity": 200,
-        "unit": "g"
+        "unit": "g",
+        "kcal": 0,
+        "name": "Lardons"
       },
       {
-        "name": "Lait",
+        "alimentId": "",
+        "measureId": "",
+        "measureLabel": "",
         "quantity": 400,
-        "unit": "mL"
+        "unit": "mL",
+        "kcal": 0,
+        "name": "Lait"
       },
       {
-        "name": "Gruyère rapé",
+        "alimentId": "",
+        "measureId": "",
+        "measureLabel": "",
         "quantity": 100,
-        "unit": "g"
+        "unit": "g",
+        "kcal": 0,
+        "name": "Gruyère rapé"
       },
       {
-        "name": "Muscade",
+        "alimentId": "",
+        "measureId": "",
+        "measureLabel": "",
         "quantity": 1,
-        "unit": ""
+        "unit": "",
+        "kcal": 0,
+        "name": "Muscade"
       },
       {
-        "name": "Salade",
+        "alimentId": "",
+        "measureId": "",
+        "measureLabel": "",
         "quantity": 1,
-        "unit": ""
+        "unit": "",
+        "kcal": 0,
+        "name": "Salade"
       }
     ],
     "steps": [
@@ -152,34 +224,58 @@
     "baseServings": 4,
     "ingredients": [
       {
-        "name": "Semoule épicée",
+        "alimentId": "",
+        "measureId": "",
+        "measureLabel": "",
         "quantity": 1,
-        "unit": "sachet"
+        "unit": "sachet",
+        "kcal": 0,
+        "name": "Semoule épicée"
       },
       {
-        "name": "Beurre",
+        "alimentId": "",
+        "measureId": "",
+        "measureLabel": "",
         "quantity": 5,
-        "unit": "g"
+        "unit": "g",
+        "kcal": 0,
+        "name": "Beurre"
       },
       {
-        "name": "Poivrons",
+        "alimentId": "",
+        "measureId": "",
+        "measureLabel": "",
         "quantity": 3,
-        "unit": ""
+        "unit": "",
+        "kcal": 0,
+        "name": "Poivrons"
       },
       {
-        "name": "Poulet",
+        "alimentId": "",
+        "measureId": "",
+        "measureLabel": "",
         "quantity": 500,
-        "unit": "g"
+        "unit": "g",
+        "kcal": 0,
+        "name": "Poulet"
       },
       {
-        "name": "Paprika",
+        "alimentId": "",
+        "measureId": "",
+        "measureLabel": "",
         "quantity": 1,
-        "unit": ""
+        "unit": "",
+        "kcal": 0,
+        "name": "Paprika"
       },
       {
-        "name": "Huile d'olive",
+        "alimentId": "",
+        "measureId": "",
+        "measureLabel": "",
         "quantity": 4,
-        "unit": "c. à café"
+        "unit": "c. à café",
+        "kcal": 0,
+        "name": "Huile d'olive"
       }
     ],
     "steps": [
@@ -201,34 +297,58 @@
     "baseServings": 4,
     "ingredients": [
       {
-        "name": "Semoule épicée",
+        "alimentId": "",
+        "measureId": "",
+        "measureLabel": "",
         "quantity": 1,
-        "unit": "sachet"
+        "unit": "sachet",
+        "kcal": 0,
+        "name": "Semoule épicée"
       },
       {
-        "name": "Beurre",
+        "alimentId": "",
+        "measureId": "",
+        "measureLabel": "",
         "quantity": 5,
-        "unit": "g"
+        "unit": "g",
+        "kcal": 0,
+        "name": "Beurre"
       },
       {
-        "name": "Poulet",
+        "alimentId": "",
+        "measureId": "",
+        "measureLabel": "",
         "quantity": 500,
-        "unit": "g"
+        "unit": "g",
+        "kcal": 0,
+        "name": "Poulet"
       },
       {
-        "name": "Haricots",
+        "alimentId": "",
+        "measureId": "",
+        "measureLabel": "",
         "quantity": 500,
-        "unit": "g"
+        "unit": "g",
+        "kcal": 0,
+        "name": "Haricots"
       },
       {
-        "name": "Curry",
+        "alimentId": "",
+        "measureId": "",
+        "measureLabel": "",
         "quantity": 1,
-        "unit": ""
+        "unit": "",
+        "kcal": 0,
+        "name": "Curry"
       },
       {
-        "name": "Huile d'olive",
+        "alimentId": "",
+        "measureId": "",
+        "measureLabel": "",
         "quantity": 4,
-        "unit": "c. à café"
+        "unit": "c. à café",
+        "kcal": 0,
+        "name": "Huile d'olive"
       }
     ],
     "steps": [
