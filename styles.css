@@ -286,6 +286,12 @@ textarea {
   gap: 0.6rem;
 }
 
+.inline-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
 .inline-title-row {
   display: flex;
   justify-content: space-between;
@@ -301,11 +307,76 @@ textarea {
 
 .ingredient-row {
   display: grid;
-  grid-template-columns: 1.5fr 1fr 1fr auto;
+  grid-template-columns: 2fr 0.8fr 0.8fr 1fr auto;
   gap: 0.5rem;
+  align-items: start;
+  padding: 0.6rem;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid #e6e9f1;
+  border-radius: 8px;
+}
+
+.ingredient-search-container {
+  position: relative;
+}
+
+.ingredient-search {
+  width: 100%;
+  padding: 0.4rem;
+}
+
+.ingredient-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #d4d8e5;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 100;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.ingredient-option {
+  padding: 0.5rem 0.6rem;
+  cursor: pointer;
+  border-bottom: 1px solid #ebedf5;
+  font-size: 0.9rem;
+}
+
+.ingredient-option:hover {
+  background: #f0f0f0;
+}
+
+.ingredient-option.selected {
+  background: #e8e8ff;
+  font-weight: 600;
+}
+
+.ingredient-quantity,
+.ingredient-unit,
+.ingredient-kcal {
+  padding: 0.4rem;
 }
 
 ul,
+.ingredient-kcal {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-left: 0.3rem;
+}
+
+.recipe-kcal-info {
+  background: #f5f5f5;
+  border-left: 4px solid var(--accent);
+  padding: 0.8rem;
+  border-radius: 6px;
+  margin: 1rem 0;
+  font-size: 0.95rem;
+}
 ol {
   margin: 0;
   padding-left: 1.2rem;
@@ -323,12 +394,118 @@ ol {
   font-weight: 600;
 }
 
+/* Tabs Navigation */
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  border-bottom: 1px solid var(--panel-border);
+  animation: reveal 0.8s ease-out both;
+}
+
+.tab-btn {
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  padding: 0.8rem 1.2rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.tab-btn.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.tab-btn:hover {
+  color: var(--text);
+}
+
+.hidden {
+  display: none;
+}
+
+/* KCAL Tab */
+.kcal-tab {
+  animation: reveal 0.8s ease-out both;
+}
+
+.search-aliment {
+  width: 100%;
+  margin-bottom: 0.8rem;
+}
+
+.aliment-list {
+  display: grid;
+  gap: 0.5rem;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.aliment-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr auto auto;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.6rem;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid #e6e9f1;
+  border-radius: 8px;
+}
+
+.aliment-name-cell {
+  font-weight: 500;
+}
+
+.aliment-kcal-cell {
+  text-align: center;
+}
+
+.aliment-kcal-input {
+  width: 100%;
+  padding: 0.4rem;
+  text-align: center;
+}
+
+.aliment-actions {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.aliment-edit-btn,
+.aliment-delete-btn {
+  padding: 0.3rem 0.6rem;
+  font-size: 0.8rem;
+}
+
+.aliment-edit-btn {
+  background: #f0f0f0;
+  border: 1px solid #d0d4df;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.aliment-edit-btn:hover {
+  background: #e0e0e0;
+}
+
+#addAlimentDialog {
+  width: min(600px, 100% - 1rem);
+}
+
 @media (max-width: 900px) {
   .content-grid {
     grid-template-columns: 1fr;
   }
 
   .ingredient-row {
+    grid-template-columns: 1fr;
+  }
+
+  .aliment-row {
     grid-template-columns: 1fr;
   }
 }

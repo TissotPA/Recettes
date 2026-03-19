@@ -43,7 +43,12 @@
       </div>
     </section>
 
-    <section class="content-grid">
+    <nav class="tabs">
+      <button class="tab-btn active" data-tab="recipes">Recettes</button>
+      <button class="tab-btn" data-tab="kcal">KCAL</button>
+    </nav>
+
+    <section class="content-grid" id="recipesTab">
       <section class="panel">
         <h2>Recettes</h2>
         <div id="recipeList" class="recipe-list"></div>
@@ -54,6 +59,17 @@
         <div id="recipeDetail" class="recipe-detail empty-state">
           Sélectionne une recette pour voir le détail.
         </div>
+      </section>
+    </section>
+
+    <section class="content-grid kcal-tab hidden" id="kcalTab">
+      <section class="panel">
+        <div class="inline-title-row">
+          <h2>Aliments (KCAL)</h2>
+          <button id="addAlimentBtn" class="btn btn-primary btn-small" type="button">+ Aliment</button>
+        </div>
+        <input id="searchAliment" type="text" placeholder="Rechercher un aliment..." class="search-aliment" />
+        <div id="alimentList" class="aliment-list"></div>
       </section>
     </section>
   </main>
@@ -107,9 +123,14 @@
 
   <template id="ingredientRowTemplate">
     <div class="ingredient-row">
-      <input class="ingredient-name" type="text" placeholder="Ingrédient" required />
+      <div class="ingredient-search-container">
+        <input class="ingredient-search" type="text" placeholder="Rechercher un aliment..." required />
+        <div class="ingredient-dropdown" style="display: none;"></div>
+        <input class="ingredient-alimentId" type="hidden" />
+      </div>
       <input class="ingredient-quantity" type="number" step="0.01" min="0" placeholder="Quantité" required />
-      <input class="ingredient-unit" type="text" placeholder="Unité (g, cl, pièce...)" />
+      <input class="ingredient-unit" type="text" placeholder="Unité" readonly />
+      <div class="ingredient-kcal" style="text-align: center; font-size: 0.9rem; color: var(--muted);"></div>
       <button class="btn btn-small btn-danger remove-ingredient-btn" type="button">Retirer</button>
     </div>
   </template>
@@ -131,6 +152,104 @@
         <button id="patConfirmBtn" class="btn btn-primary" type="button">Valider</button>
       </div>
     </div>
+  </dialog>
+
+  <dialog id="addAlimentDialog" class="modal">
+    <form id="addAlimentForm" method="dialog" class="modal-content">
+      <header class="modal-header">
+        <h2>Ajouter un aliment</h2>
+      </header>
+
+      <div class="modal-body">
+        <label>
+          Nom de l'aliment
+          <input name="name" type="text" required placeholder="Ex: Poulet blanc" />
+        </label>
+
+        <div class="inline-grid-2">
+          <label>
+            Calories (kcal)
+            <input name="kcal" type="number" step="0.1" min="0" required placeholder="Ex: 165" />
+          </label>
+
+          <label>
+            Quantité de référence
+            <input name="quantity" type="number" step="0.1" min="0.1" required placeholder="Ex: 100" />
+          </label>
+        </div>
+
+        <label>
+          Unité
+          <select name="unit" required>
+            <option value="">-- Sélectionner une unité --</option>
+            <option value="g">g (grammes)</option>
+            <option value="ml">ml (millilitres)</option>
+            <option value="cl">cl (centilitres)</option>
+            <option value="l">l (litres)</option>
+            <option value="kg">kg (kilogrammes)</option>
+            <option value="pièce">pièce</option>
+            <option value="cuillère">cuillère</option>
+            <option value="cuillère à café">cuillère à café</option>
+            <option value="cuillère à soupe">cuillère à soupe</option>
+            <option value="verre">verre</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="modal-footer">
+        <button id="cancelAddAlimentBtn" class="btn" type="button">Annuler</button>
+        <button class="btn btn-primary" type="submit">Enregistrer</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="quickAddAlimentDialog" class="modal">
+    <form id="quickAddAlimentForm" method="dialog" class="modal-content">
+      <header class="modal-header">
+        <h2>Créer un aliment</h2>
+      </header>
+
+      <div class="modal-body">
+        <label>
+          Nom de l'aliment
+          <input name="name" type="text" required placeholder="Nom de l'aliment" />
+        </label>
+
+        <div class="inline-grid-2">
+          <label>
+            Calories (kcal)
+            <input name="kcal" type="number" step="0.1" min="0" required placeholder="165" />
+          </label>
+
+          <label>
+            Quantité de référence
+            <input name="quantity" type="number" step="0.1" min="0.1" required placeholder="100" />
+          </label>
+        </div>
+
+        <label>
+          Unité
+          <select name="unit" required>
+            <option value="">-- Sélectionner --</option>
+            <option value="g">g</option>
+            <option value="ml">ml</option>
+            <option value="cl">cl</option>
+            <option value="l">l</option>
+            <option value="kg">kg</option>
+            <option value="pièce">pièce</option>
+            <option value="cuillère">cuillère</option>
+            <option value="cuillère à café">cuillère à café</option>
+            <option value="cuillère à soupe">cuillère à soupe</option>
+            <option value="verre">verre</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="modal-footer">
+        <button id="cancelQuickAddAlimentBtn" class="btn" type="button">Annuler</button>
+        <button class="btn btn-primary" type="submit">Créer</button>
+      </div>
+    </form>
   </dialog>
 
   <script src="app.js"></script>

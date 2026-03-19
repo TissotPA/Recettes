@@ -3,6 +3,7 @@ const GITHUB_OWNER = "TissotPA";
 const GITHUB_REPO = "Recettes";
 const GITHUB_BRANCH = "gh-pages";
 const GITHUB_FILE = "recettes.json";
+const GITHUB_ALIMENTS_FILE = "aliments.json";
 const PAT_STORAGE_KEY = "gh_pat";
 
 const CATEGORY_ORDER = ["entree", "plat", "dessert"];
@@ -11,6 +12,8 @@ const CATEGORY_LABELS = {
   plat: "Plats",
   dessert: "Desserts"
 };
+
+let lastQuickAlimentCallback = null;
 
 const state = {
   recipes: [],
@@ -21,7 +24,10 @@ const state = {
     includeIngredients: [],
     fridgeIngredients: []
   },
-  targetServings: BASE_SERVINGS
+  targetServings: BASE_SERVINGS,
+  aliments: [],
+  alimentSearchFilter: "",
+  currentTab: "recipes"
 };
 
 const refs = {
@@ -43,7 +49,21 @@ const refs = {
   patDialog: document.getElementById("patDialog"),
   patInput: document.getElementById("patInput"),
   patCancelBtn: document.getElementById("patCancelBtn"),
-  patConfirmBtn: document.getElementById("patConfirmBtn")
+  patConfirmBtn: document.getElementById("patConfirmBtn"),
+  // KCAL Tab
+  recipesTab: document.getElementById("recipesTab"),
+  kcalTab: document.getElementById("kcalTab"),
+  tabBtns: document.querySelectorAll(".tab-btn"),
+  addAlimentBtn: document.getElementById("addAlimentBtn"),
+  searchAliment: document.getElementById("searchAliment"),
+  alimentList: document.getElementById("alimentList"),
+  addAlimentDialog: document.getElementById("addAlimentDialog"),
+  addAlimentForm: document.getElementById("addAlimentForm"),
+  cancelAddAlimentBtn: document.getElementById("cancelAddAlimentBtn"),
+  // Quick add aliment (from recipe ingredient search)
+  quickAddAlimentDialog: document.getElementById("quickAddAlimentDialog"),
+  quickAddAlimentForm: document.getElementById("quickAddAlimentForm"),
+  cancelQuickAddAlimentBtn: document.getElementById("cancelQuickAddAlimentBtn")
 };
 
 function setStatus(message, isError = false) {
@@ -69,21 +89,23 @@ function normalizeRecipes(input) {
         return null;
       }
 
-      const ingredients = Array.isArray(recipe.ingredients)
-        ? recipe.ingredients
-            .map((ingredient) => {
-              if (!ingredient || !ingredient.name) {
-                return null;
-              }
+        const ingredients = Array.isArray(recipe.ingredients)
+          ? recipe.ingredients
+              .map((ingredient) => {
+                if (!ingredient || !ingredient.name) {
+                  return null;
+                }
 
-              return {
-                name: String(ingredient.name).trim(),
-                quantity: Number(ingredient.quantity) || 0,
-                unit: ingredient.unit ? String(ingredient.unit).trim() : ""
-              };
-            })
-            .filter(Boolean)
-        : [];
+                return {
+                  alimentId: ingredient.alimentId ? String(ingredient.alimentId).trim() : "",
+                  name: String(ingredient.name).trim(),
+                  quantity: Number(ingredient.quantity) || 0,
+                  unit: ingredient.unit ? String(ingredient.unit).trim() : "",
+                  kcal: Number(ingredient.kcal) || 0
+                };
+              })
+              .filter(Boolean)
+          : [];
 
       const steps = Array.isArray(recipe.steps)
         ? recipe.steps.map((step) => String(step).trim()).filter(Boolean)
@@ -294,16 +316,28 @@ function renderRecipeDetail() {
 
   servingsLabel.appendChild(servingsInput);
 
-  const ingredientsTitle = document.createElement("h3");
-  ingredientsTitle.textContent = "Ingrédients";
-  const ingredientsList = document.createElement("ul");
-  ingredientsList.className = "ingredients-list";
+    const ingredientsTitle = document.createElement("h3");
+    ingredientsTitle.textContent = "Ingrédients";
+    const ingredientsList = document.createElement("ul");
+    ingredientsList.className = "ingredients-list";
 
-  recipe.ingredients.forEach((ingredient) => {
-    const li = document.createElement("li");
-    li.innerHTML = `${ingredient.name}: <span class="ingredient-quantity" data-base-quantity="${ingredient.quantity}" data-unit="${ingredient.unit || ""}"></span>`;
-    ingredientsList.appendChild(li);
-  });
+    // Calculate total calories
+    const totalKcal = recipe.ingredients.reduce((sum, ingredient) => sum + (ingredient.kcal || 0), 0);
+    const kcalPerPerson = Math.round(totalKcal / recipe.baseServings);
+
+    recipe.ingredients.forEach((ingredient) => {
+      const li = document.createElement("li");
+      const kcalDisplay = ingredient.kcal ? ` <span class="ingredient-kcal">(${ingredient.kcal} kcal)</span>` : "";
+      li.innerHTML = `${ingredient.name}: <span class="ingredient-quantity" data-base-quantity="${ingredient.quantity}" data-unit="${ingredient.unit || ""}" data-kcal="${ingredient.kcal || 0}"></span>${kcalDisplay}`;
+      ingredientsList.appendChild(li);
+    });
+
+    // Add total calories info
+    const kcalInfo = document.createElement("div");
+    kcalInfo.className = "recipe-kcal-info";
+    kcalInfo.innerHTML = `
+      <strong>Calories totales:</strong> ${totalKcal} kcal (${kcalPerPerson} kcal/personne)
+    `;
 
   const stepsTitle = document.createElement("h3");
   stepsTitle.textContent = "Étapes";
@@ -315,7 +349,7 @@ function renderRecipeDetail() {
     stepsList.appendChild(li);
   });
 
-  refs.recipeDetail.append(header, servingsLabel, ingredientsTitle, ingredientsList, stepsTitle, stepsList);
+    refs.recipeDetail.append(header, servingsLabel, ingredientsTitle, ingredientsList, kcalInfo, stepsTitle, stepsList);
 
   updateScaledIngredientQuantities(recipe);
 
@@ -360,23 +394,121 @@ function renderAll() {
   renderRecipeDetail();
 }
 
-function createIngredientRow(data = { name: "", quantity: "", unit: "" }) {
+function createIngredientRow(data = { name: "", quantity: "", unit: "", alimentId: "" }) {
   const fragment = refs.ingredientRowTemplate.content.cloneNode(true);
   const row = fragment.querySelector(".ingredient-row");
-  const nameInput = row.querySelector(".ingredient-name");
+  const searchInput = row.querySelector(".ingredient-search");
+  const dropdown = row.querySelector(".ingredient-dropdown");
   const quantityInput = row.querySelector(".ingredient-quantity");
   const unitInput = row.querySelector(".ingredient-unit");
+  const kcalDisplay = row.querySelector(".ingredient-kcal");
+  const alimentIdInput = row.querySelector(".ingredient-alimentId");
   const removeBtn = row.querySelector(".remove-ingredient-btn");
 
-  nameInput.value = data.name;
-  quantityInput.value = data.quantity;
-  unitInput.value = data.unit;
+  let selectedAliment = null;
+
+  // If we're loading existing data, find the aliment
+  if (data.alimentId) {
+    selectedAliment = state.aliments.find((a) => a.id === data.alimentId);
+    if (selectedAliment) {
+      searchInput.value = selectedAliment.name;
+      unitInput.value = selectedAliment.unit;
+      alimentIdInput.value = selectedAliment.id;
+    }
+  }
+
+  quantityInput.value = data.quantity || "";
+
+  // Update kcal display based on quantity
+  function updateKcalDisplay() {
+    if (!selectedAliment || !quantityInput.value) {
+      kcalDisplay.textContent = "";
+      return;
+    }
+
+    const usedQuantity = Number(quantityInput.value);
+    if (isNaN(usedQuantity)) {
+      kcalDisplay.textContent = "";
+      return;
+    }
+
+    // Calculate: (used_quantity / reference_quantity) × kcal
+    const kcal = (usedQuantity / selectedAliment.quantity) * selectedAliment.kcal;
+    kcalDisplay.textContent = `${kcal.toFixed(0)} kcal`;
+  }
+
+  // Search input handler
+  searchInput.addEventListener("input", (e) => {
+    const searchTerm = e.target.value.toLowerCase();
+
+    if (!searchTerm) {
+      dropdown.style.display = "none";
+      return;
+    }
+
+    // Filter aliments
+    const matches = state.aliments.filter((aliment) =>
+      aliment.name.toLowerCase().includes(searchTerm)
+    );
+
+    dropdown.innerHTML = "";
+
+    if (matches.length === 0) {
+      dropdown.innerHTML = `
+        <div style="padding: 0.5rem 0.6rem; color: var(--muted); font-size: 0.9rem;">
+          Aucun aliment trouvé.
+          <button class="btn btn-small" type="button" style="margin-top: 0.3rem;">+ Créer "${searchTerm}"</button>
+        </div>
+      `;
+
+      dropdown.querySelector(".btn").addEventListener("click", (e) => {
+        e.preventDefault();
+        openAddAlimentQuickDialog(searchTerm, () => {
+          // Reload the search after creating the aliment
+          searchInput.dispatchEvent(new Event("input"));
+        });
+      });
+    } else {
+      matches.forEach((aliment) => {
+        const option = document.createElement("div");
+        option.className = "ingredient-option";
+        option.textContent = `${aliment.name} (${aliment.quantity}${aliment.unit}, ${aliment.kcal} kcal)`;
+
+        option.addEventListener("click", () => {
+          selectedAliment = aliment;
+          searchInput.value = aliment.name;
+          unitInput.value = aliment.unit;
+          alimentIdInput.value = aliment.id;
+          dropdown.style.display = "none";
+          updateKcalDisplay();
+        });
+
+        dropdown.appendChild(option);
+      });
+    }
+
+    dropdown.style.display = "block";
+  });
+
+  // Close dropdown when clicking outside
+  searchInput.addEventListener("blur", () => {
+    // Delay to allow click on dropdown to register
+    setTimeout(() => {
+      dropdown.style.display = "none";
+    }, 200);
+  });
+
+  // Update kcal display on quantity change
+  quantityInput.addEventListener("input", updateKcalDisplay);
 
   removeBtn.addEventListener("click", () => {
     row.remove();
   });
 
   refs.ingredientsRows.appendChild(row);
+
+  // Initial kcal display
+  updateKcalDisplay();
 }
 
 function resetRecipeForm() {
@@ -389,6 +521,12 @@ function openAddRecipeDialog() {
   state.editingRecipeId = null;
   resetRecipeForm();
   refs.addRecipeDialog.querySelector("h2").textContent = "Nouvelle recette";
+  
+  // Ensure aliments are loaded for ingredient search
+  if (state.aliments.length === 0) {
+    loadAliments();
+  }
+  
   refs.addRecipeDialog.showModal();
 }
 
@@ -406,6 +544,11 @@ function openEditRecipeDialog(recipeId) {
   refs.addRecipeForm.steps.value = recipe.steps.join("\n");
   refs.addRecipeForm.drinks.value = recipe.drinks.join("\n");
 
+    // Ensure aliments are loaded for ingredient search
+    if (state.aliments.length === 0) {
+      loadAliments();
+    }
+
   refs.ingredientsRows.innerHTML = "";
   recipe.ingredients.forEach((ingredient) => {
     createIngredientRow(ingredient);
@@ -422,23 +565,33 @@ function handleAddRecipeSubmit(event) {
   event.preventDefault();
 
   const formData = new FormData(refs.addRecipeForm);
-  const ingredients = Array.from(refs.ingredientsRows.querySelectorAll(".ingredient-row"))
-    .map((row) => {
-      const name = row.querySelector(".ingredient-name").value.trim();
-      const quantity = Number(row.querySelector(".ingredient-quantity").value);
-      const unit = row.querySelector(".ingredient-unit").value.trim();
+    const ingredients = Array.from(refs.ingredientsRows.querySelectorAll(".ingredient-row"))
+      .map((row) => {
+        const alimentId = row.querySelector(".ingredient-alimentId").value.trim();
+        const quantity = Number(row.querySelector(".ingredient-quantity").value);
+        const searchInput = row.querySelector(".ingredient-search").value.trim();
+      
+        if (!alimentId || !quantity) {
+          return null;
+        }
 
-      if (!name) {
-        return null;
-      }
+        const aliment = state.aliments.find((a) => a.id === alimentId);
+        if (!aliment) {
+          return null;
+        }
 
-      return {
-        name,
-        quantity: Number.isNaN(quantity) ? 0 : quantity,
-        unit
-      };
-    })
-    .filter(Boolean);
+        // Calculate calories for this ingredient
+        const kcal = (quantity / aliment.quantity) * aliment.kcal;
+
+        return {
+          alimentId,
+          name: aliment.name,
+          quantity,
+          unit: aliment.unit,
+          kcal: Math.round(kcal)
+        };
+      })
+      .filter(Boolean);
 
   if (ingredients.length === 0) {
     setStatus("Ajoute au moins un ingrédient.", true);
@@ -626,12 +779,6 @@ async function saveRecipesToGitHub(forcePrompt = false) {
       }
     );
 
-    if (putRes.status === 401) {
-      clearPat();
-      setStatus("Clé invalide. Clique à nouveau sur Enregistrer pour réessayer.", true);
-      return;
-    }
-
     if (!putRes.ok) {
       throw new Error(`Échec de l'enregistrement (code ${putRes.status})`);
     }
@@ -673,12 +820,25 @@ async function loadRecipesFromRoot(showStatus = true) {
 }
 
 function bindEvents() {
+  // Recipe events
   refs.openAddRecipeBtn.addEventListener("click", openAddRecipeDialog);
   refs.cancelAddRecipeBtn.addEventListener("click", closeAddRecipeDialog);
   refs.addIngredientRowBtn.addEventListener("click", () => createIngredientRow());
   refs.addRecipeForm.addEventListener("submit", handleAddRecipeSubmit);
-  refs.loadBtn.addEventListener("click", () => loadRecipesFromRoot(true));
-  refs.saveBtn.addEventListener("click", (e) => saveRecipesToGitHub(e.shiftKey));
+  refs.loadBtn.addEventListener("click", () => {
+    if (state.currentTab === "kcal") {
+      loadAliments();
+    } else {
+      loadRecipesFromRoot(true);
+    }
+  });
+  refs.saveBtn.addEventListener("click", (e) => {
+    if (state.currentTab === "kcal") {
+      saveAlimentToGitHub(e.shiftKey);
+    } else {
+      saveRecipesToGitHub(e.shiftKey);
+    }
+  });
 
   refs.searchByName.addEventListener("input", () => {
     state.filters.name = refs.searchByName.value.trim().toLowerCase();
@@ -694,6 +854,261 @@ function bindEvents() {
     state.filters.fridgeIngredients = parseIngredientInput(refs.fridgeIngredients.value);
     renderRecipeList();
   });
+
+  // Tab navigation
+  refs.tabBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const tabName = btn.dataset.tab;
+      switchTab(tabName);
+    });
+  });
+
+  // KCAL events
+  refs.addAlimentBtn.addEventListener("click", openAddAlimentDialog);
+  refs.cancelAddAlimentBtn.addEventListener("click", closeAddAlimentDialog);
+  refs.addAlimentForm.addEventListener("submit", handleAddAlimentSubmit);
+  refs.searchAliment.addEventListener("input", () => {
+    state.alimentSearchFilter = refs.searchAliment.value.trim().toLowerCase();
+    renderAlimentList();
+  });
+
+    // Quick add aliment events
+    refs.cancelQuickAddAlimentBtn.addEventListener("click", closeAddAlimentQuickDialog);
+    refs.quickAddAlimentForm.addEventListener("submit", handleAddAlimentQuickSubmit);
+}
+
+function switchTab(tabName) {
+  // Update tab buttons
+  refs.tabBtns.forEach((btn) => {
+    btn.classList.toggle("active", btn.dataset.tab === tabName);
+  });
+
+  // Show/hide tabs
+  refs.recipesTab.classList.toggle("hidden", tabName !== "recipes");
+  refs.kcalTab.classList.toggle("hidden", tabName !== "kcal");
+
+  state.currentTab = tabName;
+
+  // Load aliments on first KCAL tab visit
+  if (tabName === "kcal" && state.aliments.length === 0) {
+    loadAliments();
+  }
+}
+
+async function loadAliments() {
+  try {
+    const response = await fetch("aliments.json");
+    if (response.status === 404) {
+      throw new Error(`Fichier introuvable`);
+    }
+
+    const data = await response.json();
+    state.aliments = Array.isArray(data) ? data : [];
+    renderAlimentList();
+    setStatus(`${state.aliments.length} aliment(s) chargé(s).`);
+  } catch (error) {
+    setStatus(`Chargement des aliments impossible : ${error.message}`, true);
+    state.aliments = [];
+  }
+}
+
+function renderAlimentList() {
+  refs.alimentList.innerHTML = "";
+
+  const filtered = state.aliments.filter((aliment) => {
+    if (!state.alimentSearchFilter) return true;
+    return aliment.name.toLowerCase().includes(state.alimentSearchFilter);
+  });
+
+  if (filtered.length === 0) {
+    refs.alimentList.innerHTML = '<p class="empty-state">Aucun aliment trouvé.</p>';
+    return;
+  }
+
+  filtered.forEach((aliment) => {
+    const row = document.createElement("div");
+    row.className = "aliment-row";
+    
+    // Display format: "165 kcal per 100g" or "165 kcal per 1 pièce" etc.
+    const displayText = aliment.quantity 
+      ? `${aliment.kcal} kcal / ${aliment.quantity}${aliment.unit}`
+      : `${aliment.kcal} kcal`;
+    
+    row.innerHTML = `
+      <div class="aliment-name-cell">${aliment.name}</div>
+      <div class="aliment-kcal-cell">${displayText}</div>
+      <div class="aliment-actions">
+        <button class="aliment-edit-btn" type="button" title="Modifier">✎</button>
+        <button class="btn btn-small btn-danger" type="button" title="Supprimer">✕</button>
+      </div>
+    `;
+
+    const editBtn = row.querySelector(".aliment-edit-btn");
+    const deleteBtn = row.querySelector(".btn-danger");
+
+    editBtn.addEventListener("click", () => {
+      editAliment(aliment);
+    });
+
+    deleteBtn.addEventListener("click", () => {
+      if (confirm(`Supprimer "${aliment.name}" ?`)) {
+        deleteAliment(aliment.id);
+      }
+    });
+
+    refs.alimentList.appendChild(row);
+  });
+}
+
+function openAddAlimentDialog() {
+  refs.addAlimentForm.reset();
+  refs.addAlimentDialog.showModal();
+}
+
+function closeAddAlimentDialog() {
+  refs.addAlimentDialog.close();
+}
+
+function handleAddAlimentSubmit(e) {
+  e.preventDefault();
+  const formData = new FormData(refs.addAlimentForm);
+
+  const name = String(formData.get("name") || "").trim();
+  const kcal = Number(formData.get("kcal") || 0);
+  const quantity = Number(formData.get("quantity") || 0);
+  const unit = String(formData.get("unit") || "").trim();
+
+  if (!name) {
+    setStatus("Le nom de l'aliment est obligatoire.", true);
+    return;
+  }
+
+  if (kcal < 0) {
+    setStatus("Les calories ne peuvent pas être négatives.", true);
+    return;
+  }
+
+  if (quantity <= 0) {
+    setStatus("La quantité doit être supérieure à 0.", true);
+    return;
+  }
+
+  if (!unit) {
+    setStatus("L'unité est obligatoire.", true);
+    return;
+  }
+
+  const newAliment = {
+    id: `aliment-${Date.now()}`,
+    name,
+    kcal,
+    quantity,
+    unit
+  };
+
+  state.aliments.push(newAliment);
+  state.aliments.sort((a, b) => a.name.localeCompare(b.name, "fr"));
+  
+  setStatus(`Aliment "${name}" ajouté.`);
+  closeAddAlimentDialog();
+  renderAlimentList();
+}
+
+function editAliment(aliment) {
+  const displayRef = aliment.quantity ? ` (${aliment.quantity}${aliment.unit})` : "";
+  const newKcal = prompt(`Modifier les calories pour "${aliment.name}"${displayRef}\n\nValeur actuelle: ${aliment.kcal}`, String(aliment.kcal));
+  
+  if (newKcal === null) return;
+
+  const kcal = Number(newKcal);
+  if (isNaN(kcal) || kcal < 0) {
+    setStatus("Valeur invalide.", true);
+    return;
+  }
+
+  const index = state.aliments.findIndex((a) => a.id === aliment.id);
+  if (index !== -1) {
+    state.aliments[index].kcal = kcal;
+    setStatus(`"${aliment.name}" modifié.`);
+    renderAlimentList();
+  }
+}
+
+function deleteAliment(alimentId) {
+  const index = state.aliments.findIndex((a) => a.id === alimentId);
+  if (index !== -1) {
+    const name = state.aliments[index].name;
+    state.aliments.splice(index, 1);
+    setStatus(`"${name}" supprimé.`);
+    renderAlimentList();
+  }
+}
+
+async function saveAlimentToGitHub(forcePrompt = false) {
+  if (state.aliments.length === 0) {
+    setStatus("Aucun aliment à enregistrer.", true);
+    return;
+  }
+
+  let pat = forcePrompt ? "" : getStoredPat();
+
+  if (!pat) {
+    try {
+      pat = await promptPat();
+    } catch (err) {
+      setStatus(err.message, true);
+      return;
+    }
+  }
+
+  setStatus("Enregistrement des aliments en cours…");
+
+  try {
+    const shaRes = await fetch(
+      `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_ALIMENTS_FILE}?ref=${GITHUB_BRANCH}`,
+      { headers: { Authorization: `Bearer ${pat}`, Accept: "application/vnd.github+json" } }
+    );
+
+    let sha = null;
+    if (shaRes.ok) {
+      const shaData = await shaRes.json();
+      sha = shaData.sha;
+    }
+
+    const content = btoa(JSON.stringify(state.aliments, null, 2));
+
+    const putOptions = {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${pat}`,
+        Accept: "application/vnd.github+json"
+      },
+      body: JSON.stringify({
+        message: `Mise à jour des aliments - ${new Date().toLocaleString("fr-FR")}`,
+        content,
+        ...(sha && { sha })
+      })
+    };
+
+    const putRes = await fetch(
+      `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_ALIMENTS_FILE}?ref=${GITHUB_BRANCH}`,
+      putOptions
+    );
+
+    if (putRes.status === 401) {
+      clearPat();
+      setStatus("Clé invalide. Réessayez.", true);
+      return;
+    }
+
+    if (!putRes.ok) {
+      throw new Error(`Erreur GitHub (code ${putRes.status})`);
+    }
+
+    setStatus(`${state.aliments.length} aliment(s) enregistré(s) sur GitHub.`);
+  } catch (error) {
+    setStatus(`Erreur lors de l'enregistrement : ${error.message}`, true);
+  }
 }
 
 function init() {
@@ -701,6 +1116,72 @@ function init() {
   resetRecipeForm();
   renderAll();
   loadRecipesFromRoot(false);
+}
+
+function openAddAlimentQuickDialog(defaultName = "", onSuccess = null) {
+  refs.quickAddAlimentForm.reset();
+  refs.quickAddAlimentForm.name.value = defaultName;
+  lastQuickAlimentCallback = onSuccess;
+  refs.quickAddAlimentDialog.showModal();
+}
+
+function closeAddAlimentQuickDialog() {
+  if (refs.quickAddAlimentDialog.open) {
+    refs.quickAddAlimentDialog.close();
+  }
+  lastQuickAlimentCallback = null;
+}
+
+function handleAddAlimentQuickSubmit(e) {
+  e.preventDefault();
+  const formData = new FormData(refs.quickAddAlimentForm);
+
+  const name = String(formData.get("name") || "").trim();
+  const kcal = Number(formData.get("kcal") || 0);
+  const quantity = Number(formData.get("quantity") || 0);
+  const unit = String(formData.get("unit") || "").trim();
+
+  if (!name) {
+    setStatus("Le nom de l'aliment est obligatoire.", true);
+    return;
+  }
+
+  if (kcal < 0) {
+    setStatus("Les calories ne peuvent pas être négatives.", true);
+    return;
+  }
+
+  if (quantity <= 0) {
+    setStatus("La quantité doit être supérieure à 0.", true);
+    return;
+  }
+
+  if (!unit) {
+    setStatus("L'unité est obligatoire.", true);
+    return;
+  }
+
+  const newAliment = {
+    id: `aliment-${Date.now()}`,
+    name,
+    kcal,
+    quantity,
+    unit
+  };
+
+  state.aliments.push(newAliment);
+  state.aliments.sort((a, b) => a.name.localeCompare(b.name, "fr"));
+
+  setStatus(`Aliment "${name}" créé.`);
+  if (refs.quickAddAlimentDialog.open) {
+    refs.quickAddAlimentDialog.close();
+  }
+
+  if (lastQuickAlimentCallback && typeof lastQuickAlimentCallback === "function") {
+    const callback = lastQuickAlimentCallback;
+    lastQuickAlimentCallback = null;
+    callback();
+  }
 }
 
 init();
