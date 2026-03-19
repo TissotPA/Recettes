@@ -297,58 +297,58 @@
     "baseServings": 4,
     "ingredients": [
       {
-        "alimentId": "",
-        "measureId": "",
-        "measureLabel": "",
-        "quantity": 1,
-        "unit": "sachet",
-        "kcal": 0,
-        "name": "Semoule épicée"
+        "alimentId": "aliment-56",
+        "measureId": "aliment-56-measure-100-g",
+        "measureLabel": "100 g",
+        "name": "Semoule",
+        "quantity": 255,
+        "unit": "g",
+        "kcal": 923
       },
       {
-        "alimentId": "",
-        "measureId": "",
-        "measureLabel": "",
+        "alimentId": "aliment-8",
+        "measureId": "aliment-8-measure-100-g",
+        "measureLabel": "100 g",
+        "name": "Beurre",
         "quantity": 5,
         "unit": "g",
-        "kcal": 0,
-        "name": "Beurre"
+        "kcal": 36
       },
       {
-        "alimentId": "",
-        "measureId": "",
-        "measureLabel": "",
+        "alimentId": "aliment-27",
+        "measureId": "aliment-27-measure-100-g",
+        "measureLabel": "100 g",
+        "name": "Poulet blanc",
         "quantity": 500,
         "unit": "g",
-        "kcal": 0,
-        "name": "Poulet"
+        "kcal": 825
       },
       {
-        "alimentId": "",
-        "measureId": "",
-        "measureLabel": "",
+        "alimentId": "aliment-89",
+        "measureId": "aliment-89-measure-100-g",
+        "measureLabel": "100 g",
+        "name": "Haricot vert",
         "quantity": 500,
         "unit": "g",
-        "kcal": 0,
-        "name": "Haricots"
+        "kcal": 155
       },
       {
-        "alimentId": "",
-        "measureId": "",
-        "measureLabel": "",
-        "quantity": 1,
-        "unit": "",
-        "kcal": 0,
-        "name": "Curry"
+        "alimentId": "aliment-1773909030555",
+        "measureId": "aliment-1773909030555-measure-1-cuillere-a-cafe",
+        "measureLabel": "1 cuillère à café",
+        "name": "Curry",
+        "quantity": 2,
+        "unit": "cuillère à café",
+        "kcal": 10
       },
       {
-        "alimentId": "",
-        "measureId": "",
-        "measureLabel": "",
+        "alimentId": "aliment-6",
+        "measureId": "aliment-6-measure-1-cuillere-a-cafe",
+        "measureLabel": "1 cuillère à café",
+        "name": "Huile d'olive",
         "quantity": 4,
-        "unit": "c. à café",
-        "kcal": 0,
-        "name": "Huile d'olive"
+        "unit": "cuillère à café",
+        "kcal": 160
       }
     ],
     "steps": [
