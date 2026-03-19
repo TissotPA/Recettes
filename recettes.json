@@ -224,58 +224,58 @@
     "baseServings": 4,
     "ingredients": [
       {
-        "alimentId": "",
-        "measureId": "",
-        "measureLabel": "",
-        "quantity": 1,
-        "unit": "sachet",
-        "kcal": 0,
-        "name": "Semoule épicée"
+        "alimentId": "aliment-56",
+        "measureId": "aliment-56-measure-100-g",
+        "measureLabel": "100 g",
+        "name": "Semoule",
+        "quantity": 255,
+        "unit": "g",
+        "kcal": 923
       },
       {
-        "alimentId": "",
-        "measureId": "",
-        "measureLabel": "",
+        "alimentId": "aliment-8",
+        "measureId": "aliment-8-measure-100-g",
+        "measureLabel": "100 g",
+        "name": "Beurre",
         "quantity": 5,
         "unit": "g",
-        "kcal": 0,
-        "name": "Beurre"
+        "kcal": 36
       },
       {
-        "alimentId": "",
-        "measureId": "",
-        "measureLabel": "",
+        "alimentId": "aliment-68",
+        "measureId": "aliment-68-measure-1-poivron",
+        "measureLabel": "1 poivron",
+        "name": "Poivron rouge",
         "quantity": 3,
-        "unit": "",
-        "kcal": 0,
-        "name": "Poivrons"
+        "unit": "pièce",
+        "kcal": 138
       },
       {
-        "alimentId": "",
-        "measureId": "",
-        "measureLabel": "",
+        "alimentId": "aliment-27",
+        "measureId": "aliment-27-measure-100-g",
+        "measureLabel": "100 g",
+        "name": "Poulet blanc",
         "quantity": 500,
         "unit": "g",
-        "kcal": 0,
-        "name": "Poulet"
+        "kcal": 825
       },
       {
-        "alimentId": "",
-        "measureId": "",
-        "measureLabel": "",
+        "alimentId": "aliment-1773908984139",
+        "measureId": "aliment-1773908984139-measure-1-cuillere-a-cafe",
+        "measureLabel": "1 cuillère à café",
+        "name": "Paprika",
         "quantity": 1,
-        "unit": "",
-        "kcal": 0,
-        "name": "Paprika"
+        "unit": "cuillère à café",
+        "kcal": 5
       },
       {
-        "alimentId": "",
-        "measureId": "",
-        "measureLabel": "",
+        "alimentId": "aliment-6",
+        "measureId": "aliment-6-measure-1-cuillere-a-cafe",
+        "measureLabel": "1 cuillère à café",
+        "name": "Huile d'olive",
         "quantity": 4,
-        "unit": "c. à café",
-        "kcal": 0,
-        "name": "Huile d'olive"
+        "unit": "cuillère à café",
+        "kcal": 160
       }
     ],
     "steps": [
