@@ -46,6 +46,13 @@ const PRESET_MULTI_MEASURES = {
   parmesan: [{ label: "1 cuillère à soupe", quantity: 1, unit: "cuillère à soupe", kcal: 20 }]
 };
 
+const DRINK_KEYWORDS = [
+  "eau", "jus", "soda", "cola", "limonade", "the", "thé", "cafe", "café", "lait", "smoothie",
+  "sirop", "biere", "bière", "vin", "cocktail", "boisson", "nectar", "infusion", "chocolat chaud"
+];
+
+const DRINK_UNITS = ["ml", "cl", "l", "verre", "tasse"];
+
 let lastQuickAlimentCallback = null;
 
 const state = {
@@ -116,7 +123,9 @@ const refs = {
   dayEntriesList: document.getElementById("dayEntriesList"),
   dayTotalKcal: document.getElementById("dayTotalKcal"),
   dayDrinksKcal: document.getElementById("dayDrinksKcal"),
-  dayDrinkSelect: document.getElementById("dayDrinkSelect"),
+  dayDrinkSearch: document.getElementById("dayDrinkSearch"),
+  dayDrinkDropdown: document.getElementById("dayDrinkDropdown"),
+  dayDrinkAlimentId: document.getElementById("dayDrinkAlimentId"),
   dayDrinkMeasureSelect: document.getElementById("dayDrinkMeasureSelect"),
   dayDrinkQuantityInput: document.getElementById("dayDrinkQuantityInput"),
   addDayDrinkBtn: document.getElementById("addDayDrinkBtn"),
@@ -129,7 +138,9 @@ const refs = {
   menuEntreeSelect: document.getElementById("menuEntreeSelect"),
   menuPlatSelect: document.getElementById("menuPlatSelect"),
   menuDessertSelect: document.getElementById("menuDessertSelect"),
-  menuDrinkSelect: document.getElementById("menuDrinkSelect"),
+  menuDrinkSearch: document.getElementById("menuDrinkSearch"),
+  menuDrinkDropdown: document.getElementById("menuDrinkDropdown"),
+  menuDrinkAlimentId: document.getElementById("menuDrinkAlimentId"),
   menuDrinkMeasureSelect: document.getElementById("menuDrinkMeasureSelect"),
   menuDrinkQuantityInput: document.getElementById("menuDrinkQuantityInput"),
   addMenuDrinkBtn: document.getElementById("addMenuDrinkBtn"),
@@ -196,6 +207,13 @@ function getPresetMeasuresForAliment(name) {
   return PRESET_MULTI_MEASURES[normalizeLookupKey(name)] || [];
 }
 
+function inferIsDrink(name, measures = []) {
+  const normalizedName = normalizeLookupKey(name);
+  const byName = DRINK_KEYWORDS.some((keyword) => normalizedName.includes(normalizeLookupKey(keyword)));
+  const byUnit = measures.some((measure) => DRINK_UNITS.includes(normalizeLookupKey(measure.unit)));
+  return byName || byUnit;
+}
+
 function getDefaultMeasure(aliment) {
   return Array.isArray(aliment.measures) && aliment.measures.length > 0
     ? aliment.measures[0]
@@ -259,6 +277,7 @@ function normalizeAliment(aliment, index) {
     id: alimentId,
     name: String(aliment.name).trim(),
     measures: normalizedMeasures,
+    isDrink: typeof aliment.isDrink === "boolean" ? aliment.isDrink : inferIsDrink(aliment.name, normalizedMeasures),
     kcal: defaultMeasure.kcal,
     quantity: defaultMeasure.quantity,
     unit: defaultMeasure.unit
@@ -356,6 +375,21 @@ function getAlimentById(alimentId) {
   return state.aliments.find((aliment) => aliment.id === alimentId) || null;
 }
 
+function getDrinkAliments() {
+  return state.aliments.filter((aliment) => aliment.isDrink);
+}
+
+function getDrinkMatches(searchTerm) {
+  const normalizedTerm = normalizeLookupKey(searchTerm);
+  if (!normalizedTerm) {
+    return [];
+  }
+
+  return getDrinkAliments()
+    .filter((aliment) => normalizeLookupKey(aliment.name).includes(normalizedTerm))
+    .sort((a, b) => a.name.localeCompare(b.name, "fr"));
+}
+
 function fillSelectWithRecipes(select, recipes, placeholder) {
   if (!select) {
     return;
@@ -387,28 +421,22 @@ function fillSelectWithRecipes(select, recipes, placeholder) {
 function renderDayRecipeOptions() {
   fillSelectWithRecipes(refs.dayRecipeSelect, state.recipes, "Sélectionner une recette");
 
-  const previousDrinkValue = refs.dayDrinkSelect.value;
-  refs.dayDrinkSelect.innerHTML = '<option value="">Sélectionner une boisson</option>';
-
-  state.aliments
-    .slice()
-    .sort((a, b) => a.name.localeCompare(b.name, "fr"))
-    .forEach((aliment) => {
-      const option = document.createElement("option");
-      option.value = aliment.id;
-      option.textContent = aliment.name;
-      refs.dayDrinkSelect.appendChild(option);
-    });
-
-  if (previousDrinkValue && state.aliments.some((aliment) => aliment.id === previousDrinkValue)) {
-    refs.dayDrinkSelect.value = previousDrinkValue;
+  const selectedDrinkId = refs.dayDrinkAlimentId.value;
+  if (selectedDrinkId) {
+    const selectedDrink = getDrinkAliments().find((aliment) => aliment.id === selectedDrinkId);
+    if (selectedDrink) {
+      refs.dayDrinkSearch.value = selectedDrink.name;
+    } else {
+      refs.dayDrinkAlimentId.value = "";
+      refs.dayDrinkSearch.value = "";
+    }
   }
 
   updateDayDrinkMeasureOptions();
 }
 
 function updateDayDrinkMeasureOptions() {
-  const drinkId = refs.dayDrinkSelect.value;
+  const drinkId = refs.dayDrinkAlimentId.value;
   refs.dayDrinkMeasureSelect.innerHTML = '<option value="">Choisir une mesure</option>';
 
   if (!drinkId) {
@@ -432,8 +460,58 @@ function updateDayDrinkMeasureOptions() {
   }
 }
 
+function bindDrinkSearch(inputEl, dropdownEl, hiddenIdEl, onSelect) {
+  if (!inputEl || !dropdownEl || !hiddenIdEl) {
+    return;
+  }
+
+  inputEl.addEventListener("input", (event) => {
+    const rawSearch = event.target.value.trim();
+    hiddenIdEl.value = "";
+    onSelect(null);
+
+    if (!rawSearch) {
+      dropdownEl.style.display = "none";
+      return;
+    }
+
+    const matches = getDrinkMatches(rawSearch);
+    dropdownEl.innerHTML = "";
+
+    if (matches.length === 0) {
+      dropdownEl.innerHTML = '<div style="padding: 0.5rem 0.6rem; color: var(--muted); font-size: 0.9rem;">Aucune boisson trouvée. Tagge un aliment en "boisson" dans l\'onglet KCAL.</div>';
+    } else {
+      matches.forEach((aliment) => {
+        const option = document.createElement("div");
+        option.className = "ingredient-option";
+        const defaultMeasure = getDefaultMeasure(aliment);
+        option.textContent = defaultMeasure
+          ? `${aliment.name} (${defaultMeasure.label}, ${defaultMeasure.kcal} kcal)`
+          : aliment.name;
+
+        option.addEventListener("click", () => {
+          inputEl.value = aliment.name;
+          hiddenIdEl.value = aliment.id;
+          onSelect(aliment);
+          dropdownEl.style.display = "none";
+        });
+
+        dropdownEl.appendChild(option);
+      });
+    }
+
+    dropdownEl.style.display = "block";
+  });
+
+  inputEl.addEventListener("blur", () => {
+    setTimeout(() => {
+      dropdownEl.style.display = "none";
+    }, 200);
+  });
+}
+
 function addDayDrinkEntry() {
-  const alimentId = refs.dayDrinkSelect.value;
+  const alimentId = refs.dayDrinkAlimentId.value;
   const measureId = refs.dayDrinkMeasureSelect.value;
   const quantity = Number(refs.dayDrinkQuantityInput.value);
 
@@ -608,21 +686,15 @@ function renderMenuOptions() {
   fillSelectWithRecipes(refs.menuPlatSelect, plats, "Sélectionner un plat");
   fillSelectWithRecipes(refs.menuDessertSelect, desserts, "Sélectionner un dessert");
 
-  const previousDrinkValue = refs.menuDrinkSelect.value;
-  refs.menuDrinkSelect.innerHTML = '<option value="">Sélectionner une boisson</option>';
-
-  state.aliments
-    .slice()
-    .sort((a, b) => a.name.localeCompare(b.name, "fr"))
-    .forEach((aliment) => {
-      const option = document.createElement("option");
-      option.value = aliment.id;
-      option.textContent = aliment.name;
-      refs.menuDrinkSelect.appendChild(option);
-    });
-
-  if (previousDrinkValue && state.aliments.some((aliment) => aliment.id === previousDrinkValue)) {
-    refs.menuDrinkSelect.value = previousDrinkValue;
+  const selectedDrinkId = refs.menuDrinkAlimentId.value;
+  if (selectedDrinkId) {
+    const selectedDrink = getDrinkAliments().find((aliment) => aliment.id === selectedDrinkId);
+    if (selectedDrink) {
+      refs.menuDrinkSearch.value = selectedDrink.name;
+    } else {
+      refs.menuDrinkAlimentId.value = "";
+      refs.menuDrinkSearch.value = "";
+    }
   }
 
   updateMenuDrinkMeasureOptions();
@@ -641,7 +713,7 @@ function updateMenuSelection() {
 }
 
 function updateMenuDrinkMeasureOptions() {
-  const drinkId = refs.menuDrinkSelect.value;
+  const drinkId = refs.menuDrinkAlimentId.value;
   refs.menuDrinkMeasureSelect.innerHTML = '<option value="">Choisir une mesure</option>';
 
   if (!drinkId) {
@@ -666,7 +738,7 @@ function updateMenuDrinkMeasureOptions() {
 }
 
 function addMenuDrinkEntry() {
-  const alimentId = refs.menuDrinkSelect.value;
+  const alimentId = refs.menuDrinkAlimentId.value;
   const measureId = refs.menuDrinkMeasureSelect.value;
   const quantity = Number(refs.menuDrinkQuantityInput.value);
 
@@ -1586,7 +1658,10 @@ function bindEvents() {
 
   // Day events
   refs.addDayEntryBtn.addEventListener("click", addDayEntry);
-  refs.dayDrinkSelect.addEventListener("change", updateDayDrinkMeasureOptions);
+  bindDrinkSearch(refs.dayDrinkSearch, refs.dayDrinkDropdown, refs.dayDrinkAlimentId, () => {
+    refs.dayDrinkMeasureSelect.value = "";
+    updateDayDrinkMeasureOptions();
+  });
   refs.addDayDrinkBtn.addEventListener("click", addDayDrinkEntry);
   refs.addWaterBtn.addEventListener("click", () => updateWaterCount(1));
   refs.removeWaterBtn.addEventListener("click", () => updateWaterCount(-1));
@@ -1596,7 +1671,10 @@ function bindEvents() {
   refs.menuEntreeSelect.addEventListener("change", updateMenuSelection);
   refs.menuPlatSelect.addEventListener("change", updateMenuSelection);
   refs.menuDessertSelect.addEventListener("change", updateMenuSelection);
-  refs.menuDrinkSelect.addEventListener("change", updateMenuDrinkMeasureOptions);
+  bindDrinkSearch(refs.menuDrinkSearch, refs.menuDrinkDropdown, refs.menuDrinkAlimentId, () => {
+    refs.menuDrinkMeasureSelect.value = "";
+    updateMenuDrinkMeasureOptions();
+  });
   refs.addMenuDrinkBtn.addEventListener("click", addMenuDrinkEntry);
 
   // KCAL events
@@ -1654,6 +1732,7 @@ async function loadAliments() {
 
     const data = await response.json();
     state.aliments = normalizeAliments(Array.isArray(data) ? data : []);
+    renderAll();
     renderAlimentList();
     setStatus(`${state.aliments.length} aliment(s) chargé(s).`);
     return state.aliments;
@@ -1690,7 +1769,7 @@ function renderAlimentList() {
     
     row.innerHTML = `
       <div class="aliment-name-cell">
-        <strong>${aliment.name}</strong>
+        <strong>${aliment.name}</strong> ${aliment.isDrink ? '<span class="badge">Boisson</span>' : ""}
         <div class="aliment-measures-summary">${measureSummary}</div>
       </div>
       <div class="aliment-kcal-cell">${displayText}</div>
@@ -1747,11 +1826,13 @@ function resetAlimentForm(aliment = null) {
     refs.submitAddAlimentBtn.textContent = "Mettre à jour";
     refs.addAlimentForm.elements.alimentId.value = aliment.id;
     refs.addAlimentForm.elements.name.value = aliment.name;
+    refs.addAlimentForm.elements.isDrink.checked = Boolean(aliment.isDrink);
     aliment.measures.forEach((measure) => createAlimentMeasureRow(measure));
   } else {
     refs.addAlimentDialogTitle.textContent = "Ajouter un aliment";
     refs.submitAddAlimentBtn.textContent = "Enregistrer";
     refs.addAlimentForm.elements.alimentId.value = "";
+    refs.addAlimentForm.elements.isDrink.checked = false;
     createAlimentMeasureRow({ label: "100 g", quantity: 100, unit: "g", kcal: "" });
   }
 }
@@ -1794,6 +1875,7 @@ function handleAddAlimentSubmit(e) {
 
   const alimentId = String(formData.get("alimentId") || "").trim();
   const name = String(formData.get("name") || "").trim();
+  const isDrink = String(formData.get("isDrink") || "") === "on";
   const measures = collectAlimentMeasures();
 
   if (!name) {
@@ -1808,6 +1890,7 @@ function handleAddAlimentSubmit(e) {
   const normalizedAliment = normalizeAliment({
     id: alimentId || `aliment-${Date.now()}`,
     name,
+    isDrink,
     measures
   }, state.aliments.length);
 
@@ -1825,6 +1908,7 @@ function handleAddAlimentSubmit(e) {
 
   state.aliments.sort((a, b) => a.name.localeCompare(b.name, "fr"));
   closeAddAlimentDialog();
+  renderAll();
   renderAlimentList();
 }
 
@@ -1839,6 +1923,7 @@ function deleteAliment(alimentId) {
     const name = state.aliments[index].name;
     state.aliments.splice(index, 1);
     setStatus(`"${name}" supprimé.`);
+    renderAll();
     renderAlimentList();
   }
 }
@@ -1963,6 +2048,7 @@ function handleAddAlimentQuickSubmit(e) {
   const kcal = Number(formData.get("kcal") || 0);
   const quantity = Number(formData.get("quantity") || 0);
   const unit = String(formData.get("unit") || "").trim();
+  const isDrink = String(formData.get("isDrink") || "") === "on";
 
   if (!name) {
     setStatus("Le nom de l'aliment est obligatoire.", true);
@@ -1987,6 +2073,7 @@ function handleAddAlimentQuickSubmit(e) {
   const newAliment = {
     id: `aliment-${Date.now()}`,
     name,
+    isDrink,
     measures: [{
       label: buildMeasureLabel(quantity, unit),
       quantity,
@@ -1999,6 +2086,7 @@ function handleAddAlimentQuickSubmit(e) {
   state.aliments.sort((a, b) => a.name.localeCompare(b.name, "fr"));
 
   setStatus(`Aliment "${name}" créé.`);
+  renderAll();
   if (refs.quickAddAlimentDialog.open) {
     refs.quickAddAlimentDialog.close();
   }

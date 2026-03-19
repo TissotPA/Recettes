@@ -121,9 +121,11 @@
           <div class="drink-grid">
             <label>
               Boisson
-              <select id="dayDrinkSelect">
-                <option value="">Sélectionner une boisson</option>
-              </select>
+              <div class="drink-search-container">
+                <input id="dayDrinkSearch" type="text" placeholder="Rechercher une boisson..." />
+                <div id="dayDrinkDropdown" class="ingredient-dropdown" style="display: none;"></div>
+                <input id="dayDrinkAlimentId" type="hidden" />
+              </div>
             </label>
 
             <label>
@@ -138,7 +140,7 @@
               <input id="dayDrinkQuantityInput" type="number" min="0.25" step="0.25" value="1" />
             </label>
 
-            <button id="addDayDrinkBtn" class="btn btn-primary" type="button">Ajouter boisson</button>
+            <button id="addDayDrinkBtn" class="btn btn-primary drink-add-btn" type="button">Ajouter boisson</button>
           </div>
           <div id="dayDrinksList" class="drink-entries-list"></div>
         </section>
@@ -193,9 +195,11 @@
           <div class="drink-grid">
             <label>
               Boisson
-              <select id="menuDrinkSelect">
-                <option value="">Sélectionner une boisson</option>
-              </select>
+              <div class="drink-search-container">
+                <input id="menuDrinkSearch" type="text" placeholder="Rechercher une boisson..." />
+                <div id="menuDrinkDropdown" class="ingredient-dropdown" style="display: none;"></div>
+                <input id="menuDrinkAlimentId" type="hidden" />
+              </div>
             </label>
 
             <label>
@@ -210,7 +214,7 @@
               <input id="menuDrinkQuantityInput" type="number" min="0.25" step="0.25" value="1" />
             </label>
 
-            <button id="addMenuDrinkBtn" class="btn btn-primary" type="button">Ajouter boisson</button>
+            <button id="addMenuDrinkBtn" class="btn btn-primary drink-add-btn" type="button">Ajouter boisson</button>
           </div>
           <div id="menuDrinksList" class="drink-entries-list"></div>
         </section>
@@ -322,6 +326,11 @@
           <input name="name" type="text" required placeholder="Ex: Poulet blanc" />
         </label>
 
+        <label class="checkbox-inline">
+          <input name="isDrink" type="checkbox" />
+          Aliment de type boisson
+        </label>
+
         <section>
           <div class="inline-title-row">
             <h3>Mesures de référence</h3>
@@ -401,6 +410,11 @@
             <option value="cuillère à soupe">cuillère à soupe</option>
             <option value="verre">verre</option>
           </select>
+        </label>
+
+        <label class="checkbox-inline">
+          <input name="isDrink" type="checkbox" />
+          Aliment de type boisson
         </label>
       </div>
 
