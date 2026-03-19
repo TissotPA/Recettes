@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20260319" />
+  <link rel="stylesheet" href="styles.css?v=20260319-journee-menu" />
 </head>
 <body>
   <div class="page-bg"></div>
@@ -46,6 +46,8 @@
     <nav class="tabs">
       <button class="tab-btn active" data-tab="recipes">Recettes</button>
       <button class="tab-btn" data-tab="kcal">KCAL</button>
+      <button class="tab-btn" data-tab="day">Journée</button>
+      <button class="tab-btn" data-tab="menu">Menu</button>
     </nav>
 
     <section class="content-grid" id="recipesTab">
@@ -70,6 +72,96 @@
         </div>
         <input id="searchAliment" type="text" placeholder="Rechercher un aliment..." class="search-aliment" />
         <div id="alimentList" class="aliment-list"></div>
+      </section>
+    </section>
+
+    <section class="content-grid hidden" id="dayTab" hidden>
+      <section class="panel">
+        <div class="inline-title-row">
+          <h2>Journée</h2>
+          <span class="badge">Suivi quotidien</span>
+        </div>
+
+        <div class="day-grid">
+          <label>
+            Recette consommée
+            <select id="dayRecipeSelect">
+              <option value="">Sélectionner une recette</option>
+            </select>
+          </label>
+
+          <label>
+            Portions consommées
+            <input id="dayServingsInput" type="number" min="0.25" step="0.25" value="1" />
+          </label>
+
+          <button id="addDayEntryBtn" class="btn btn-primary" type="button">Ajouter à la journée</button>
+        </div>
+
+        <div class="day-summary">
+          <div class="day-metric">
+            <span class="day-metric-label">Total kcal de la journée</span>
+            <strong id="dayTotalKcal">0 kcal</strong>
+          </div>
+          <div class="day-metric">
+            <span class="day-metric-label">Verres d'eau</span>
+            <strong id="waterCount">0</strong>
+          </div>
+        </div>
+
+        <div class="water-controls">
+          <button id="addWaterBtn" class="btn btn-small" type="button">+1 verre</button>
+          <button id="removeWaterBtn" class="btn btn-small" type="button">-1 verre</button>
+          <button id="resetWaterBtn" class="btn btn-small" type="button">Réinitialiser</button>
+        </div>
+
+        <h3>Repas de la journée</h3>
+        <div id="dayEntriesList" class="day-entries-list"></div>
+      </section>
+    </section>
+
+    <section class="content-grid hidden" id="menuTab" hidden>
+      <section class="panel">
+        <div class="inline-title-row">
+          <h2>Menu</h2>
+          <span class="badge">Entrée + Plat + Dessert + Boissons</span>
+        </div>
+
+        <div class="menu-grid">
+          <label>
+            Entrée
+            <select id="menuEntreeSelect">
+              <option value="">Sélectionner une entrée</option>
+            </select>
+          </label>
+
+          <label>
+            Plat
+            <select id="menuPlatSelect">
+              <option value="">Sélectionner un plat</option>
+            </select>
+          </label>
+
+          <label>
+            Dessert
+            <select id="menuDessertSelect">
+              <option value="">Sélectionner un dessert</option>
+            </select>
+          </label>
+
+          <label>
+            Boissons (une par ligne)
+            <textarea id="menuDrinksInput" rows="4" placeholder="Eau plate&#10;Vin blanc"></textarea>
+          </label>
+        </div>
+
+        <div class="menu-summary">
+          <span>Kcal du menu (par personne)</span>
+          <strong id="menuTotalKcal">0 kcal/personne</strong>
+        </div>
+
+        <h3>Récapitulatif du menu</h3>
+        <div id="menuPreview" class="menu-preview empty-state">Sélectionne des recettes pour construire le menu.</div>
       </section>
     </section>
   </main>
@@ -259,6 +351,6 @@
     </form>
   </dialog>
 
-  <script src="app.js?v=20260319"></script>
+  <script src="app.js?v=20260319-journee-menu"></script>
 </body>
 </html>

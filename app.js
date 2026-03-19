@@ -60,7 +60,15 @@ const state = {
   targetServings: BASE_SERVINGS,
   aliments: [],
   alimentSearchFilter: "",
-  currentTab: "recipes"
+  currentTab: "recipes",
+  dayEntries: [],
+  waterGlasses: 0,
+  menuSelection: {
+    entreeId: "",
+    platId: "",
+    dessertId: "",
+    drinks: []
+  }
 };
 
 const refs = {
@@ -86,6 +94,8 @@ const refs = {
   // KCAL Tab
   recipesTab: document.getElementById("recipesTab"),
   kcalTab: document.getElementById("kcalTab"),
+  dayTab: document.getElementById("dayTab"),
+  menuTab: document.getElementById("menuTab"),
   tabBtns: document.querySelectorAll(".tab-btn"),
   addAlimentBtn: document.getElementById("addAlimentBtn"),
   searchAliment: document.getElementById("searchAliment"),
@@ -98,6 +108,23 @@ const refs = {
   addAlimentMeasureBtn: document.getElementById("addAlimentMeasureBtn"),
   alimentMeasureRows: document.getElementById("alimentMeasureRows"),
   alimentMeasureRowTemplate: document.getElementById("alimentMeasureRowTemplate"),
+  // Day tab
+  dayRecipeSelect: document.getElementById("dayRecipeSelect"),
+  dayServingsInput: document.getElementById("dayServingsInput"),
+  addDayEntryBtn: document.getElementById("addDayEntryBtn"),
+  dayEntriesList: document.getElementById("dayEntriesList"),
+  dayTotalKcal: document.getElementById("dayTotalKcal"),
+  waterCount: document.getElementById("waterCount"),
+  addWaterBtn: document.getElementById("addWaterBtn"),
+  removeWaterBtn: document.getElementById("removeWaterBtn"),
+  resetWaterBtn: document.getElementById("resetWaterBtn"),
+  // Menu tab
+  menuEntreeSelect: document.getElementById("menuEntreeSelect"),
+  menuPlatSelect: document.getElementById("menuPlatSelect"),
+  menuDessertSelect: document.getElementById("menuDessertSelect"),
+  menuDrinksInput: document.getElementById("menuDrinksInput"),
+  menuPreview: document.getElementById("menuPreview"),
+  menuTotalKcal: document.getElementById("menuTotalKcal"),
   // Quick add aliment (from recipe ingredient search)
   quickAddAlimentDialog: document.getElementById("quickAddAlimentDialog"),
   quickAddAlimentForm: document.getElementById("quickAddAlimentForm"),
@@ -302,6 +329,202 @@ function getScaleFactor(recipe) {
 function formatQuantity(quantity) {
   const rounded = Math.round(quantity * 100) / 100;
   return Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(2);
+}
+
+function getRecipeKcalPerPerson(recipe) {
+  const baseServings = recipe.baseServings || BASE_SERVINGS;
+  const totalKcal = (recipe.ingredients || []).reduce((sum, ingredient) => sum + (ingredient.kcal || 0), 0);
+  return totalKcal / baseServings;
+}
+
+function getRecipeById(recipeId) {
+  return state.recipes.find((recipe) => recipe.id === recipeId) || null;
+}
+
+function fillSelectWithRecipes(select, recipes, placeholder) {
+  if (!select) {
+    return;
+  }
+
+  const previousValue = select.value;
+  select.innerHTML = "";
+
+  const placeholderOption = document.createElement("option");
+  placeholderOption.value = "";
+  placeholderOption.textContent = placeholder;
+  select.appendChild(placeholderOption);
+
+  recipes
+    .slice()
+    .sort((a, b) => a.name.localeCompare(b.name, "fr"))
+    .forEach((recipe) => {
+      const option = document.createElement("option");
+      option.value = recipe.id;
+      option.textContent = recipe.name;
+      select.appendChild(option);
+    });
+
+  if (previousValue && recipes.some((recipe) => recipe.id === previousValue)) {
+    select.value = previousValue;
+  }
+}
+
+function renderDayRecipeOptions() {
+  fillSelectWithRecipes(refs.dayRecipeSelect, state.recipes, "Sélectionner une recette");
+}
+
+function addDayEntry() {
+  const recipeId = refs.dayRecipeSelect.value;
+  const portions = Number(refs.dayServingsInput.value);
+
+  if (!recipeId) {
+    setStatus("Sélectionne une recette pour l'ajouter à la journée.", true);
+    return;
+  }
+
+  if (Number.isNaN(portions) || portions <= 0) {
+    setStatus("Le nombre de portions doit être supérieur à 0.", true);
+    return;
+  }
+
+  const recipe = getRecipeById(recipeId);
+  if (!recipe) {
+    setStatus("Recette introuvable.", true);
+    return;
+  }
+
+  state.dayEntries.push({
+    id: `day-entry-${Date.now()}`,
+    recipeId,
+    servings: portions
+  });
+
+  renderDayEntries();
+  setStatus(`"${recipe.name}" ajouté à la journée.`);
+}
+
+function removeDayEntry(entryId) {
+  const index = state.dayEntries.findIndex((entry) => entry.id === entryId);
+  if (index === -1) {
+    return;
+  }
+
+  state.dayEntries.splice(index, 1);
+  renderDayEntries();
+}
+
+function renderDayEntries() {
+  if (!refs.dayEntriesList || !refs.dayTotalKcal || !refs.waterCount) {
+    return;
+  }
+
+  refs.dayEntriesList.innerHTML = "";
+
+  if (state.dayEntries.length === 0) {
+    refs.dayEntriesList.innerHTML = '<p class="empty-state">Aucune recette ajoutée pour la journée.</p>';
+  }
+
+  let totalKcal = 0;
+
+  state.dayEntries.forEach((entry) => {
+    const recipe = getRecipeById(entry.recipeId);
+    if (!recipe) {
+      return;
+    }
+
+    const recipeKcal = getRecipeKcalPerPerson(recipe) * entry.servings;
+    totalKcal += recipeKcal;
+
+    const row = document.createElement("div");
+    row.className = "day-entry-row";
+    row.innerHTML = `
+      <div>
+        <strong>${recipe.name}</strong>
+        <div class="day-entry-meta">${formatQuantity(entry.servings)} portion(s) • ${Math.round(recipeKcal)} kcal</div>
+      </div>
+      <button class="btn btn-small btn-danger" type="button">Retirer</button>
+    `;
+
+    row.querySelector("button").addEventListener("click", () => removeDayEntry(entry.id));
+    refs.dayEntriesList.appendChild(row);
+  });
+
+  refs.dayTotalKcal.textContent = `${Math.round(totalKcal)} kcal`;
+  refs.waterCount.textContent = String(state.waterGlasses);
+}
+
+function updateWaterCount(delta) {
+  state.waterGlasses = Math.max(0, state.waterGlasses + delta);
+  renderDayEntries();
+}
+
+function resetWaterCount() {
+  state.waterGlasses = 0;
+  renderDayEntries();
+}
+
+function renderMenuOptions() {
+  const entries = state.recipes.filter((recipe) => normalizeCategoryKey(recipe.category) === "entree");
+  const plats = state.recipes.filter((recipe) => normalizeCategoryKey(recipe.category) === "plat");
+  const desserts = state.recipes.filter((recipe) => normalizeCategoryKey(recipe.category) === "dessert");
+
+  fillSelectWithRecipes(refs.menuEntreeSelect, entries, "Sélectionner une entrée");
+  fillSelectWithRecipes(refs.menuPlatSelect, plats, "Sélectionner un plat");
+  fillSelectWithRecipes(refs.menuDessertSelect, desserts, "Sélectionner un dessert");
+
+  refs.menuEntreeSelect.value = state.menuSelection.entreeId;
+  refs.menuPlatSelect.value = state.menuSelection.platId;
+  refs.menuDessertSelect.value = state.menuSelection.dessertId;
+}
+
+function updateMenuSelection() {
+  state.menuSelection.entreeId = refs.menuEntreeSelect.value;
+  state.menuSelection.platId = refs.menuPlatSelect.value;
+  state.menuSelection.dessertId = refs.menuDessertSelect.value;
+  state.menuSelection.drinks = String(refs.menuDrinksInput.value || "")
+    .split("\n")
+    .map((drink) => drink.trim())
+    .filter(Boolean);
+
+  renderMenuPreview();
+}
+
+function renderMenuPreview() {
+  if (!refs.menuPreview || !refs.menuTotalKcal) {
+    return;
+  }
+
+  const entree = getRecipeById(state.menuSelection.entreeId);
+  const plat = getRecipeById(state.menuSelection.platId);
+  const dessert = getRecipeById(state.menuSelection.dessertId);
+
+  const selectedRecipes = [entree, plat, dessert].filter(Boolean);
+  const totalKcalPerPerson = selectedRecipes.reduce((sum, recipe) => sum + getRecipeKcalPerPerson(recipe), 0);
+
+  refs.menuTotalKcal.textContent = `${Math.round(totalKcalPerPerson)} kcal/personne`;
+
+  if (!entree && !plat && !dessert && state.menuSelection.drinks.length === 0) {
+    refs.menuPreview.className = "menu-preview empty-state";
+    refs.menuPreview.textContent = "Sélectionne des recettes pour construire le menu.";
+    return;
+  }
+
+  refs.menuPreview.className = "menu-preview";
+
+  const drinksItems = state.menuSelection.drinks.length > 0
+    ? state.menuSelection.drinks.map((drink) => `<li>${drink}</li>`).join("")
+    : "<li>Aucune boisson définie</li>";
+
+  refs.menuPreview.innerHTML = `
+    <ul>
+      <li><strong>Entrée:</strong> ${entree ? entree.name : "-"}</li>
+      <li><strong>Plat:</strong> ${plat ? plat.name : "-"}</li>
+      <li><strong>Dessert:</strong> ${dessert ? dessert.name : "-"}</li>
+      <li><strong>Boissons:</strong>
+        <ul>${drinksItems}</ul>
+      </li>
+    </ul>
+  `;
 }
 
 function updateScaledIngredientQuantities(recipe) {
@@ -572,6 +795,10 @@ function renderRecipeDetail() {
 function renderAll() {
   renderRecipeList();
   renderRecipeDetail();
+  renderDayRecipeOptions();
+  renderDayEntries();
+  renderMenuOptions();
+  renderMenuPreview();
 }
 
 function createIngredientRow(data = { name: "", quantity: "", unit: "", alimentId: "", measureId: "", measureLabel: "" }) {
@@ -1098,6 +1325,18 @@ function bindEvents() {
     });
   });
 
+  // Day events
+  refs.addDayEntryBtn.addEventListener("click", addDayEntry);
+  refs.addWaterBtn.addEventListener("click", () => updateWaterCount(1));
+  refs.removeWaterBtn.addEventListener("click", () => updateWaterCount(-1));
+  refs.resetWaterBtn.addEventListener("click", resetWaterCount);
+
+  // Menu events
+  refs.menuEntreeSelect.addEventListener("change", updateMenuSelection);
+  refs.menuPlatSelect.addEventListener("change", updateMenuSelection);
+  refs.menuDessertSelect.addEventListener("change", updateMenuSelection);
+  refs.menuDrinksInput.addEventListener("input", updateMenuSelection);
+
   // KCAL events
   refs.addAlimentBtn.addEventListener("click", openAddAlimentDialog);
   refs.cancelAddAlimentBtn.addEventListener("click", closeAddAlimentDialog);
@@ -1122,13 +1361,19 @@ function switchTab(tabName) {
   // Show/hide tabs
   const showRecipes = tabName === "recipes";
   const showKcal = tabName === "kcal";
+  const showDay = tabName === "day";
+  const showMenu = tabName === "menu";
 
   refs.recipesTab.classList.toggle("hidden", !showRecipes);
   refs.kcalTab.classList.toggle("hidden", !showKcal);
+  refs.dayTab.classList.toggle("hidden", !showDay);
+  refs.menuTab.classList.toggle("hidden", !showMenu);
 
   // Keep native hidden attribute in sync for environments where CSS may fail/cached stale.
   refs.recipesTab.hidden = !showRecipes;
   refs.kcalTab.hidden = !showKcal;
+  refs.dayTab.hidden = !showDay;
+  refs.menuTab.hidden = !showMenu;
 
   state.currentTab = tabName;
 
