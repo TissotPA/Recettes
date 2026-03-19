@@ -1,0 +1,2428 @@
+[
+  {
+    "id": "aliment-130",
+    "name": "Abricot frais",
+    "measures": [
+      {
+        "id": "aliment-130-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 48
+      }
+    ],
+    "kcal": 48,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-32",
+    "name": "Agneau",
+    "measures": [
+      {
+        "id": "aliment-32-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 294
+      }
+    ],
+    "kcal": 294,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-71",
+    "name": "Ail",
+    "measures": [
+      {
+        "id": "aliment-71-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 149
+      }
+    ],
+    "kcal": 149,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-103",
+    "name": "Amande",
+    "measures": [
+      {
+        "id": "aliment-103-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 579
+      }
+    ],
+    "kcal": 579,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-126",
+    "name": "Ananas",
+    "measures": [
+      {
+        "id": "aliment-126-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 50
+      }
+    ],
+    "kcal": 50,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-87",
+    "name": "Artichaut",
+    "measures": [
+      {
+        "id": "aliment-87-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 47
+      }
+    ],
+    "kcal": 47,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-88",
+    "name": "Asperge",
+    "measures": [
+      {
+        "id": "aliment-88-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 27
+      }
+    ],
+    "kcal": 27,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-86",
+    "name": "Aubergine",
+    "measures": [
+      {
+        "id": "aliment-86-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 25
+      },
+      {
+        "id": "aliment-86-measure-1-aubergine-moyenne",
+        "label": "1 aubergine moyenne",
+        "quantity": 1,
+        "unit": "pièce",
+        "kcal": 75
+      }
+    ],
+    "kcal": 25,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-60",
+    "name": "Avoine",
+    "measures": [
+      {
+        "id": "aliment-60-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 389
+      }
+    ],
+    "kcal": 389,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-25",
+    "name": "Bacon",
+    "measures": [
+      {
+        "id": "aliment-25-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 541
+      }
+    ],
+    "kcal": 541,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-53",
+    "name": "Baguette",
+    "measures": [
+      {
+        "id": "aliment-53-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 270
+      }
+    ],
+    "kcal": 270,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-109",
+    "name": "Banane",
+    "measures": [
+      {
+        "id": "aliment-109-measure-1-piece",
+        "label": "1 pièce",
+        "quantity": 1,
+        "unit": "pièce",
+        "kcal": 89
+      }
+    ],
+    "kcal": 89,
+    "quantity": 1,
+    "unit": "pièce"
+  },
+  {
+    "id": "aliment-1773909529601",
+    "name": "Basilic",
+    "measures": [
+      {
+        "id": "aliment-1773909529601-measure-1-piece",
+        "label": "1 pièce",
+        "quantity": 1,
+        "unit": "pièce",
+        "kcal": 0
+      }
+    ],
+    "kcal": 0,
+    "quantity": 1,
+    "unit": "pièce"
+  },
+  {
+    "id": "aliment-81",
+    "name": "Betterave",
+    "measures": [
+      {
+        "id": "aliment-81-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 43
+      }
+    ],
+    "kcal": 43,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-8",
+    "name": "Beurre",
+    "measures": [
+      {
+        "id": "aliment-8-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 717
+      },
+      {
+        "id": "aliment-8-measure-1-noix",
+        "label": "1 noix",
+        "quantity": 10,
+        "unit": "g",
+        "kcal": 72
+      }
+    ],
+    "kcal": 717,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-139",
+    "name": "Bière",
+    "measures": [
+      {
+        "id": "aliment-139-measure-100-ml",
+        "label": "100 ml",
+        "quantity": 100,
+        "unit": "ml",
+        "kcal": 43
+      }
+    ],
+    "kcal": 43,
+    "quantity": 100,
+    "unit": "ml"
+  },
+  {
+    "id": "aliment-22",
+    "name": "Blanc d'oeuf",
+    "measures": [
+      {
+        "id": "aliment-22-measure-1-piece",
+        "label": "1 pièce",
+        "quantity": 1,
+        "unit": "pièce",
+        "kcal": 52
+      }
+    ],
+    "kcal": 52,
+    "quantity": 1,
+    "unit": "pièce"
+  },
+  {
+    "id": "aliment-76",
+    "name": "Brocoli",
+    "measures": [
+      {
+        "id": "aliment-76-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 34
+      }
+    ],
+    "kcal": 34,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-37",
+    "name": "Cabillaud",
+    "measures": [
+      {
+        "id": "aliment-37-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 82
+      }
+    ],
+    "kcal": 82,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-106",
+    "name": "Cacahuète",
+    "measures": [
+      {
+        "id": "aliment-106-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 567
+      }
+    ],
+    "kcal": 567,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-133",
+    "name": "Café",
+    "measures": [
+      {
+        "id": "aliment-133-measure-100-ml",
+        "label": "100 ml",
+        "quantity": 100,
+        "unit": "ml",
+        "kcal": 0
+      }
+    ],
+    "kcal": 0,
+    "quantity": 100,
+    "unit": "ml"
+  },
+  {
+    "id": "aliment-15",
+    "name": "Camembert",
+    "measures": [
+      {
+        "id": "aliment-15-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 265
+      }
+    ],
+    "kcal": 265,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-79",
+    "name": "Carotte",
+    "measures": [
+      {
+        "id": "aliment-79-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 41
+      },
+      {
+        "id": "aliment-79-measure-1-carotte-moyenne",
+        "label": "1 carotte moyenne",
+        "quantity": 1,
+        "unit": "pièce",
+        "kcal": 25
+      }
+    ],
+    "kcal": 41,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-95",
+    "name": "Céleri-rave",
+    "measures": [
+      {
+        "id": "aliment-95-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 42
+      }
+    ],
+    "kcal": 42,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-83",
+    "name": "Cèpe",
+    "measures": [
+      {
+        "id": "aliment-83-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 38
+      }
+    ],
+    "kcal": 38,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-119",
+    "name": "Cerise",
+    "measures": [
+      {
+        "id": "aliment-119-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 63
+      }
+    ],
+    "kcal": 63,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-138",
+    "name": "Champagne",
+    "measures": [
+      {
+        "id": "aliment-138-measure-100-ml",
+        "label": "100 ml",
+        "quantity": 100,
+        "unit": "ml",
+        "kcal": 77
+      }
+    ],
+    "kcal": 77,
+    "quantity": 100,
+    "unit": "ml"
+  },
+  {
+    "id": "aliment-82",
+    "name": "Champignon de Paris",
+    "measures": [
+      {
+        "id": "aliment-82-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 22
+      }
+    ],
+    "kcal": 22,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-16",
+    "name": "Cheddar",
+    "measures": [
+      {
+        "id": "aliment-16-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 403
+      }
+    ],
+    "kcal": 403,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-99",
+    "name": "Chicorée",
+    "measures": [
+      {
+        "id": "aliment-99-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 23
+      }
+    ],
+    "kcal": 23,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-132",
+    "name": "Chocolat au lait",
+    "measures": [
+      {
+        "id": "aliment-132-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 535
+      }
+    ],
+    "kcal": 535,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-131",
+    "name": "Chocolat noir",
+    "measures": [
+      {
+        "id": "aliment-131-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 598
+      }
+    ],
+    "kcal": 598,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-78",
+    "name": "Chou",
+    "measures": [
+      {
+        "id": "aliment-78-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 25
+      }
+    ],
+    "kcal": 25,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-77",
+    "name": "Chou-fleur",
+    "measures": [
+      {
+        "id": "aliment-77-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 25
+      }
+    ],
+    "kcal": 25,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-111",
+    "name": "Citron",
+    "measures": [
+      {
+        "id": "aliment-111-measure-1-piece",
+        "label": "1 pièce",
+        "quantity": 1,
+        "unit": "pièce",
+        "kcal": 29
+      }
+    ],
+    "kcal": 29,
+    "quantity": 1,
+    "unit": "pièce"
+  },
+  {
+    "id": "aliment-73",
+    "name": "Concombre",
+    "measures": [
+      {
+        "id": "aliment-73-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 16
+      },
+      {
+        "id": "aliment-73-measure-1-concombre",
+        "label": "1 concombre",
+        "quantity": 1,
+        "unit": "pièce",
+        "kcal": 48
+      }
+    ],
+    "kcal": 16,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-84",
+    "name": "Courge",
+    "measures": [
+      {
+        "id": "aliment-84-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 34
+      }
+    ],
+    "kcal": 34,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-85",
+    "name": "Courgette",
+    "measures": [
+      {
+        "id": "aliment-85-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 18
+      },
+      {
+        "id": "aliment-85-measure-1-courgette-moyenne",
+        "label": "1 courgette moyenne",
+        "quantity": 1,
+        "unit": "pièce",
+        "kcal": 36
+      }
+    ],
+    "kcal": 18,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-9",
+    "name": "Crème fraîche",
+    "measures": [
+      {
+        "id": "aliment-9-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 340
+      }
+    ],
+    "kcal": 340,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-101",
+    "name": "Cresson",
+    "measures": [
+      {
+        "id": "aliment-101-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 22
+      }
+    ],
+    "kcal": 22,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-42",
+    "name": "Crevette",
+    "measures": [
+      {
+        "id": "aliment-42-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 99
+      }
+    ],
+    "kcal": 99,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-52",
+    "name": "Croissant",
+    "measures": [
+      {
+        "id": "aliment-52-measure-1-piece",
+        "label": "1 pièce",
+        "quantity": 1,
+        "unit": "pièce",
+        "kcal": 406
+      }
+    ],
+    "kcal": 406,
+    "quantity": 1,
+    "unit": "pièce"
+  },
+  {
+    "id": "aliment-117",
+    "name": "Datte",
+    "measures": [
+      {
+        "id": "aliment-117-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 282
+      }
+    ],
+    "kcal": 282,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-29",
+    "name": "Dinde",
+    "measures": [
+      {
+        "id": "aliment-29-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 135
+      }
+    ],
+    "kcal": 135,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-1",
+    "name": "Eau",
+    "measures": [
+      {
+        "id": "aliment-1-measure-100-ml",
+        "label": "100 ml",
+        "quantity": 100,
+        "unit": "ml",
+        "kcal": 0
+      }
+    ],
+    "kcal": 0,
+    "quantity": 100,
+    "unit": "ml"
+  },
+  {
+    "id": "aliment-72",
+    "name": "Échalote",
+    "measures": [
+      {
+        "id": "aliment-72-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 72
+      }
+    ],
+    "kcal": 72,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-98",
+    "name": "Endive",
+    "measures": [
+      {
+        "id": "aliment-98-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 17
+      }
+    ],
+    "kcal": 17,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-75",
+    "name": "Épinard",
+    "measures": [
+      {
+        "id": "aliment-75-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 23
+      }
+    ],
+    "kcal": 23,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-54",
+    "name": "Farine blanche",
+    "measures": [
+      {
+        "id": "aliment-54-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 364
+      },
+      {
+        "id": "aliment-54-measure-1-cuillere-a-soupe",
+        "label": "1 cuillère à soupe",
+        "quantity": 1,
+        "unit": "cuillère à soupe",
+        "kcal": 36
+      }
+    ],
+    "kcal": 364,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-55",
+    "name": "Farine complète",
+    "measures": [
+      {
+        "id": "aliment-55-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 340
+      }
+    ],
+    "kcal": 340,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-18",
+    "name": "Feta",
+    "measures": [
+      {
+        "id": "aliment-18-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 264
+      }
+    ],
+    "kcal": 264,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-66",
+    "name": "Fève",
+    "measures": [
+      {
+        "id": "aliment-66-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 89
+      }
+    ],
+    "kcal": 89,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-118",
+    "name": "Figue",
+    "measures": [
+      {
+        "id": "aliment-118-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 74
+      }
+    ],
+    "kcal": 74,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-34",
+    "name": "Foie",
+    "measures": [
+      {
+        "id": "aliment-34-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 165
+      }
+    ],
+    "kcal": 165,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-113",
+    "name": "Fraise",
+    "measures": [
+      {
+        "id": "aliment-113-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 32
+      },
+      {
+        "id": "aliment-113-measure-10-fraises",
+        "label": "10 fraises",
+        "quantity": 10,
+        "unit": "pièce",
+        "kcal": 45
+      }
+    ],
+    "kcal": 32,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-114",
+    "name": "Framboise",
+    "measures": [
+      {
+        "id": "aliment-114-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 52
+      }
+    ],
+    "kcal": 52,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-13",
+    "name": "Fromage blanc",
+    "measures": [
+      {
+        "id": "aliment-13-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 83
+      }
+    ],
+    "kcal": 83,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-129",
+    "name": "Grenade",
+    "measures": [
+      {
+        "id": "aliment-129-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 83
+      }
+    ],
+    "kcal": 83,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-17",
+    "name": "Gruyère",
+    "measures": [
+      {
+        "id": "aliment-17-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 413
+      }
+    ],
+    "kcal": 413,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-89",
+    "name": "Haricot vert",
+    "measures": [
+      {
+        "id": "aliment-89-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 31
+      }
+    ],
+    "kcal": 31,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-65",
+    "name": "Haricots blancs",
+    "measures": [
+      {
+        "id": "aliment-65-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 123
+      }
+    ],
+    "kcal": 123,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-64",
+    "name": "Haricots rouges",
+    "measures": [
+      {
+        "id": "aliment-64-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 127
+      }
+    ],
+    "kcal": 127,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-43",
+    "name": "Homard",
+    "measures": [
+      {
+        "id": "aliment-43-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 90
+      }
+    ],
+    "kcal": 90,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-6",
+    "name": "Huile d'olive",
+    "measures": [
+      {
+        "id": "aliment-6-measure-100-ml",
+        "label": "100 ml",
+        "quantity": 100,
+        "unit": "ml",
+        "kcal": 884
+      },
+      {
+        "id": "aliment-6-measure-1-cuillere-a-soupe",
+        "label": "1 cuillère à soupe",
+        "quantity": 1,
+        "unit": "cuillère à soupe",
+        "kcal": 119
+      },
+      {
+        "id": "aliment-6-measure-1-cuillere-a-cafe",
+        "label": "1 cuillère à café",
+        "quantity": 1,
+        "unit": "cuillère à café",
+        "kcal": 40
+      }
+    ],
+    "kcal": 884,
+    "quantity": 100,
+    "unit": "ml"
+  },
+  {
+    "id": "aliment-7",
+    "name": "Huile de tournesol",
+    "measures": [
+      {
+        "id": "aliment-7-measure-100-ml",
+        "label": "100 ml",
+        "quantity": 100,
+        "unit": "ml",
+        "kcal": 884
+      },
+      {
+        "id": "aliment-7-measure-1-cuillere-a-soupe",
+        "label": "1 cuillère à soupe",
+        "quantity": 1,
+        "unit": "cuillère à soupe",
+        "kcal": 119
+      },
+      {
+        "id": "aliment-7-measure-1-cuillere-a-cafe",
+        "label": "1 cuillère à café",
+        "quantity": 1,
+        "unit": "cuillère à café",
+        "kcal": 40
+      }
+    ],
+    "kcal": 884,
+    "quantity": 100,
+    "unit": "ml"
+  },
+  {
+    "id": "aliment-45",
+    "name": "Huître",
+    "measures": [
+      {
+        "id": "aliment-45-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 68
+      }
+    ],
+    "kcal": 68,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-24",
+    "name": "Jambon",
+    "measures": [
+      {
+        "id": "aliment-24-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 142
+      }
+    ],
+    "kcal": 142,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-23",
+    "name": "Jaune d'oeuf",
+    "measures": [
+      {
+        "id": "aliment-23-measure-1-piece",
+        "label": "1 pièce",
+        "quantity": 1,
+        "unit": "pièce",
+        "kcal": 322
+      }
+    ],
+    "kcal": 322,
+    "quantity": 1,
+    "unit": "pièce"
+  },
+  {
+    "id": "aliment-140",
+    "name": "Jus d'orange",
+    "measures": [
+      {
+        "id": "aliment-140-measure-100-ml",
+        "label": "100 ml",
+        "quantity": 100,
+        "unit": "ml",
+        "kcal": 45
+      }
+    ],
+    "kcal": 45,
+    "quantity": 100,
+    "unit": "ml"
+  },
+  {
+    "id": "aliment-112",
+    "name": "Kiwi",
+    "measures": [
+      {
+        "id": "aliment-112-measure-1-piece",
+        "label": "1 pièce",
+        "quantity": 1,
+        "unit": "pièce",
+        "kcal": 61
+      }
+    ],
+    "kcal": 61,
+    "quantity": 1,
+    "unit": "pièce"
+  },
+  {
+    "id": "aliment-11",
+    "name": "Lait écrémé",
+    "measures": [
+      {
+        "id": "aliment-11-measure-100-ml",
+        "label": "100 ml",
+        "quantity": 100,
+        "unit": "ml",
+        "kcal": 36
+      }
+    ],
+    "kcal": 36,
+    "quantity": 100,
+    "unit": "ml"
+  },
+  {
+    "id": "aliment-10",
+    "name": "Lait entier",
+    "measures": [
+      {
+        "id": "aliment-10-measure-100-ml",
+        "label": "100 ml",
+        "quantity": 100,
+        "unit": "ml",
+        "kcal": 64
+      },
+      {
+        "id": "aliment-10-measure-1-verre",
+        "label": "1 verre",
+        "quantity": 1,
+        "unit": "verre",
+        "kcal": 128
+      }
+    ],
+    "kcal": 64,
+    "quantity": 100,
+    "unit": "ml"
+  },
+  {
+    "id": "aliment-74",
+    "name": "Laitue",
+    "measures": [
+      {
+        "id": "aliment-74-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 15
+      }
+    ],
+    "kcal": 15,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-62",
+    "name": "Lentille",
+    "measures": [
+      {
+        "id": "aliment-62-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 116
+      }
+    ],
+    "kcal": 116,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-61",
+    "name": "Maïs",
+    "measures": [
+      {
+        "id": "aliment-61-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 86
+      }
+    ],
+    "kcal": 86,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-91",
+    "name": "Maïs doux",
+    "measures": [
+      {
+        "id": "aliment-91-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 86
+      }
+    ],
+    "kcal": 86,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-127",
+    "name": "Mangue",
+    "measures": [
+      {
+        "id": "aliment-127-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 60
+      }
+    ],
+    "kcal": 60,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-124",
+    "name": "Melon",
+    "measures": [
+      {
+        "id": "aliment-124-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 34
+      }
+    ],
+    "kcal": 34,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-5",
+    "name": "Miel",
+    "measures": [
+      {
+        "id": "aliment-5-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 304
+      }
+    ],
+    "kcal": 304,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-58",
+    "name": "Millet",
+    "measures": [
+      {
+        "id": "aliment-58-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 378
+      }
+    ],
+    "kcal": 378,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-41",
+    "name": "Moule",
+    "measures": [
+      {
+        "id": "aliment-41-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 95
+      }
+    ],
+    "kcal": 95,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-14",
+    "name": "Mozzarella",
+    "measures": [
+      {
+        "id": "aliment-14-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 280
+      }
+    ],
+    "kcal": 280,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-115",
+    "name": "Mûre",
+    "measures": [
+      {
+        "id": "aliment-115-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 43
+      }
+    ],
+    "kcal": 43,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-116",
+    "name": "Myrtille",
+    "measures": [
+      {
+        "id": "aliment-116-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 57
+      }
+    ],
+    "kcal": 57,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-97",
+    "name": "Navet",
+    "measures": [
+      {
+        "id": "aliment-97-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 36
+      }
+    ],
+    "kcal": 36,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-121",
+    "name": "Nectarine",
+    "measures": [
+      {
+        "id": "aliment-121-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 44
+      }
+    ],
+    "kcal": 44,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-104",
+    "name": "Noisette",
+    "measures": [
+      {
+        "id": "aliment-104-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 628
+      }
+    ],
+    "kcal": 628,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-102",
+    "name": "Noix",
+    "measures": [
+      {
+        "id": "aliment-102-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 654
+      }
+    ],
+    "kcal": 654,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-21",
+    "name": "Oeuf entier",
+    "measures": [
+      {
+        "id": "aliment-21-measure-1-piece",
+        "label": "1 pièce",
+        "quantity": 1,
+        "unit": "pièce",
+        "kcal": 155
+      }
+    ],
+    "kcal": 155,
+    "quantity": 1,
+    "unit": "pièce"
+  },
+  {
+    "id": "aliment-70",
+    "name": "Oignon",
+    "measures": [
+      {
+        "id": "aliment-70-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 40
+      },
+      {
+        "id": "aliment-70-measure-1-oignon-moyen",
+        "label": "1 oignon moyen",
+        "quantity": 1,
+        "unit": "pièce",
+        "kcal": 44
+      }
+    ],
+    "kcal": 40,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-110",
+    "name": "Orange",
+    "measures": [
+      {
+        "id": "aliment-110-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 47
+      },
+      {
+        "id": "aliment-110-measure-1-orange",
+        "label": "1 orange",
+        "quantity": 1,
+        "unit": "pièce",
+        "kcal": 61
+      }
+    ],
+    "kcal": 47,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-59",
+    "name": "Orge",
+    "measures": [
+      {
+        "id": "aliment-59-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 354
+      }
+    ],
+    "kcal": 354,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-49",
+    "name": "Pain blanc",
+    "measures": [
+      {
+        "id": "aliment-49-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 265
+      }
+    ],
+    "kcal": 265,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-50",
+    "name": "Pain complet",
+    "measures": [
+      {
+        "id": "aliment-50-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 227
+      }
+    ],
+    "kcal": 227,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-51",
+    "name": "Pain de mie",
+    "measures": [
+      {
+        "id": "aliment-51-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 267
+      }
+    ],
+    "kcal": 267,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-128",
+    "name": "Papaye",
+    "measures": [
+      {
+        "id": "aliment-128-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 43
+      }
+    ],
+    "kcal": 43,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-19",
+    "name": "Parmesan",
+    "measures": [
+      {
+        "id": "aliment-19-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 392
+      },
+      {
+        "id": "aliment-19-measure-1-cuillere-a-soupe",
+        "label": "1 cuillère à soupe",
+        "quantity": 1,
+        "unit": "cuillère à soupe",
+        "kcal": 20
+      }
+    ],
+    "kcal": 392,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-125",
+    "name": "Pastèque",
+    "measures": [
+      {
+        "id": "aliment-125-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 30
+      }
+    ],
+    "kcal": 30,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-94",
+    "name": "Patate",
+    "measures": [
+      {
+        "id": "aliment-94-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 86
+      }
+    ],
+    "kcal": 86,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-93",
+    "name": "Patate douce",
+    "measures": [
+      {
+        "id": "aliment-93-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 86
+      }
+    ],
+    "kcal": 86,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-48",
+    "name": "Pâtes",
+    "measures": [
+      {
+        "id": "aliment-48-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 131
+      }
+    ],
+    "kcal": 131,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-120",
+    "name": "Pêche",
+    "measures": [
+      {
+        "id": "aliment-120-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 39
+      }
+    ],
+    "kcal": 39,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-90",
+    "name": "Petit pois",
+    "measures": [
+      {
+        "id": "aliment-90-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 80
+      }
+    ],
+    "kcal": 80,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-105",
+    "name": "Pistache",
+    "measures": [
+      {
+        "id": "aliment-105-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 557
+      }
+    ],
+    "kcal": 557,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-108",
+    "name": "Poire",
+    "measures": [
+      {
+        "id": "aliment-108-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 57
+      },
+      {
+        "id": "aliment-108-measure-1-poire-moyenne",
+        "label": "1 poire moyenne",
+        "quantity": 1,
+        "unit": "pièce",
+        "kcal": 97
+      }
+    ],
+    "kcal": 57,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-80",
+    "name": "Poireau",
+    "measures": [
+      {
+        "id": "aliment-80-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 31
+      }
+    ],
+    "kcal": 31,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-63",
+    "name": "Pois chiches",
+    "measures": [
+      {
+        "id": "aliment-63-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 164
+      }
+    ],
+    "kcal": 164,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-3",
+    "name": "Poivre",
+    "measures": [
+      {
+        "id": "aliment-3-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 251
+      }
+    ],
+    "kcal": 251,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-68",
+    "name": "Poivron rouge",
+    "measures": [
+      {
+        "id": "aliment-68-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 31
+      },
+      {
+        "id": "aliment-68-measure-1-poivron",
+        "label": "1 poivron",
+        "quantity": 1,
+        "unit": "pièce",
+        "kcal": 46
+      }
+    ],
+    "kcal": 31,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-69",
+    "name": "Poivron vert",
+    "measures": [
+      {
+        "id": "aliment-69-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 30
+      },
+      {
+        "id": "aliment-69-measure-1-poivron",
+        "label": "1 poivron",
+        "quantity": 1,
+        "unit": "pièce",
+        "kcal": 36
+      }
+    ],
+    "kcal": 30,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-107",
+    "name": "Pomme",
+    "measures": [
+      {
+        "id": "aliment-107-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 52
+      },
+      {
+        "id": "aliment-107-measure-1-pomme-moyenne",
+        "label": "1 pomme moyenne",
+        "quantity": 1,
+        "unit": "pièce",
+        "kcal": 78
+      }
+    ],
+    "kcal": 52,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-92",
+    "name": "Pomme de terre",
+    "measures": [
+      {
+        "id": "aliment-92-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 77
+      }
+    ],
+    "kcal": 77,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-33",
+    "name": "Porc rôti",
+    "measures": [
+      {
+        "id": "aliment-33-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 242
+      }
+    ],
+    "kcal": 242,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-27",
+    "name": "Poulet blanc",
+    "measures": [
+      {
+        "id": "aliment-27-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 165
+      }
+    ],
+    "kcal": 165,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-28",
+    "name": "Poulet cuisse",
+    "measures": [
+      {
+        "id": "aliment-28-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 209
+      }
+    ],
+    "kcal": 209,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-44",
+    "name": "Poulpe",
+    "measures": [
+      {
+        "id": "aliment-44-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 81
+      }
+    ],
+    "kcal": 81,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-96",
+    "name": "Radis",
+    "measures": [
+      {
+        "id": "aliment-96-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 16
+      }
+    ],
+    "kcal": 16,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-122",
+    "name": "Raisin blanc",
+    "measures": [
+      {
+        "id": "aliment-122-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 67
+      }
+    ],
+    "kcal": 67,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-123",
+    "name": "Raisin rouge",
+    "measures": [
+      {
+        "id": "aliment-123-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 72
+      }
+    ],
+    "kcal": 72,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-20",
+    "name": "Ricotta",
+    "measures": [
+      {
+        "id": "aliment-20-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 174
+      }
+    ],
+    "kcal": 174,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-46",
+    "name": "Riz blanc",
+    "measures": [
+      {
+        "id": "aliment-46-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 130
+      }
+    ],
+    "kcal": 130,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-47",
+    "name": "Riz complet",
+    "measures": [
+      {
+        "id": "aliment-47-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 111
+      }
+    ],
+    "kcal": 111,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-57",
+    "name": "Riz sauvage",
+    "measures": [
+      {
+        "id": "aliment-57-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 101
+      }
+    ],
+    "kcal": 101,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-100",
+    "name": "Roquette",
+    "measures": [
+      {
+        "id": "aliment-100-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 25
+      }
+    ],
+    "kcal": 25,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-39",
+    "name": "Sardine",
+    "measures": [
+      {
+        "id": "aliment-39-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 208
+      }
+    ],
+    "kcal": 208,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-26",
+    "name": "Saucisse",
+    "measures": [
+      {
+        "id": "aliment-26-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 301
+      }
+    ],
+    "kcal": 301,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-35",
+    "name": "Saumon",
+    "measures": [
+      {
+        "id": "aliment-35-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 208
+      }
+    ],
+    "kcal": 208,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-2",
+    "name": "Sel",
+    "measures": [
+      {
+        "id": "aliment-2-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 0
+      }
+    ],
+    "kcal": 0,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-56",
+    "name": "Semoule",
+    "measures": [
+      {
+        "id": "aliment-56-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 362
+      }
+    ],
+    "kcal": 362,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-38",
+    "name": "Sole",
+    "measures": [
+      {
+        "id": "aliment-38-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 84
+      }
+    ],
+    "kcal": 84,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-30",
+    "name": "Steak boeuf",
+    "measures": [
+      {
+        "id": "aliment-30-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 250
+      }
+    ],
+    "kcal": 250,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-4",
+    "name": "Sucre blanc",
+    "measures": [
+      {
+        "id": "aliment-4-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 387
+      },
+      {
+        "id": "aliment-4-measure-1-cuillere-a-cafe",
+        "label": "1 cuillère à café",
+        "quantity": 1,
+        "unit": "cuillère à café",
+        "kcal": 16
+      },
+      {
+        "id": "aliment-4-measure-1-cuillere-a-soupe",
+        "label": "1 cuillère à soupe",
+        "quantity": 1,
+        "unit": "cuillère à soupe",
+        "kcal": 48
+      }
+    ],
+    "kcal": 387,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-134",
+    "name": "Thé",
+    "measures": [
+      {
+        "id": "aliment-134-measure-100-ml",
+        "label": "100 ml",
+        "quantity": 100,
+        "unit": "ml",
+        "kcal": 0
+      }
+    ],
+    "kcal": 0,
+    "quantity": 100,
+    "unit": "ml"
+  },
+  {
+    "id": "aliment-40",
+    "name": "Thon",
+    "measures": [
+      {
+        "id": "aliment-40-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 144
+      }
+    ],
+    "kcal": 144,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-67",
+    "name": "Tomate",
+    "measures": [
+      {
+        "id": "aliment-67-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 18
+      },
+      {
+        "id": "aliment-67-measure-1-tomate-moyenne",
+        "label": "1 tomate moyenne",
+        "quantity": 1,
+        "unit": "pièce",
+        "kcal": 22
+      }
+    ],
+    "kcal": 18,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-36",
+    "name": "Trout",
+    "measures": [
+      {
+        "id": "aliment-36-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 141
+      }
+    ],
+    "kcal": 141,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-31",
+    "name": "Veau",
+    "measures": [
+      {
+        "id": "aliment-31-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 145
+      }
+    ],
+    "kcal": 145,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
+    "id": "aliment-136",
+    "name": "Vin blanc",
+    "measures": [
+      {
+        "id": "aliment-136-measure-100-ml",
+        "label": "100 ml",
+        "quantity": 100,
+        "unit": "ml",
+        "kcal": 77
+      }
+    ],
+    "kcal": 77,
+    "quantity": 100,
+    "unit": "ml"
+  },
+  {
+    "id": "aliment-137",
+    "name": "Vin rosé",
+    "measures": [
+      {
+        "id": "aliment-137-measure-100-ml",
+        "label": "100 ml",
+        "quantity": 100,
+        "unit": "ml",
+        "kcal": 83
+      }
+    ],
+    "kcal": 83,
+    "quantity": 100,
+    "unit": "ml"
+  },
+  {
+    "id": "aliment-135",
+    "name": "Vin rouge",
+    "measures": [
+      {
+        "id": "aliment-135-measure-100-ml",
+        "label": "100 ml",
+        "quantity": 100,
+        "unit": "ml",
+        "kcal": 82
+      }
+    ],
+    "kcal": 82,
+    "quantity": 100,
+    "unit": "ml"
+  },
+  {
+    "id": "aliment-1773909518180",
+    "name": "Vinaigre balsamique",
+    "measures": [
+      {
+        "id": "aliment-1773909518180-measure-1-cuillere-a-cafe",
+        "label": "1 cuillère à café",
+        "quantity": 1,
+        "unit": "cuillère à café",
+        "kcal": 5
+      }
+    ],
+    "kcal": 5,
+    "quantity": 1,
+    "unit": "cuillère à café"
+  },
+  {
+    "id": "aliment-12",
+    "name": "Yaourt nature",
+    "measures": [
+      {
+        "id": "aliment-12-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 59
+      }
+    ],
+    "kcal": 59,
+    "quantity": 100,
+    "unit": "g"
+  }
+]
