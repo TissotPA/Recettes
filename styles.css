@@ -553,6 +553,26 @@ ol {
   padding: 0.8rem;
 }
 
+.drink-box {
+  border: 1px solid #e6e9f1;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.62);
+  padding: 0.9rem;
+  margin: 0 0 1rem;
+}
+
+.drink-grid {
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  margin-bottom: 0.7rem;
+}
+
+.drink-entries-list {
+  display: grid;
+  gap: 0.5rem;
+}
+
 .search-aliment {
   width: 100%;
   margin-bottom: 0.8rem;

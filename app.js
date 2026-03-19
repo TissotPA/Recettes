@@ -62,12 +62,13 @@ const state = {
   alimentSearchFilter: "",
   currentTab: "recipes",
   dayEntries: [],
+  dayDrinkEntries: [],
   waterGlasses: 0,
   menuSelection: {
     entreeId: "",
     platId: "",
     dessertId: "",
-    drinks: []
+    drinkEntries: []
   }
 };
 
@@ -114,6 +115,12 @@ const refs = {
   addDayEntryBtn: document.getElementById("addDayEntryBtn"),
   dayEntriesList: document.getElementById("dayEntriesList"),
   dayTotalKcal: document.getElementById("dayTotalKcal"),
+  dayDrinksKcal: document.getElementById("dayDrinksKcal"),
+  dayDrinkSelect: document.getElementById("dayDrinkSelect"),
+  dayDrinkMeasureSelect: document.getElementById("dayDrinkMeasureSelect"),
+  dayDrinkQuantityInput: document.getElementById("dayDrinkQuantityInput"),
+  addDayDrinkBtn: document.getElementById("addDayDrinkBtn"),
+  dayDrinksList: document.getElementById("dayDrinksList"),
   waterCount: document.getElementById("waterCount"),
   addWaterBtn: document.getElementById("addWaterBtn"),
   removeWaterBtn: document.getElementById("removeWaterBtn"),
@@ -122,7 +129,11 @@ const refs = {
   menuEntreeSelect: document.getElementById("menuEntreeSelect"),
   menuPlatSelect: document.getElementById("menuPlatSelect"),
   menuDessertSelect: document.getElementById("menuDessertSelect"),
-  menuDrinksInput: document.getElementById("menuDrinksInput"),
+  menuDrinkSelect: document.getElementById("menuDrinkSelect"),
+  menuDrinkMeasureSelect: document.getElementById("menuDrinkMeasureSelect"),
+  menuDrinkQuantityInput: document.getElementById("menuDrinkQuantityInput"),
+  addMenuDrinkBtn: document.getElementById("addMenuDrinkBtn"),
+  menuDrinksList: document.getElementById("menuDrinksList"),
   menuPreview: document.getElementById("menuPreview"),
   menuTotalKcal: document.getElementById("menuTotalKcal"),
   // Quick add aliment (from recipe ingredient search)
@@ -341,6 +352,10 @@ function getRecipeById(recipeId) {
   return state.recipes.find((recipe) => recipe.id === recipeId) || null;
 }
 
+function getAlimentById(alimentId) {
+  return state.aliments.find((aliment) => aliment.id === alimentId) || null;
+}
+
 function fillSelectWithRecipes(select, recipes, placeholder) {
   if (!select) {
     return;
@@ -371,6 +386,96 @@ function fillSelectWithRecipes(select, recipes, placeholder) {
 
 function renderDayRecipeOptions() {
   fillSelectWithRecipes(refs.dayRecipeSelect, state.recipes, "Sélectionner une recette");
+
+  const previousDrinkValue = refs.dayDrinkSelect.value;
+  refs.dayDrinkSelect.innerHTML = '<option value="">Sélectionner une boisson</option>';
+
+  state.aliments
+    .slice()
+    .sort((a, b) => a.name.localeCompare(b.name, "fr"))
+    .forEach((aliment) => {
+      const option = document.createElement("option");
+      option.value = aliment.id;
+      option.textContent = aliment.name;
+      refs.dayDrinkSelect.appendChild(option);
+    });
+
+  if (previousDrinkValue && state.aliments.some((aliment) => aliment.id === previousDrinkValue)) {
+    refs.dayDrinkSelect.value = previousDrinkValue;
+  }
+
+  updateDayDrinkMeasureOptions();
+}
+
+function updateDayDrinkMeasureOptions() {
+  const drinkId = refs.dayDrinkSelect.value;
+  refs.dayDrinkMeasureSelect.innerHTML = '<option value="">Choisir une mesure</option>';
+
+  if (!drinkId) {
+    return;
+  }
+
+  const aliment = getAlimentById(drinkId);
+  if (!aliment) {
+    return;
+  }
+
+  aliment.measures.forEach((measure) => {
+    const option = document.createElement("option");
+    option.value = measure.id;
+    option.textContent = `${measure.label} • ${measure.kcal} kcal`;
+    refs.dayDrinkMeasureSelect.appendChild(option);
+  });
+
+  if (aliment.measures.length > 0) {
+    refs.dayDrinkMeasureSelect.value = aliment.measures[0].id;
+  }
+}
+
+function addDayDrinkEntry() {
+  const alimentId = refs.dayDrinkSelect.value;
+  const measureId = refs.dayDrinkMeasureSelect.value;
+  const quantity = Number(refs.dayDrinkQuantityInput.value);
+
+  if (!alimentId || !measureId) {
+    setStatus("Sélectionne une boisson et une mesure.", true);
+    return;
+  }
+
+  if (Number.isNaN(quantity) || quantity <= 0) {
+    setStatus("La quantité de boisson doit être supérieure à 0.", true);
+    return;
+  }
+
+  const aliment = getAlimentById(alimentId);
+  const measure = aliment ? getMeasureById(aliment, measureId) : null;
+
+  if (!aliment || !measure) {
+    setStatus("Boisson introuvable.", true);
+    return;
+  }
+
+  const kcal = (quantity / measure.quantity) * measure.kcal;
+
+  state.dayDrinkEntries.push({
+    id: `day-drink-${Date.now()}`,
+    alimentId,
+    measureId,
+    quantity,
+    kcal: Math.round(kcal)
+  });
+
+  renderDayEntries();
+}
+
+function removeDayDrinkEntry(entryId) {
+  const index = state.dayDrinkEntries.findIndex((entry) => entry.id === entryId);
+  if (index === -1) {
+    return;
+  }
+
+  state.dayDrinkEntries.splice(index, 1);
+  renderDayEntries();
 }
 
 function addDayEntry() {
@@ -414,17 +519,19 @@ function removeDayEntry(entryId) {
 }
 
 function renderDayEntries() {
-  if (!refs.dayEntriesList || !refs.dayTotalKcal || !refs.waterCount) {
+  if (!refs.dayEntriesList || !refs.dayTotalKcal || !refs.waterCount || !refs.dayDrinksList || !refs.dayDrinksKcal) {
     return;
   }
 
   refs.dayEntriesList.innerHTML = "";
+  refs.dayDrinksList.innerHTML = "";
 
   if (state.dayEntries.length === 0) {
     refs.dayEntriesList.innerHTML = '<p class="empty-state">Aucune recette ajoutée pour la journée.</p>';
   }
 
   let totalKcal = 0;
+  let drinksKcal = 0;
 
   state.dayEntries.forEach((entry) => {
     const recipe = getRecipeById(entry.recipeId);
@@ -449,7 +556,36 @@ function renderDayEntries() {
     refs.dayEntriesList.appendChild(row);
   });
 
-  refs.dayTotalKcal.textContent = `${Math.round(totalKcal)} kcal`;
+  if (state.dayDrinkEntries.length === 0) {
+    refs.dayDrinksList.innerHTML = '<p class="empty-state">Aucune boisson ajoutée.</p>';
+  }
+
+  state.dayDrinkEntries.forEach((entry) => {
+    const aliment = getAlimentById(entry.alimentId);
+    const measure = aliment ? getMeasureById(aliment, entry.measureId) : null;
+    if (!aliment || !measure) {
+      return;
+    }
+
+    const kcal = Number(entry.kcal) || 0;
+    drinksKcal += kcal;
+
+    const row = document.createElement("div");
+    row.className = "day-entry-row";
+    row.innerHTML = `
+      <div>
+        <strong>${aliment.name}</strong>
+        <div class="day-entry-meta">${formatQuantity(entry.quantity)} × ${measure.label} • ${Math.round(kcal)} kcal</div>
+      </div>
+      <button class="btn btn-small btn-danger" type="button">Retirer</button>
+    `;
+
+    row.querySelector("button").addEventListener("click", () => removeDayDrinkEntry(entry.id));
+    refs.dayDrinksList.appendChild(row);
+  });
+
+  refs.dayDrinksKcal.textContent = `${Math.round(drinksKcal)} kcal`;
+  refs.dayTotalKcal.textContent = `${Math.round(totalKcal + drinksKcal)} kcal`;
   refs.waterCount.textContent = String(state.waterGlasses);
 }
 
@@ -472,6 +608,25 @@ function renderMenuOptions() {
   fillSelectWithRecipes(refs.menuPlatSelect, plats, "Sélectionner un plat");
   fillSelectWithRecipes(refs.menuDessertSelect, desserts, "Sélectionner un dessert");
 
+  const previousDrinkValue = refs.menuDrinkSelect.value;
+  refs.menuDrinkSelect.innerHTML = '<option value="">Sélectionner une boisson</option>';
+
+  state.aliments
+    .slice()
+    .sort((a, b) => a.name.localeCompare(b.name, "fr"))
+    .forEach((aliment) => {
+      const option = document.createElement("option");
+      option.value = aliment.id;
+      option.textContent = aliment.name;
+      refs.menuDrinkSelect.appendChild(option);
+    });
+
+  if (previousDrinkValue && state.aliments.some((aliment) => aliment.id === previousDrinkValue)) {
+    refs.menuDrinkSelect.value = previousDrinkValue;
+  }
+
+  updateMenuDrinkMeasureOptions();
+
   refs.menuEntreeSelect.value = state.menuSelection.entreeId;
   refs.menuPlatSelect.value = state.menuSelection.platId;
   refs.menuDessertSelect.value = state.menuSelection.dessertId;
@@ -481,16 +636,83 @@ function updateMenuSelection() {
   state.menuSelection.entreeId = refs.menuEntreeSelect.value;
   state.menuSelection.platId = refs.menuPlatSelect.value;
   state.menuSelection.dessertId = refs.menuDessertSelect.value;
-  state.menuSelection.drinks = String(refs.menuDrinksInput.value || "")
-    .split("\n")
-    .map((drink) => drink.trim())
-    .filter(Boolean);
 
   renderMenuPreview();
 }
 
+function updateMenuDrinkMeasureOptions() {
+  const drinkId = refs.menuDrinkSelect.value;
+  refs.menuDrinkMeasureSelect.innerHTML = '<option value="">Choisir une mesure</option>';
+
+  if (!drinkId) {
+    return;
+  }
+
+  const aliment = getAlimentById(drinkId);
+  if (!aliment) {
+    return;
+  }
+
+  aliment.measures.forEach((measure) => {
+    const option = document.createElement("option");
+    option.value = measure.id;
+    option.textContent = `${measure.label} • ${measure.kcal} kcal`;
+    refs.menuDrinkMeasureSelect.appendChild(option);
+  });
+
+  if (aliment.measures.length > 0) {
+    refs.menuDrinkMeasureSelect.value = aliment.measures[0].id;
+  }
+}
+
+function addMenuDrinkEntry() {
+  const alimentId = refs.menuDrinkSelect.value;
+  const measureId = refs.menuDrinkMeasureSelect.value;
+  const quantity = Number(refs.menuDrinkQuantityInput.value);
+
+  if (!alimentId || !measureId) {
+    setStatus("Sélectionne une boisson et une mesure pour le menu.", true);
+    return;
+  }
+
+  if (Number.isNaN(quantity) || quantity <= 0) {
+    setStatus("La quantité de boisson doit être supérieure à 0.", true);
+    return;
+  }
+
+  const aliment = getAlimentById(alimentId);
+  const measure = aliment ? getMeasureById(aliment, measureId) : null;
+
+  if (!aliment || !measure) {
+    setStatus("Boisson du menu introuvable.", true);
+    return;
+  }
+
+  const kcal = (quantity / measure.quantity) * measure.kcal;
+
+  state.menuSelection.drinkEntries.push({
+    id: `menu-drink-${Date.now()}`,
+    alimentId,
+    measureId,
+    quantity,
+    kcal: Math.round(kcal)
+  });
+
+  renderMenuPreview();
+}
+
+function removeMenuDrinkEntry(entryId) {
+  const index = state.menuSelection.drinkEntries.findIndex((entry) => entry.id === entryId);
+  if (index === -1) {
+    return;
+  }
+
+  state.menuSelection.drinkEntries.splice(index, 1);
+  renderMenuPreview();
+}
+
 function renderMenuPreview() {
-  if (!refs.menuPreview || !refs.menuTotalKcal) {
+  if (!refs.menuPreview || !refs.menuTotalKcal || !refs.menuDrinksList) {
     return;
   }
 
@@ -499,11 +721,39 @@ function renderMenuPreview() {
   const dessert = getRecipeById(state.menuSelection.dessertId);
 
   const selectedRecipes = [entree, plat, dessert].filter(Boolean);
-  const totalKcalPerPerson = selectedRecipes.reduce((sum, recipe) => sum + getRecipeKcalPerPerson(recipe), 0);
+  const drinksKcalPerPerson = state.menuSelection.drinkEntries.reduce((sum, entry) => sum + (Number(entry.kcal) || 0), 0);
+  const totalKcalPerPerson = selectedRecipes.reduce((sum, recipe) => sum + getRecipeKcalPerPerson(recipe), 0) + drinksKcalPerPerson;
 
   refs.menuTotalKcal.textContent = `${Math.round(totalKcalPerPerson)} kcal/personne`;
 
-  if (!entree && !plat && !dessert && state.menuSelection.drinks.length === 0) {
+  refs.menuDrinksList.innerHTML = "";
+
+  if (state.menuSelection.drinkEntries.length === 0) {
+    refs.menuDrinksList.innerHTML = '<p class="empty-state">Aucune boisson ajoutée.</p>';
+  }
+
+  state.menuSelection.drinkEntries.forEach((entry) => {
+    const aliment = getAlimentById(entry.alimentId);
+    const measure = aliment ? getMeasureById(aliment, entry.measureId) : null;
+    if (!aliment || !measure) {
+      return;
+    }
+
+    const row = document.createElement("div");
+    row.className = "day-entry-row";
+    row.innerHTML = `
+      <div>
+        <strong>${aliment.name}</strong>
+        <div class="day-entry-meta">${formatQuantity(entry.quantity)} × ${measure.label} • ${Math.round(entry.kcal)} kcal/pers</div>
+      </div>
+      <button class="btn btn-small btn-danger" type="button">Retirer</button>
+    `;
+
+    row.querySelector("button").addEventListener("click", () => removeMenuDrinkEntry(entry.id));
+    refs.menuDrinksList.appendChild(row);
+  });
+
+  if (!entree && !plat && !dessert && state.menuSelection.drinkEntries.length === 0) {
     refs.menuPreview.className = "menu-preview empty-state";
     refs.menuPreview.textContent = "Sélectionne des recettes pour construire le menu.";
     return;
@@ -511,8 +761,17 @@ function renderMenuPreview() {
 
   refs.menuPreview.className = "menu-preview";
 
-  const drinksItems = state.menuSelection.drinks.length > 0
-    ? state.menuSelection.drinks.map((drink) => `<li>${drink}</li>`).join("")
+  const drinksItems = state.menuSelection.drinkEntries.length > 0
+    ? state.menuSelection.drinkEntries
+        .map((entry) => {
+          const aliment = getAlimentById(entry.alimentId);
+          const measure = aliment ? getMeasureById(aliment, entry.measureId) : null;
+          if (!aliment || !measure) {
+            return "";
+          }
+          return `<li>${aliment.name} (${formatQuantity(entry.quantity)} × ${measure.label}) • ${Math.round(entry.kcal)} kcal/pers</li>`;
+        })
+        .join("")
     : "<li>Aucune boisson définie</li>";
 
   refs.menuPreview.innerHTML = `
@@ -1327,6 +1586,8 @@ function bindEvents() {
 
   // Day events
   refs.addDayEntryBtn.addEventListener("click", addDayEntry);
+  refs.dayDrinkSelect.addEventListener("change", updateDayDrinkMeasureOptions);
+  refs.addDayDrinkBtn.addEventListener("click", addDayDrinkEntry);
   refs.addWaterBtn.addEventListener("click", () => updateWaterCount(1));
   refs.removeWaterBtn.addEventListener("click", () => updateWaterCount(-1));
   refs.resetWaterBtn.addEventListener("click", resetWaterCount);
@@ -1335,7 +1596,8 @@ function bindEvents() {
   refs.menuEntreeSelect.addEventListener("change", updateMenuSelection);
   refs.menuPlatSelect.addEventListener("change", updateMenuSelection);
   refs.menuDessertSelect.addEventListener("change", updateMenuSelection);
-  refs.menuDrinksInput.addEventListener("input", updateMenuSelection);
+  refs.menuDrinkSelect.addEventListener("change", updateMenuDrinkMeasureOptions);
+  refs.addMenuDrinkBtn.addEventListener("click", addMenuDrinkEntry);
 
   // KCAL events
   refs.addAlimentBtn.addEventListener("click", openAddAlimentDialog);
