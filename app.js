@@ -1124,8 +1124,15 @@ function switchTab(tabName) {
   });
 
   // Show/hide tabs
-  refs.recipesTab.classList.toggle("hidden", tabName !== "recipes");
-  refs.kcalTab.classList.toggle("hidden", tabName !== "kcal");
+  const showRecipes = tabName === "recipes";
+  const showKcal = tabName === "kcal";
+
+  refs.recipesTab.classList.toggle("hidden", !showRecipes);
+  refs.kcalTab.classList.toggle("hidden", !showKcal);
+
+  // Keep native hidden attribute in sync for environments where CSS may fail/cached stale.
+  refs.recipesTab.hidden = !showRecipes;
+  refs.kcalTab.hidden = !showKcal;
 
   state.currentTab = tabName;
 
@@ -1402,6 +1409,7 @@ async function saveAlimentToGitHub(forcePrompt = false) {
 
 function init() {
   bindEvents();
+  switchTab(state.currentTab);
   resetRecipeForm();
   renderAll();
   loadRecipesFromRoot(false);
