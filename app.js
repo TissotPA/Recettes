@@ -1,7 +1,7 @@
 const BASE_SERVINGS = 4;
 const GITHUB_OWNER = "TissotPA";
 const GITHUB_REPO = "Recettes";
-const GITHUB_BRANCH = "gh-pages";
+const GITHUB_BRANCH = "kcal";
 const GITHUB_FILE = "recettes.json";
 const GITHUB_ALIMENTS_FILE = "aliments.json";
 const PAT_STORAGE_KEY = "gh_pat";
@@ -1071,12 +1071,8 @@ function bindEvents() {
       loadRecipesFromRoot(true);
     }
   });
-  refs.saveBtn.addEventListener("click", (e) => {
-    if (state.currentTab === "kcal") {
-      saveAlimentToGitHub(e.shiftKey);
-    } else {
-      saveRecipesToGitHub(e.shiftKey);
-    }
+  refs.saveBtn.addEventListener("click", async (e) => {
+    await saveAllToGitHub(e.shiftKey);
   });
 
   refs.searchByName.addEventListener("input", () => {
@@ -1401,9 +1397,32 @@ async function saveAlimentToGitHub(forcePrompt = false) {
       throw new Error(`Erreur GitHub (code ${putRes.status})`);
     }
 
+    storePat(pat);
     setStatus(`${state.aliments.length} aliment(s) enregistré(s) sur GitHub.`);
   } catch (error) {
     setStatus(`Erreur lors de l'enregistrement : ${error.message}`, true);
+  }
+}
+
+async function saveAllToGitHub(forcePrompt = false) {
+  const hasRecipes = state.recipes.length > 0;
+  const hasAliments = state.aliments.length > 0;
+
+  if (!hasRecipes && !hasAliments) {
+    setStatus("Aucune donnée à enregistrer.", true);
+    return;
+  }
+
+  if (hasRecipes) {
+    await saveRecipesToGitHub(forcePrompt);
+  }
+
+  if (hasAliments) {
+    await saveAlimentToGitHub(false);
+  }
+
+  if (hasRecipes && hasAliments) {
+    setStatus(`Recettes (${state.recipes.length}) et aliments (${state.aliments.length}) enregistrés.`);
   }
 }
 
