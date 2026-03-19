@@ -568,6 +568,15 @@ ol {
   margin-bottom: 0.7rem;
 }
 
+.drink-grid > label {
+  min-width: 0;
+}
+
+.drink-grid select,
+.drink-grid input[type="number"] {
+  width: 100%;
+}
+
 .drink-search-container {
   position: relative;
 }
@@ -579,8 +588,9 @@ ol {
 .drink-add-btn {
   width: fit-content;
   max-width: 100%;
+  grid-column: 1 / -1;
   justify-self: start;
-  align-self: end;
+  align-self: start;
   white-space: nowrap;
 }
 
