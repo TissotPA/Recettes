@@ -13,6 +13,39 @@ const CATEGORY_LABELS = {
   dessert: "Desserts"
 };
 
+const PRESET_MULTI_MEASURES = {
+  tomate: [{ label: "1 tomate moyenne", quantity: 1, unit: "pièce", kcal: 22 }],
+  oignon: [{ label: "1 oignon moyen", quantity: 1, unit: "pièce", kcal: 44 }],
+  carotte: [{ label: "1 carotte moyenne", quantity: 1, unit: "pièce", kcal: 25 }],
+  concombre: [{ label: "1 concombre", quantity: 1, unit: "pièce", kcal: 48 }],
+  courgette: [{ label: "1 courgette moyenne", quantity: 1, unit: "pièce", kcal: 36 }],
+  aubergine: [{ label: "1 aubergine moyenne", quantity: 1, unit: "pièce", kcal: 75 }],
+  "poivron rouge": [{ label: "1 poivron", quantity: 1, unit: "pièce", kcal: 46 }],
+  "poivron vert": [{ label: "1 poivron", quantity: 1, unit: "pièce", kcal: 36 }],
+  pomme: [{ label: "1 pomme moyenne", quantity: 1, unit: "pièce", kcal: 78 }],
+  poire: [{ label: "1 poire moyenne", quantity: 1, unit: "pièce", kcal: 97 }],
+  orange: [{ label: "1 orange", quantity: 1, unit: "pièce", kcal: 61 }],
+  fraise: [{ label: "10 fraises", quantity: 10, unit: "pièce", kcal: 45 }],
+  beurre: [{ label: "1 noix", quantity: 10, unit: "g", kcal: 72 }],
+  "huile d'olive": [
+    { label: "1 cuillère à soupe", quantity: 1, unit: "cuillère à soupe", kcal: 119 },
+    { label: "1 cuillère à café", quantity: 1, unit: "cuillère à café", kcal: 40 }
+  ],
+  "huile de tournesol": [
+    { label: "1 cuillère à soupe", quantity: 1, unit: "cuillère à soupe", kcal: 119 },
+    { label: "1 cuillère à café", quantity: 1, unit: "cuillère à café", kcal: 40 }
+  ],
+  "sucre blanc": [
+    { label: "1 cuillère à café", quantity: 1, unit: "cuillère à café", kcal: 16 },
+    { label: "1 cuillère à soupe", quantity: 1, unit: "cuillère à soupe", kcal: 48 }
+  ],
+  "farine blanche": [{ label: "1 cuillère à soupe", quantity: 1, unit: "cuillère à soupe", kcal: 36 }],
+  "lait entier": [{ label: "1 verre", quantity: 1, unit: "verre", kcal: 128 }],
+  "lait écrémé": [{ label: "1 verre", quantity: 1, unit: "verre", kcal: 72 }],
+  "crème fraîche": [{ label: "1 cuillère à soupe", quantity: 1, unit: "cuillère à soupe", kcal: 51 }],
+  parmesan: [{ label: "1 cuillère à soupe", quantity: 1, unit: "cuillère à soupe", kcal: 20 }]
+};
+
 let lastQuickAlimentCallback = null;
 
 const state = {
@@ -60,6 +93,11 @@ const refs = {
   addAlimentDialog: document.getElementById("addAlimentDialog"),
   addAlimentForm: document.getElementById("addAlimentForm"),
   cancelAddAlimentBtn: document.getElementById("cancelAddAlimentBtn"),
+  addAlimentDialogTitle: document.getElementById("addAlimentDialogTitle"),
+  submitAddAlimentBtn: document.getElementById("submitAddAlimentBtn"),
+  addAlimentMeasureBtn: document.getElementById("addAlimentMeasureBtn"),
+  alimentMeasureRows: document.getElementById("alimentMeasureRows"),
+  alimentMeasureRowTemplate: document.getElementById("alimentMeasureRowTemplate"),
   // Quick add aliment (from recipe ingredient search)
   quickAddAlimentDialog: document.getElementById("quickAddAlimentDialog"),
   quickAddAlimentForm: document.getElementById("quickAddAlimentForm"),
@@ -78,6 +116,128 @@ function parseIngredientInput(text) {
     .filter(Boolean);
 }
 
+function normalizeLookupKey(value) {
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
+function buildMeasureLabel(quantity, unit) {
+  return `${formatQuantity(quantity)} ${unit}`.trim();
+}
+
+function createMeasureId(alimentId, measure, index) {
+  const labelPart = normalizeLookupKey(measure.label || `${measure.quantity}-${measure.unit}`)
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+  return `${alimentId}-measure-${labelPart || index + 1}`;
+}
+
+function normalizeMeasure(measure, alimentId, index) {
+  const quantity = Number(measure.quantity);
+  const kcal = Number(measure.kcal);
+  const unit = String(measure.unit || "").trim();
+  const label = String(measure.label || buildMeasureLabel(quantity, unit)).trim();
+
+  if (!label || !unit || Number.isNaN(quantity) || quantity <= 0 || Number.isNaN(kcal) || kcal < 0) {
+    return null;
+  }
+
+  return {
+    id: measure.id ? String(measure.id).trim() : createMeasureId(alimentId, { label, quantity, unit }, index),
+    label,
+    quantity,
+    unit,
+    kcal
+  };
+}
+
+function getPresetMeasuresForAliment(name) {
+  return PRESET_MULTI_MEASURES[normalizeLookupKey(name)] || [];
+}
+
+function getDefaultMeasure(aliment) {
+  return Array.isArray(aliment.measures) && aliment.measures.length > 0
+    ? aliment.measures[0]
+    : null;
+}
+
+function getMeasureById(aliment, measureId) {
+  return Array.isArray(aliment.measures)
+    ? aliment.measures.find((measure) => measure.id === measureId) || getDefaultMeasure(aliment)
+    : null;
+}
+
+function findAlimentByName(name) {
+  const target = normalizeLookupKey(name);
+  const singularTarget = target.endsWith("s") ? target.slice(0, -1) : target;
+
+  return state.aliments.find((aliment) => {
+    const alimentName = normalizeLookupKey(aliment.name);
+    const singularAlimentName = alimentName.endsWith("s") ? alimentName.slice(0, -1) : alimentName;
+    return alimentName === target || singularAlimentName === singularTarget;
+  }) || null;
+}
+
+function normalizeAliment(aliment, index) {
+  if (!aliment || !aliment.name) {
+    return null;
+  }
+
+  const alimentId = String(aliment.id || `aliment-${Date.now()}-${index}`).trim();
+  const baseMeasures = Array.isArray(aliment.measures) && aliment.measures.length > 0
+    ? aliment.measures
+    : [{
+        label: buildMeasureLabel(Number(aliment.quantity) || 100, String(aliment.unit || "g").trim() || "g"),
+        quantity: Number(aliment.quantity) || 100,
+        unit: String(aliment.unit || "g").trim() || "g",
+        kcal: Number(aliment.kcal) || 0
+      }];
+
+  const normalizedMeasures = baseMeasures
+    .map((measure, measureIndex) => normalizeMeasure(measure, alimentId, measureIndex))
+    .filter(Boolean);
+
+  const presetMeasures = getPresetMeasuresForAliment(aliment.name)
+    .map((measure, measureIndex) => normalizeMeasure(measure, alimentId, normalizedMeasures.length + measureIndex))
+    .filter(Boolean);
+
+  presetMeasures.forEach((presetMeasure) => {
+    const exists = normalizedMeasures.some((measure) => normalizeLookupKey(measure.label) === normalizeLookupKey(presetMeasure.label));
+    if (!exists) {
+      normalizedMeasures.push(presetMeasure);
+    }
+  });
+
+  if (normalizedMeasures.length === 0) {
+    return null;
+  }
+
+  const defaultMeasure = normalizedMeasures[0];
+
+  return {
+    id: alimentId,
+    name: String(aliment.name).trim(),
+    measures: normalizedMeasures,
+    kcal: defaultMeasure.kcal,
+    quantity: defaultMeasure.quantity,
+    unit: defaultMeasure.unit
+  };
+}
+
+function normalizeAliments(input) {
+  if (!Array.isArray(input)) {
+    return [];
+  }
+
+  return input
+    .map((aliment, index) => normalizeAliment(aliment, index))
+    .filter(Boolean)
+    .sort((a, b) => a.name.localeCompare(b.name, "fr"));
+}
+
 function normalizeRecipes(input) {
   if (!Array.isArray(input)) {
     return [];
@@ -89,23 +249,25 @@ function normalizeRecipes(input) {
         return null;
       }
 
-        const ingredients = Array.isArray(recipe.ingredients)
-          ? recipe.ingredients
-              .map((ingredient) => {
-                if (!ingredient || !ingredient.name) {
-                  return null;
-                }
+      const ingredients = Array.isArray(recipe.ingredients)
+        ? recipe.ingredients
+            .map((ingredient) => {
+              if (!ingredient || !ingredient.name) {
+                return null;
+              }
 
-                return {
-                  alimentId: ingredient.alimentId ? String(ingredient.alimentId).trim() : "",
-                  name: String(ingredient.name).trim(),
-                  quantity: Number(ingredient.quantity) || 0,
-                  unit: ingredient.unit ? String(ingredient.unit).trim() : "",
-                  kcal: Number(ingredient.kcal) || 0
-                };
-              })
-              .filter(Boolean)
-          : [];
+              return {
+                alimentId: ingredient.alimentId ? String(ingredient.alimentId).trim() : "",
+                measureId: ingredient.measureId ? String(ingredient.measureId).trim() : "",
+                measureLabel: ingredient.measureLabel ? String(ingredient.measureLabel).trim() : "",
+                quantity: Number(ingredient.quantity) || 0,
+                unit: ingredient.unit ? String(ingredient.unit).trim() : "",
+                kcal: Number(ingredient.kcal) || 0,
+                name: String(ingredient.name).trim()
+              };
+            })
+            .filter(Boolean)
+        : [];
 
       const steps = Array.isArray(recipe.steps)
         ? recipe.steps.map((step) => String(step).trim()).filter(Boolean)
@@ -150,6 +312,7 @@ function updateScaledIngredientQuantities(recipe) {
 
   const scale = getScaleFactor(recipe);
   const quantityNodes = ingredientsList.querySelectorAll(".ingredient-quantity");
+  const kcalNodes = ingredientsList.querySelectorAll(".ingredient-kcal-value");
 
   quantityNodes.forEach((node) => {
     const baseQuantity = Number(node.dataset.baseQuantity);
@@ -158,6 +321,21 @@ function updateScaledIngredientQuantities(recipe) {
     const scaled = (Number.isNaN(baseQuantity) ? 0 : baseQuantity) * scale;
     node.textContent = `${formatQuantity(scaled)}${suffix}`;
   });
+
+  kcalNodes.forEach((node) => {
+    const baseKcal = Number(node.dataset.baseKcal);
+    const scaledKcal = (Number.isNaN(baseKcal) ? 0 : baseKcal) * scale;
+    const perPersonKcal = scaledKcal / state.targetServings;
+    node.textContent = `${Math.round(perPersonKcal)} kcal/pers`;
+  });
+
+  const perPersonNode = refs.recipeDetail.querySelector("[data-base-total-kcal-person]");
+
+  if (perPersonNode) {
+    const baseTotal = Number(perPersonNode.dataset.baseTotalKcal);
+    const scaledTotal = (Number.isNaN(baseTotal) ? 0 : baseTotal) * scale;
+    perPersonNode.textContent = String(Math.round(scaledTotal / state.targetServings));
+  }
 }
 
 function getFilteredRecipes() {
@@ -316,28 +494,30 @@ function renderRecipeDetail() {
 
   servingsLabel.appendChild(servingsInput);
 
-    const ingredientsTitle = document.createElement("h3");
-    ingredientsTitle.textContent = "Ingrédients";
-    const ingredientsList = document.createElement("ul");
-    ingredientsList.className = "ingredients-list";
+  const ingredientsTitle = document.createElement("h3");
+  ingredientsTitle.textContent = "Ingrédients";
+  const ingredientsList = document.createElement("ul");
+  ingredientsList.className = "ingredients-list";
 
-    // Calculate total calories
-    const totalKcal = recipe.ingredients.reduce((sum, ingredient) => sum + (ingredient.kcal || 0), 0);
-    const kcalPerPerson = Math.round(totalKcal / recipe.baseServings);
+  const totalKcal = recipe.ingredients.reduce((sum, ingredient) => sum + (ingredient.kcal || 0), 0);
 
-    recipe.ingredients.forEach((ingredient) => {
-      const li = document.createElement("li");
-      const kcalDisplay = ingredient.kcal ? ` <span class="ingredient-kcal">(${ingredient.kcal} kcal)</span>` : "";
-      li.innerHTML = `${ingredient.name}: <span class="ingredient-quantity" data-base-quantity="${ingredient.quantity}" data-unit="${ingredient.unit || ""}" data-kcal="${ingredient.kcal || 0}"></span>${kcalDisplay}`;
-      ingredientsList.appendChild(li);
-    });
+  recipe.ingredients.forEach((ingredient) => {
+    const li = document.createElement("li");
+    const measureInfo = ingredient.measureLabel ? ` <span class="ingredient-meta">(${ingredient.measureLabel})</span>` : "";
+    const kcalInfo = ingredient.kcal
+      ? ` <span class="ingredient-kcal ingredient-kcal-value" data-base-kcal="${ingredient.kcal}">${Math.round(ingredient.kcal / (recipe.baseServings || BASE_SERVINGS))} kcal/pers</span>`
+      : "";
 
-    // Add total calories info
-    const kcalInfo = document.createElement("div");
-    kcalInfo.className = "recipe-kcal-info";
-    kcalInfo.innerHTML = `
-      <strong>Calories totales:</strong> ${totalKcal} kcal (${kcalPerPerson} kcal/personne)
-    `;
+    li.innerHTML = `${ingredient.name}: <span class="ingredient-quantity" data-base-quantity="${ingredient.quantity}" data-unit="${ingredient.unit || ""}"></span>${measureInfo}${kcalInfo}`;
+    ingredientsList.appendChild(li);
+  });
+
+  const kcalInfo = document.createElement("div");
+  kcalInfo.className = "recipe-kcal-info";
+  kcalInfo.innerHTML = `
+    <strong>Calories de la recette:</strong>
+    <span data-base-total-kcal-person data-base-total-kcal="${totalKcal}">${Math.round(totalKcal / (recipe.baseServings || BASE_SERVINGS))}</span> kcal/personne
+  `;
 
   const stepsTitle = document.createElement("h3");
   stepsTitle.textContent = "Étapes";
@@ -349,7 +529,7 @@ function renderRecipeDetail() {
     stepsList.appendChild(li);
   });
 
-    refs.recipeDetail.append(header, servingsLabel, ingredientsTitle, ingredientsList, kcalInfo, stepsTitle, stepsList);
+  refs.recipeDetail.append(header, servingsLabel, ingredientsTitle, ingredientsList, kcalInfo, stepsTitle, stepsList);
 
   updateScaledIngredientQuantities(recipe);
 
@@ -394,34 +574,68 @@ function renderAll() {
   renderRecipeDetail();
 }
 
-function createIngredientRow(data = { name: "", quantity: "", unit: "", alimentId: "" }) {
+function createIngredientRow(data = { name: "", quantity: "", unit: "", alimentId: "", measureId: "", measureLabel: "" }) {
   const fragment = refs.ingredientRowTemplate.content.cloneNode(true);
   const row = fragment.querySelector(".ingredient-row");
   const searchInput = row.querySelector(".ingredient-search");
   const dropdown = row.querySelector(".ingredient-dropdown");
+  const measureSelect = row.querySelector(".ingredient-measure");
   const quantityInput = row.querySelector(".ingredient-quantity");
-  const unitInput = row.querySelector(".ingredient-unit");
   const kcalDisplay = row.querySelector(".ingredient-kcal");
   const alimentIdInput = row.querySelector(".ingredient-alimentId");
   const removeBtn = row.querySelector(".remove-ingredient-btn");
 
   let selectedAliment = null;
 
-  // If we're loading existing data, find the aliment
-  if (data.alimentId) {
-    selectedAliment = state.aliments.find((a) => a.id === data.alimentId);
-    if (selectedAliment) {
-      searchInput.value = selectedAliment.name;
-      unitInput.value = selectedAliment.unit;
-      alimentIdInput.value = selectedAliment.id;
+  function clearSelectedAliment() {
+    selectedAliment = null;
+    alimentIdInput.value = "";
+    measureSelect.innerHTML = '<option value="">Choisir une mesure</option>';
+    measureSelect.value = "";
+    quantityInput.placeholder = "Quantité";
+    kcalDisplay.textContent = "";
+  }
+
+  function getSelectedMeasure() {
+    if (!selectedAliment || !measureSelect.value) {
+      return null;
     }
+
+    return getMeasureById(selectedAliment, measureSelect.value);
+  }
+
+  function populateMeasureOptions(aliment, preferredMeasure = {}) {
+    measureSelect.innerHTML = '<option value="">Choisir une mesure</option>';
+
+    aliment.measures.forEach((measure) => {
+      const option = document.createElement("option");
+      option.value = measure.id;
+      option.textContent = `${measure.label} • ${measure.kcal} kcal`;
+      measureSelect.appendChild(option);
+    });
+
+    const preferred = aliment.measures.find((measure) => measure.id === preferredMeasure.measureId)
+      || aliment.measures.find((measure) => normalizeLookupKey(measure.label) === normalizeLookupKey(preferredMeasure.measureLabel))
+      || aliment.measures.find((measure) => measure.unit === preferredMeasure.unit)
+      || getDefaultMeasure(aliment);
+
+    measureSelect.value = preferred ? preferred.id : "";
+  }
+
+  function applySelectedAliment(aliment, preferredMeasure = {}) {
+    selectedAliment = aliment;
+    searchInput.value = aliment.name;
+    alimentIdInput.value = aliment.id;
+    populateMeasureOptions(aliment, preferredMeasure);
+    updateKcalDisplay();
   }
 
   quantityInput.value = data.quantity || "";
 
-  // Update kcal display based on quantity
   function updateKcalDisplay() {
-    if (!selectedAliment || !quantityInput.value) {
+    const selectedMeasure = getSelectedMeasure();
+
+    if (!selectedMeasure || !quantityInput.value) {
       kcalDisplay.textContent = "";
       return;
     }
@@ -432,21 +646,23 @@ function createIngredientRow(data = { name: "", quantity: "", unit: "", alimentI
       return;
     }
 
-    // Calculate: (used_quantity / reference_quantity) × kcal
-    const kcal = (usedQuantity / selectedAliment.quantity) * selectedAliment.kcal;
+    quantityInput.placeholder = `Quantité (${selectedMeasure.unit})`;
+
+    const kcal = (usedQuantity / selectedMeasure.quantity) * selectedMeasure.kcal;
     kcalDisplay.textContent = `${kcal.toFixed(0)} kcal`;
   }
 
-  // Search input handler
   searchInput.addEventListener("input", (e) => {
-    const searchTerm = e.target.value.toLowerCase();
+    const rawSearchTerm = e.target.value.trim();
+    const searchTerm = rawSearchTerm.toLowerCase();
+
+    clearSelectedAliment();
 
     if (!searchTerm) {
       dropdown.style.display = "none";
       return;
     }
 
-    // Filter aliments
     const matches = state.aliments.filter((aliment) =>
       aliment.name.toLowerCase().includes(searchTerm)
     );
@@ -457,14 +673,13 @@ function createIngredientRow(data = { name: "", quantity: "", unit: "", alimentI
       dropdown.innerHTML = `
         <div style="padding: 0.5rem 0.6rem; color: var(--muted); font-size: 0.9rem;">
           Aucun aliment trouvé.
-          <button class="btn btn-small" type="button" style="margin-top: 0.3rem;">+ Créer "${searchTerm}"</button>
+          <button class="btn btn-small" type="button" style="margin-top: 0.3rem;">+ Créer "${rawSearchTerm}"</button>
         </div>
       `;
 
       dropdown.querySelector(".btn").addEventListener("click", (e) => {
         e.preventDefault();
-        openAddAlimentQuickDialog(searchTerm, () => {
-          // Reload the search after creating the aliment
+        openAddAlimentQuickDialog(rawSearchTerm, () => {
           searchInput.dispatchEvent(new Event("input"));
         });
       });
@@ -472,15 +687,12 @@ function createIngredientRow(data = { name: "", quantity: "", unit: "", alimentI
       matches.forEach((aliment) => {
         const option = document.createElement("div");
         option.className = "ingredient-option";
-        option.textContent = `${aliment.name} (${aliment.quantity}${aliment.unit}, ${aliment.kcal} kcal)`;
+        const defaultMeasure = getDefaultMeasure(aliment);
+        option.textContent = `${aliment.name} (${defaultMeasure.label}, ${defaultMeasure.kcal} kcal)`;
 
         option.addEventListener("click", () => {
-          selectedAliment = aliment;
-          searchInput.value = aliment.name;
-          unitInput.value = aliment.unit;
-          alimentIdInput.value = aliment.id;
+          applySelectedAliment(aliment);
           dropdown.style.display = "none";
-          updateKcalDisplay();
         });
 
         dropdown.appendChild(option);
@@ -498,16 +710,24 @@ function createIngredientRow(data = { name: "", quantity: "", unit: "", alimentI
     }, 200);
   });
 
-  // Update kcal display on quantity change
+  measureSelect.addEventListener("change", updateKcalDisplay);
   quantityInput.addEventListener("input", updateKcalDisplay);
 
   removeBtn.addEventListener("click", () => {
     row.remove();
   });
 
-  refs.ingredientsRows.appendChild(row);
+  const initialAliment = data.alimentId
+    ? state.aliments.find((aliment) => aliment.id === data.alimentId)
+    : findAlimentByName(data.name);
 
-  // Initial kcal display
+  if (initialAliment) {
+    applySelectedAliment(initialAliment, data);
+  } else if (data.name) {
+    searchInput.value = data.name;
+  }
+
+  refs.ingredientsRows.appendChild(row);
   updateKcalDisplay();
 }
 
@@ -517,25 +737,27 @@ function resetRecipeForm() {
   createIngredientRow();
 }
 
-function openAddRecipeDialog() {
+async function ensureAlimentsLoaded() {
+  if (state.aliments.length === 0) {
+    await loadAliments();
+  }
+}
+
+async function openAddRecipeDialog() {
   state.editingRecipeId = null;
+  await ensureAlimentsLoaded();
   resetRecipeForm();
   refs.addRecipeDialog.querySelector("h2").textContent = "Nouvelle recette";
-  
-  // Ensure aliments are loaded for ingredient search
-  if (state.aliments.length === 0) {
-    loadAliments();
-  }
-  
   refs.addRecipeDialog.showModal();
 }
 
-function openEditRecipeDialog(recipeId) {
+async function openEditRecipeDialog(recipeId) {
   const recipe = state.recipes.find((r) => r.id === recipeId);
   if (!recipe) {
     return;
   }
 
+  await ensureAlimentsLoaded();
   state.editingRecipeId = recipeId;
   refs.addRecipeDialog.querySelector("h2").textContent = "Éditer la recette";
 
@@ -543,11 +765,6 @@ function openEditRecipeDialog(recipeId) {
   refs.addRecipeForm.category.value = recipe.category;
   refs.addRecipeForm.steps.value = recipe.steps.join("\n");
   refs.addRecipeForm.drinks.value = recipe.drinks.join("\n");
-
-    // Ensure aliments are loaded for ingredient search
-    if (state.aliments.length === 0) {
-      loadAliments();
-    }
 
   refs.ingredientsRows.innerHTML = "";
   recipe.ingredients.forEach((ingredient) => {
@@ -565,33 +782,55 @@ function handleAddRecipeSubmit(event) {
   event.preventDefault();
 
   const formData = new FormData(refs.addRecipeForm);
-    const ingredients = Array.from(refs.ingredientsRows.querySelectorAll(".ingredient-row"))
-      .map((row) => {
-        const alimentId = row.querySelector(".ingredient-alimentId").value.trim();
-        const quantity = Number(row.querySelector(".ingredient-quantity").value);
-        const searchInput = row.querySelector(".ingredient-search").value.trim();
-      
-        if (!alimentId || !quantity) {
-          return null;
-        }
+  const ingredientRows = Array.from(refs.ingredientsRows.querySelectorAll(".ingredient-row"));
 
-        const aliment = state.aliments.find((a) => a.id === alimentId);
-        if (!aliment) {
-          return null;
-        }
+  const hasInvalidIngredient = ingredientRows.some((row) => {
+    const searchValue = row.querySelector(".ingredient-search").value.trim();
+    const alimentId = row.querySelector(".ingredient-alimentId").value.trim();
+    const measureId = row.querySelector(".ingredient-measure").value.trim();
+    const quantity = Number(row.querySelector(".ingredient-quantity").value);
 
-        // Calculate calories for this ingredient
-        const kcal = (quantity / aliment.quantity) * aliment.kcal;
+    return Boolean(searchValue) && (!alimentId || !measureId || Number.isNaN(quantity) || quantity <= 0);
+  });
 
-        return {
-          alimentId,
-          name: aliment.name,
-          quantity,
-          unit: aliment.unit,
-          kcal: Math.round(kcal)
-        };
-      })
-      .filter(Boolean);
+  if (hasInvalidIngredient) {
+    setStatus("Chaque ingrédient doit correspondre à un aliment, une mesure et une quantité valides.", true);
+    return;
+  }
+
+  const ingredients = Array.from(refs.ingredientsRows.querySelectorAll(".ingredient-row"))
+    .map((row) => {
+      const alimentId = row.querySelector(".ingredient-alimentId").value.trim();
+      const measureId = row.querySelector(".ingredient-measure").value.trim();
+      const quantity = Number(row.querySelector(".ingredient-quantity").value);
+
+      if (!alimentId || !measureId || Number.isNaN(quantity) || quantity <= 0) {
+        return null;
+      }
+
+      const aliment = state.aliments.find((item) => item.id === alimentId);
+      if (!aliment) {
+        return null;
+      }
+
+      const measure = getMeasureById(aliment, measureId);
+      if (!measure) {
+        return null;
+      }
+
+      const kcal = (quantity / measure.quantity) * measure.kcal;
+
+      return {
+        alimentId,
+        measureId: measure.id,
+        measureLabel: measure.label,
+        name: aliment.name,
+        quantity,
+        unit: measure.unit,
+        kcal: Math.round(kcal)
+      };
+    })
+    .filter(Boolean);
 
   if (ingredients.length === 0) {
     setStatus("Ajoute au moins un ingrédient.", true);
@@ -866,6 +1105,7 @@ function bindEvents() {
   // KCAL events
   refs.addAlimentBtn.addEventListener("click", openAddAlimentDialog);
   refs.cancelAddAlimentBtn.addEventListener("click", closeAddAlimentDialog);
+  refs.addAlimentMeasureBtn.addEventListener("click", () => createAlimentMeasureRow());
   refs.addAlimentForm.addEventListener("submit", handleAddAlimentSubmit);
   refs.searchAliment.addEventListener("input", () => {
     state.alimentSearchFilter = refs.searchAliment.value.trim().toLowerCase();
@@ -897,18 +1137,20 @@ function switchTab(tabName) {
 
 async function loadAliments() {
   try {
-    const response = await fetch("aliments.json");
+    const response = await fetch("aliments.json", { cache: "no-store" });
     if (response.status === 404) {
       throw new Error(`Fichier introuvable`);
     }
 
     const data = await response.json();
-    state.aliments = Array.isArray(data) ? data : [];
+    state.aliments = normalizeAliments(Array.isArray(data) ? data : []);
     renderAlimentList();
     setStatus(`${state.aliments.length} aliment(s) chargé(s).`);
+    return state.aliments;
   } catch (error) {
     setStatus(`Chargement des aliments impossible : ${error.message}`, true);
     state.aliments = [];
+    return [];
   }
 }
 
@@ -928,14 +1170,19 @@ function renderAlimentList() {
   filtered.forEach((aliment) => {
     const row = document.createElement("div");
     row.className = "aliment-row";
-    
-    // Display format: "165 kcal per 100g" or "165 kcal per 1 pièce" etc.
-    const displayText = aliment.quantity 
-      ? `${aliment.kcal} kcal / ${aliment.quantity}${aliment.unit}`
+    const defaultMeasure = getDefaultMeasure(aliment);
+    const displayText = defaultMeasure
+      ? `${defaultMeasure.kcal} kcal / ${defaultMeasure.label}`
       : `${aliment.kcal} kcal`;
+    const measureSummary = aliment.measures
+      .map((measure) => `<span class="aliment-measure-chip">${measure.label}: ${measure.kcal} kcal</span>`)
+      .join("");
     
     row.innerHTML = `
-      <div class="aliment-name-cell">${aliment.name}</div>
+      <div class="aliment-name-cell">
+        <strong>${aliment.name}</strong>
+        <div class="aliment-measures-summary">${measureSummary}</div>
+      </div>
       <div class="aliment-kcal-cell">${displayText}</div>
       <div class="aliment-actions">
         <button class="aliment-edit-btn" type="button" title="Modifier">✎</button>
@@ -960,8 +1207,70 @@ function renderAlimentList() {
   });
 }
 
-function openAddAlimentDialog() {
+function createAlimentMeasureRow(data = { label: "", quantity: "", unit: "g", kcal: "" }) {
+  const fragment = refs.alimentMeasureRowTemplate.content.cloneNode(true);
+  const row = fragment.querySelector(".aliment-measure-row");
+  const labelInput = row.querySelector(".aliment-measure-label");
+  const quantityInput = row.querySelector(".aliment-measure-quantity");
+  const unitSelect = row.querySelector(".aliment-measure-unit");
+  const kcalInput = row.querySelector(".aliment-measure-kcal");
+  const removeBtn = row.querySelector(".remove-aliment-measure-btn");
+
+  labelInput.value = data.label || "";
+  quantityInput.value = data.quantity || "";
+  unitSelect.value = data.unit || "g";
+  kcalInput.value = data.kcal || "";
+
+  removeBtn.addEventListener("click", () => {
+    row.remove();
+  });
+
+  refs.alimentMeasureRows.appendChild(row);
+}
+
+function resetAlimentForm(aliment = null) {
   refs.addAlimentForm.reset();
+  refs.alimentMeasureRows.innerHTML = "";
+
+  if (aliment) {
+    refs.addAlimentDialogTitle.textContent = "Modifier un aliment";
+    refs.submitAddAlimentBtn.textContent = "Mettre à jour";
+    refs.addAlimentForm.elements.alimentId.value = aliment.id;
+    refs.addAlimentForm.elements.name.value = aliment.name;
+    aliment.measures.forEach((measure) => createAlimentMeasureRow(measure));
+  } else {
+    refs.addAlimentDialogTitle.textContent = "Ajouter un aliment";
+    refs.submitAddAlimentBtn.textContent = "Enregistrer";
+    refs.addAlimentForm.elements.alimentId.value = "";
+    createAlimentMeasureRow({ label: "100 g", quantity: 100, unit: "g", kcal: "" });
+  }
+}
+
+function collectAlimentMeasures() {
+  const rows = Array.from(refs.alimentMeasureRows.querySelectorAll(".aliment-measure-row"));
+  const measures = rows.map((row) => ({
+    label: row.querySelector(".aliment-measure-label").value.trim(),
+    quantity: Number(row.querySelector(".aliment-measure-quantity").value),
+    unit: row.querySelector(".aliment-measure-unit").value.trim(),
+    kcal: Number(row.querySelector(".aliment-measure-kcal").value)
+  }));
+
+  if (measures.length === 0) {
+    setStatus("Ajoute au moins une mesure de référence.", true);
+    return null;
+  }
+
+  const invalidMeasure = measures.find((measure) => !measure.label || !measure.unit || Number.isNaN(measure.quantity) || measure.quantity <= 0 || Number.isNaN(measure.kcal) || measure.kcal < 0);
+  if (invalidMeasure) {
+    setStatus("Chaque mesure doit avoir un libellé, une quantité, une unité et des kcal valides.", true);
+    return null;
+  }
+
+  return measures;
+}
+
+function openAddAlimentDialog() {
+  resetAlimentForm();
   refs.addAlimentDialog.showModal();
 }
 
@@ -973,65 +1282,45 @@ function handleAddAlimentSubmit(e) {
   e.preventDefault();
   const formData = new FormData(refs.addAlimentForm);
 
+  const alimentId = String(formData.get("alimentId") || "").trim();
   const name = String(formData.get("name") || "").trim();
-  const kcal = Number(formData.get("kcal") || 0);
-  const quantity = Number(formData.get("quantity") || 0);
-  const unit = String(formData.get("unit") || "").trim();
+  const measures = collectAlimentMeasures();
 
   if (!name) {
     setStatus("Le nom de l'aliment est obligatoire.", true);
     return;
   }
 
-  if (kcal < 0) {
-    setStatus("Les calories ne peuvent pas être négatives.", true);
+  if (!measures) {
     return;
   }
 
-  if (quantity <= 0) {
-    setStatus("La quantité doit être supérieure à 0.", true);
-    return;
-  }
-
-  if (!unit) {
-    setStatus("L'unité est obligatoire.", true);
-    return;
-  }
-
-  const newAliment = {
-    id: `aliment-${Date.now()}`,
+  const normalizedAliment = normalizeAliment({
+    id: alimentId || `aliment-${Date.now()}`,
     name,
-    kcal,
-    quantity,
-    unit
-  };
+    measures
+  }, state.aliments.length);
 
-  state.aliments.push(newAliment);
+  const existingIndex = alimentId
+    ? state.aliments.findIndex((aliment) => aliment.id === alimentId)
+    : -1;
+
+  if (existingIndex === -1) {
+    state.aliments.push(normalizedAliment);
+    setStatus(`Aliment "${name}" ajouté.`);
+  } else {
+    state.aliments[existingIndex] = normalizedAliment;
+    setStatus(`Aliment "${name}" mis à jour.`);
+  }
+
   state.aliments.sort((a, b) => a.name.localeCompare(b.name, "fr"));
-  
-  setStatus(`Aliment "${name}" ajouté.`);
   closeAddAlimentDialog();
   renderAlimentList();
 }
 
 function editAliment(aliment) {
-  const displayRef = aliment.quantity ? ` (${aliment.quantity}${aliment.unit})` : "";
-  const newKcal = prompt(`Modifier les calories pour "${aliment.name}"${displayRef}\n\nValeur actuelle: ${aliment.kcal}`, String(aliment.kcal));
-  
-  if (newKcal === null) return;
-
-  const kcal = Number(newKcal);
-  if (isNaN(kcal) || kcal < 0) {
-    setStatus("Valeur invalide.", true);
-    return;
-  }
-
-  const index = state.aliments.findIndex((a) => a.id === aliment.id);
-  if (index !== -1) {
-    state.aliments[index].kcal = kcal;
-    setStatus(`"${aliment.name}" modifié.`);
-    renderAlimentList();
-  }
+  resetAlimentForm(aliment);
+  refs.addAlimentDialog.showModal();
 }
 
 function deleteAliment(alimentId) {
@@ -1164,12 +1453,15 @@ function handleAddAlimentQuickSubmit(e) {
   const newAliment = {
     id: `aliment-${Date.now()}`,
     name,
-    kcal,
-    quantity,
-    unit
+    measures: [{
+      label: buildMeasureLabel(quantity, unit),
+      quantity,
+      unit,
+      kcal
+    }]
   };
 
-  state.aliments.push(newAliment);
+  state.aliments.push(normalizeAliment(newAliment, state.aliments.length));
   state.aliments.sort((a, b) => a.name.localeCompare(b.name, "fr"));
 
   setStatus(`Aliment "${name}" créé.`);

@@ -128,8 +128,10 @@
         <div class="ingredient-dropdown" style="display: none;"></div>
         <input class="ingredient-alimentId" type="hidden" />
       </div>
+      <select class="ingredient-measure" required>
+        <option value="">Choisir une mesure</option>
+      </select>
       <input class="ingredient-quantity" type="number" step="0.01" min="0" placeholder="Quantité" required />
-      <input class="ingredient-unit" type="text" placeholder="Unité" readonly />
       <div class="ingredient-kcal" style="text-align: center; font-size: 0.9rem; color: var(--muted);"></div>
       <button class="btn btn-small btn-danger remove-ingredient-btn" type="button">Retirer</button>
     </div>
@@ -157,51 +159,56 @@
   <dialog id="addAlimentDialog" class="modal">
     <form id="addAlimentForm" method="dialog" class="modal-content">
       <header class="modal-header">
-        <h2>Ajouter un aliment</h2>
+        <h2 id="addAlimentDialogTitle">Ajouter un aliment</h2>
       </header>
 
       <div class="modal-body">
+        <input name="alimentId" type="hidden" />
+
         <label>
           Nom de l'aliment
           <input name="name" type="text" required placeholder="Ex: Poulet blanc" />
         </label>
 
-        <div class="inline-grid-2">
-          <label>
-            Calories (kcal)
-            <input name="kcal" type="number" step="0.1" min="0" required placeholder="Ex: 165" />
-          </label>
-
-          <label>
-            Quantité de référence
-            <input name="quantity" type="number" step="0.1" min="0.1" required placeholder="Ex: 100" />
-          </label>
-        </div>
-
-        <label>
-          Unité
-          <select name="unit" required>
-            <option value="">-- Sélectionner une unité --</option>
-            <option value="g">g (grammes)</option>
-            <option value="ml">ml (millilitres)</option>
-            <option value="cl">cl (centilitres)</option>
-            <option value="l">l (litres)</option>
-            <option value="kg">kg (kilogrammes)</option>
-            <option value="pièce">pièce</option>
-            <option value="cuillère">cuillère</option>
-            <option value="cuillère à café">cuillère à café</option>
-            <option value="cuillère à soupe">cuillère à soupe</option>
-            <option value="verre">verre</option>
-          </select>
-        </label>
+        <section>
+          <div class="inline-title-row">
+            <h3>Mesures de référence</h3>
+            <button id="addAlimentMeasureBtn" class="btn btn-small" type="button">+ Mesure</button>
+          </div>
+          <p class="section-hint">Exemples: 100 g, 1 tomate moyenne, 1 cuillère à soupe.</p>
+          <div id="alimentMeasureRows" class="stack"></div>
+        </section>
       </div>
 
       <div class="modal-footer">
         <button id="cancelAddAlimentBtn" class="btn" type="button">Annuler</button>
-        <button class="btn btn-primary" type="submit">Enregistrer</button>
+        <button id="submitAddAlimentBtn" class="btn btn-primary" type="submit">Enregistrer</button>
       </div>
     </form>
   </dialog>
+
+  <template id="alimentMeasureRowTemplate">
+    <div class="aliment-measure-row">
+      <input class="aliment-measure-label" type="text" placeholder="Libellé (ex: 1 tomate moyenne)" required />
+      <input class="aliment-measure-quantity" type="number" step="0.01" min="0.01" placeholder="Quantité" required />
+      <select class="aliment-measure-unit" required>
+        <option value="">Unité</option>
+        <option value="g">g</option>
+        <option value="kg">kg</option>
+        <option value="ml">ml</option>
+        <option value="cl">cl</option>
+        <option value="l">l</option>
+        <option value="pièce">pièce</option>
+        <option value="cuillère à café">cuillère à café</option>
+        <option value="cuillère à soupe">cuillère à soupe</option>
+        <option value="cuillère">cuillère</option>
+        <option value="verre">verre</option>
+        <option value="tranche">tranche</option>
+      </select>
+      <input class="aliment-measure-kcal" type="number" step="0.1" min="0" placeholder="kcal" required />
+      <button class="btn btn-small btn-danger remove-aliment-measure-btn" type="button">Retirer</button>
+    </div>
+  </template>
 
   <dialog id="quickAddAlimentDialog" class="modal">
     <form id="quickAddAlimentForm" method="dialog" class="modal-content">

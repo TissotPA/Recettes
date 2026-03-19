@@ -307,7 +307,7 @@ textarea {
 
 .ingredient-row {
   display: grid;
-  grid-template-columns: 2fr 0.8fr 0.8fr 1fr auto;
+  grid-template-columns: 2fr 1.3fr 0.9fr 1fr auto;
   gap: 0.5rem;
   align-items: start;
   padding: 0.6rem;
@@ -321,6 +321,11 @@ textarea {
 }
 
 .ingredient-search {
+  width: 100%;
+  padding: 0.4rem;
+}
+
+.ingredient-measure {
   width: 100%;
   padding: 0.4rem;
 }
@@ -357,16 +362,20 @@ textarea {
 }
 
 .ingredient-quantity,
-.ingredient-unit,
 .ingredient-kcal {
   padding: 0.4rem;
 }
 
-ul,
 .ingredient-kcal {
   color: var(--muted);
   font-size: 0.9rem;
   margin-left: 0.3rem;
+  align-self: center;
+}
+
+.ingredient-meta {
+  color: var(--muted);
+  font-size: 0.85rem;
 }
 
 .recipe-kcal-info {
@@ -377,6 +386,42 @@ ul,
   margin: 1rem 0;
   font-size: 0.95rem;
 }
+
+.section-hint {
+  margin: 0.2rem 0 0.7rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.aliment-measure-row {
+  display: grid;
+  grid-template-columns: 1.8fr 0.8fr 1fr 0.7fr auto;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.6rem;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid #e6e9f1;
+  border-radius: 8px;
+}
+
+.aliment-measures-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.35rem;
+}
+
+.aliment-measure-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.45rem;
+  border-radius: 999px;
+  background: rgba(216, 91, 43, 0.08);
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+ul,
 ol {
   margin: 0;
   padding-left: 1.2rem;
@@ -502,6 +547,10 @@ ol {
   }
 
   .ingredient-row {
+    grid-template-columns: 1fr;
+  }
+
+  .aliment-measure-row {
     grid-template-columns: 1fr;
   }
 
