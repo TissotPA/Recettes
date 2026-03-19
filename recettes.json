@@ -9,46 +9,46 @@
         "alimentId": "aliment-67",
         "measureId": "aliment-67-measure-1-tomate-moyenne",
         "measureLabel": "1 tomate moyenne",
-        "name": "Tomate",
         "quantity": 8,
         "unit": "pièce",
-        "kcal": 176
+        "kcal": 176,
+        "name": "Tomate"
       },
       {
         "alimentId": "aliment-14",
         "measureId": "aliment-14-measure-100-g",
         "measureLabel": "100 g",
-        "name": "Mozzarella",
         "quantity": 400,
         "unit": "g",
-        "kcal": 1120
+        "kcal": 1120,
+        "name": "Mozzarella"
       },
       {
         "alimentId": "aliment-6",
         "measureId": "aliment-6-measure-1-cuillere-a-cafe",
         "measureLabel": "1 cuillère à café",
-        "name": "Huile d'olive",
         "quantity": 4,
         "unit": "cuillère à café",
-        "kcal": 160
+        "kcal": 160,
+        "name": "Huile d'olive"
       },
       {
         "alimentId": "aliment-1773909518180",
         "measureId": "aliment-1773909518180-measure-1-cuillere-a-cafe",
         "measureLabel": "1 cuillère à café",
-        "name": "Vinaigre balsamique",
         "quantity": 4,
         "unit": "cuillère à café",
-        "kcal": 20
+        "kcal": 20,
+        "name": "Vinaigre balsamique"
       },
       {
         "alimentId": "aliment-1773909529601",
         "measureId": "aliment-1773909529601-measure-1-piece",
         "measureLabel": "1 pièce",
-        "name": "Basilic",
         "quantity": 12,
         "unit": "pièce",
-        "kcal": 0
+        "kcal": 0,
+        "name": "Basilic"
       }
     ],
     "steps": [
@@ -68,58 +68,58 @@
     "baseServings": 4,
     "ingredients": [
       {
-        "alimentId": "",
-        "measureId": "",
-        "measureLabel": "",
+        "alimentId": "aliment-48",
+        "measureId": "aliment-48-measure-100-g",
+        "measureLabel": "100 g",
+        "name": "Pâtes",
         "quantity": 320,
         "unit": "g",
-        "kcal": 0,
-        "name": "Pâtes (crues)"
+        "kcal": 419
       },
       {
-        "alimentId": "",
-        "measureId": "",
-        "measureLabel": "",
+        "alimentId": "aliment-23",
+        "measureId": "aliment-23-measure-1-piece",
+        "measureLabel": "1 pièce",
+        "name": "Jaune d'oeuf",
         "quantity": 4,
-        "unit": "",
-        "kcal": 0,
-        "name": "Oeuf (jaune)"
+        "unit": "pièce",
+        "kcal": 1288
       },
       {
-        "alimentId": "",
-        "measureId": "",
-        "measureLabel": "",
+        "alimentId": "aliment-21",
+        "measureId": "aliment-21-measure-1-piece",
+        "measureLabel": "1 pièce",
+        "name": "Oeuf entier",
         "quantity": 1,
-        "unit": "",
-        "kcal": 0,
-        "name": "Oeuf (entier)"
+        "unit": "pièce",
+        "kcal": 155
       },
       {
-        "alimentId": "",
-        "measureId": "",
-        "measureLabel": "",
+        "alimentId": "aliment-1773909827262",
+        "measureId": "aliment-1773909827262-measure-100-g",
+        "measureLabel": "100 g",
+        "name": "Guanciale",
         "quantity": 200,
         "unit": "g",
-        "kcal": 0,
-        "name": "Guanciale"
+        "kcal": 1250
       },
       {
-        "alimentId": "",
-        "measureId": "",
-        "measureLabel": "",
+        "alimentId": "aliment-1773909868143",
+        "measureId": "aliment-1773909868143-measure-100-g",
+        "measureLabel": "100 g",
+        "name": "Pecorino",
         "quantity": 200,
         "unit": "g",
-        "kcal": 0,
-        "name": "Pecorino"
+        "kcal": 800
       },
       {
-        "alimentId": "",
-        "measureId": "",
-        "measureLabel": "",
-        "quantity": 1,
-        "unit": "",
-        "kcal": 0,
-        "name": "Poivre"
+        "alimentId": "aliment-3",
+        "measureId": "aliment-3-measure-100-g",
+        "measureLabel": "100 g",
+        "name": "Poivre",
+        "quantity": 20,
+        "unit": "g",
+        "kcal": 50
       }
     ],
     "steps": [
@@ -141,67 +141,67 @@
     "baseServings": 4,
     "ingredients": [
       {
-        "alimentId": "",
-        "measureId": "",
-        "measureLabel": "",
+        "alimentId": "aliment-1773910063752",
+        "measureId": "aliment-1773910063752-measure-1-piece",
+        "measureLabel": "1 pièce",
+        "name": "Pâte brisée",
         "quantity": 1,
-        "unit": "",
-        "kcal": 0,
-        "name": "Pâte brisée"
+        "unit": "pièce",
+        "kcal": 396
       },
       {
-        "alimentId": "",
-        "measureId": "",
-        "measureLabel": "",
+        "alimentId": "aliment-21",
+        "measureId": "aliment-21-measure-1-piece",
+        "measureLabel": "1 pièce",
+        "name": "Oeuf entier",
         "quantity": 3,
-        "unit": "",
-        "kcal": 0,
-        "name": "Oeuf"
+        "unit": "pièce",
+        "kcal": 465
       },
       {
-        "alimentId": "",
-        "measureId": "",
-        "measureLabel": "",
-        "quantity": 200,
-        "unit": "g",
-        "kcal": 0,
-        "name": "Lardons"
-      },
-      {
-        "alimentId": "",
-        "measureId": "",
-        "measureLabel": "",
+        "alimentId": "aliment-1773910117782",
+        "measureId": "aliment-1773910117782-measure-100-g",
+        "measureLabel": "100 g",
+        "name": "Lardons",
         "quantity": 400,
-        "unit": "mL",
-        "kcal": 0,
-        "name": "Lait"
+        "unit": "g",
+        "kcal": 1084
       },
       {
-        "alimentId": "",
-        "measureId": "",
-        "measureLabel": "",
+        "alimentId": "aliment-11",
+        "measureId": "aliment-11-measure-100-ml",
+        "measureLabel": "100 ml",
+        "name": "Lait écrémé",
+        "quantity": 400,
+        "unit": "ml",
+        "kcal": 144
+      },
+      {
+        "alimentId": "aliment-17",
+        "measureId": "aliment-17-measure-100-g",
+        "measureLabel": "100 g",
+        "name": "Gruyère",
         "quantity": 100,
         "unit": "g",
-        "kcal": 0,
-        "name": "Gruyère rapé"
+        "kcal": 413
       },
       {
-        "alimentId": "",
-        "measureId": "",
-        "measureLabel": "",
+        "alimentId": "aliment-1773910141645",
+        "measureId": "aliment-1773910141645-measure-1-cuillere-a-cafe",
+        "measureLabel": "1 cuillère à café",
+        "name": "Muscade",
         "quantity": 1,
-        "unit": "",
-        "kcal": 0,
-        "name": "Muscade"
+        "unit": "cuillère à café",
+        "kcal": 5
       },
       {
-        "alimentId": "",
-        "measureId": "",
-        "measureLabel": "",
+        "alimentId": "aliment-1773910173320",
+        "measureId": "aliment-1773910173320-measure-1-piece",
+        "measureLabel": "1 pièce",
+        "name": "Salade",
         "quantity": 1,
-        "unit": "",
-        "kcal": 0,
-        "name": "Salade"
+        "unit": "pièce",
+        "kcal": 50
       }
     ],
     "steps": [
@@ -224,58 +224,58 @@
     "baseServings": 4,
     "ingredients": [
       {
-        "alimentId": "",
-        "measureId": "",
-        "measureLabel": "",
-        "quantity": 1,
-        "unit": "sachet",
-        "kcal": 0,
-        "name": "Semoule épicée"
+        "alimentId": "aliment-56",
+        "measureId": "aliment-56-measure-100-g",
+        "measureLabel": "100 g",
+        "name": "Semoule",
+        "quantity": 255,
+        "unit": "g",
+        "kcal": 923
       },
       {
-        "alimentId": "",
-        "measureId": "",
-        "measureLabel": "",
+        "alimentId": "aliment-8",
+        "measureId": "aliment-8-measure-100-g",
+        "measureLabel": "100 g",
+        "name": "Beurre",
         "quantity": 5,
         "unit": "g",
-        "kcal": 0,
-        "name": "Beurre"
+        "kcal": 36
       },
       {
-        "alimentId": "",
-        "measureId": "",
-        "measureLabel": "",
+        "alimentId": "aliment-68",
+        "measureId": "aliment-68-measure-1-poivron",
+        "measureLabel": "1 poivron",
+        "name": "Poivron rouge",
         "quantity": 3,
-        "unit": "",
-        "kcal": 0,
-        "name": "Poivrons"
+        "unit": "pièce",
+        "kcal": 138
       },
       {
-        "alimentId": "",
-        "measureId": "",
-        "measureLabel": "",
+        "alimentId": "aliment-27",
+        "measureId": "aliment-27-measure-100-g",
+        "measureLabel": "100 g",
+        "name": "Poulet blanc",
         "quantity": 500,
         "unit": "g",
-        "kcal": 0,
-        "name": "Poulet"
+        "kcal": 825
       },
       {
-        "alimentId": "",
-        "measureId": "",
-        "measureLabel": "",
+        "alimentId": "aliment-1773909569798",
+        "measureId": "aliment-1773909569798-measure-1-cuillere-a-cafe",
+        "measureLabel": "1 cuillère à café",
+        "name": "Paprika",
         "quantity": 1,
-        "unit": "",
-        "kcal": 0,
-        "name": "Paprika"
+        "unit": "cuillère à café",
+        "kcal": 5
       },
       {
-        "alimentId": "",
-        "measureId": "",
-        "measureLabel": "",
+        "alimentId": "aliment-6",
+        "measureId": "aliment-6-measure-1-cuillere-a-cafe",
+        "measureLabel": "1 cuillère à café",
+        "name": "Huile d'olive",
         "quantity": 4,
-        "unit": "c. à café",
-        "kcal": 0,
-        "name": "Huile d'olive"
+        "unit": "cuillère à café",
+        "kcal": 160
       }
     ],
     "steps": [
@@ -297,58 +297,58 @@
     "baseServings": 4,
     "ingredients": [
       {
-        "alimentId": "",
-        "measureId": "",
-        "measureLabel": "",
-        "quantity": 1,
-        "unit": "sachet",
-        "kcal": 0,
-        "name": "Semoule épicée"
+        "alimentId": "aliment-56",
+        "measureId": "aliment-56-measure-100-g",
+        "measureLabel": "100 g",
+        "name": "Semoule",
+        "quantity": 255,
+        "unit": "g",
+        "kcal": 923
       },
       {
-        "alimentId": "",
-        "measureId": "",
-        "measureLabel": "",
+        "alimentId": "aliment-8",
+        "measureId": "aliment-8-measure-100-g",
+        "measureLabel": "100 g",
+        "name": "Beurre",
         "quantity": 5,
         "unit": "g",
-        "kcal": 0,
-        "name": "Beurre"
+        "kcal": 36
       },
       {
-        "alimentId": "",
-        "measureId": "",
-        "measureLabel": "",
+        "alimentId": "aliment-27",
+        "measureId": "aliment-27-measure-100-g",
+        "measureLabel": "100 g",
+        "name": "Poulet blanc",
         "quantity": 500,
         "unit": "g",
-        "kcal": 0,
-        "name": "Poulet"
+        "kcal": 825
       },
       {
-        "alimentId": "",
-        "measureId": "",
-        "measureLabel": "",
+        "alimentId": "aliment-89",
+        "measureId": "aliment-89-measure-100-g",
+        "measureLabel": "100 g",
+        "name": "Haricot vert",
         "quantity": 500,
         "unit": "g",
-        "kcal": 0,
-        "name": "Haricots"
+        "kcal": 155
       },
       {
-        "alimentId": "",
-        "measureId": "",
-        "measureLabel": "",
+        "alimentId": "aliment-1773909776673",
+        "measureId": "aliment-1773909776673-measure-1-cuillere-a-cafe",
+        "measureLabel": "1 cuillère à café",
+        "name": "Curry",
         "quantity": 1,
-        "unit": "",
-        "kcal": 0,
-        "name": "Curry"
+        "unit": "cuillère à café",
+        "kcal": 5
       },
       {
-        "alimentId": "",
-        "measureId": "",
-        "measureLabel": "",
+        "alimentId": "aliment-6",
+        "measureId": "aliment-6-measure-1-cuillere-a-cafe",
+        "measureLabel": "1 cuillère à café",
+        "name": "Huile d'olive",
         "quantity": 4,
-        "unit": "c. à café",
-        "kcal": 0,
-        "name": "Huile d'olive"
+        "unit": "cuillère à café",
+        "kcal": 160
       }
     ],
     "steps": [
