@@ -727,7 +727,13 @@ ol {
 }
 
 #addAlimentDialog {
-  width: min(980px, 100% - 1rem);
+  width: min(1100px, 100% - 1rem);
+}
+
+@media (min-width: 1280px) {
+  #addAlimentDialog {
+    width: min(1220px, 100% - 1rem);
+  }
 }
 
 @media (max-width: 900px) {
