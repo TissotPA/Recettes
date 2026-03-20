@@ -33,8 +33,8 @@
         "kcal": 160
       },
       {
-        "alimentId": "aliment-1774000590029",
-        "measureId": "aliment-1774000590029-measure-1-cuillere-a-cafe",
+        "alimentId": "aliment-1774000906063",
+        "measureId": "aliment-1774000906063-measure-1-cuillere-a-cafe",
         "measureLabel": "1 cuillère à café",
         "name": "Vinaigre balsamique",
         "quantity": 4,
@@ -42,13 +42,13 @@
         "kcal": 40
       },
       {
-        "alimentId": "aliment-1774000609296",
-        "measureId": "aliment-1774000609296-measure-1-piece",
+        "alimentId": "aliment-1774000925361",
+        "measureId": "aliment-1774000925361-measure-1-piece",
         "measureLabel": "1 pièce",
         "name": "Basilic",
         "quantity": 12,
         "unit": "pièce",
-        "kcal": 60
+        "kcal": 12
       }
     ],
     "steps": [
