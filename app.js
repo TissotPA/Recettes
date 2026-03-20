@@ -76,7 +76,8 @@ const state = {
     platId: "",
     dessertId: "",
     drinkEntries: []
-  }
+  },
+  coursesEntries: []
 };
 
 const refs = {
@@ -147,6 +148,15 @@ const refs = {
   menuDrinksList: document.getElementById("menuDrinksList"),
   menuPreview: document.getElementById("menuPreview"),
   menuTotalKcal: document.getElementById("menuTotalKcal"),
+  // Courses tab
+  coursesTab: document.getElementById("coursesTab"),
+  coursesRecipeSelect: document.getElementById("coursesRecipeSelect"),
+  coursesServingsInput: document.getElementById("coursesServingsInput"),
+  addCoursesEntryBtn: document.getElementById("addCoursesEntryBtn"),
+  coursesRecipesList: document.getElementById("coursesRecipesList"),
+  clearCoursesBtn: document.getElementById("clearCoursesBtn"),
+  printShoppingListBtn: document.getElementById("printShoppingListBtn"),
+  shoppingList: document.getElementById("shoppingList"),
   // Quick add aliment (from recipe ingredient search)
   quickAddAlimentDialog: document.getElementById("quickAddAlimentDialog"),
   quickAddAlimentForm: document.getElementById("quickAddAlimentForm"),
@@ -858,6 +868,187 @@ function renderMenuPreview() {
   `;
 }
 
+// ── Courses tab ──────────────────────────────────────────────────────────────
+
+function renderCoursesRecipeOptions() {
+  fillSelectWithRecipes(refs.coursesRecipeSelect, state.recipes, "Sélectionner une recette");
+}
+
+function addCoursesEntry() {
+  const recipeId = refs.coursesRecipeSelect.value;
+  const servings = Number(refs.coursesServingsInput.value);
+
+  if (!recipeId) {
+    setStatus("Sélectionne une recette pour la liste de courses.", true);
+    return;
+  }
+
+  if (Number.isNaN(servings) || servings <= 0) {
+    setStatus("Le nombre de personnes doit être supérieur à 0.", true);
+    return;
+  }
+
+  const recipe = getRecipeById(recipeId);
+  if (!recipe) {
+    setStatus("Recette introuvable.", true);
+    return;
+  }
+
+  state.coursesEntries.push({
+    id: `courses-${Date.now()}`,
+    recipeId,
+    servings
+  });
+
+  renderCoursesTab();
+  setStatus(`"${recipe.name}" ajoutée à la liste de courses.`);
+}
+
+function removeCoursesEntry(entryId) {
+  const index = state.coursesEntries.findIndex((entry) => entry.id === entryId);
+  if (index === -1) return;
+  state.coursesEntries.splice(index, 1);
+  renderCoursesTab();
+}
+
+function clearCoursesList() {
+  state.coursesEntries = [];
+  renderCoursesTab();
+}
+
+function buildShoppingList() {
+  // Map: "normalizedName|unit" -> { name, unit, totalQuantity }
+  const map = new Map();
+
+  state.coursesEntries.forEach((entry) => {
+    const recipe = getRecipeById(entry.recipeId);
+    if (!recipe) return;
+
+    const scale = entry.servings / (recipe.baseServings || BASE_SERVINGS);
+
+    recipe.ingredients.forEach((ingredient) => {
+      const scaledQty = ingredient.quantity * scale;
+      const key = `${normalizeLookupKey(ingredient.name)}|${ingredient.unit || ""}`;
+
+      if (map.has(key)) {
+        map.get(key).totalQuantity += scaledQty;
+      } else {
+        map.set(key, {
+          name: ingredient.name,
+          unit: ingredient.unit || "",
+          totalQuantity: scaledQty
+        });
+      }
+    });
+  });
+
+  return Array.from(map.values()).sort((a, b) => a.name.localeCompare(b.name, "fr"));
+}
+
+function renderCoursesTab() {
+  if (!refs.coursesRecipesList || !refs.shoppingList) return;
+
+  renderCoursesRecipeOptions();
+
+  // Render selected recipes list
+  refs.coursesRecipesList.innerHTML = "";
+
+  if (state.coursesEntries.length === 0) {
+    refs.coursesRecipesList.innerHTML = '<p class="empty-state">Aucune recette sélectionnée.</p>';
+  } else {
+    state.coursesEntries.forEach((entry) => {
+      const recipe = getRecipeById(entry.recipeId);
+      if (!recipe) return;
+
+      const row = document.createElement("div");
+      row.className = "day-entry-row";
+      row.innerHTML = `
+        <div>
+          <strong>${recipe.name}</strong>
+          <div class="day-entry-meta">${entry.servings} personne(s)</div>
+        </div>
+        <button class="btn btn-small btn-danger" type="button">Retirer</button>
+      `;
+      row.querySelector("button").addEventListener("click", () => removeCoursesEntry(entry.id));
+      refs.coursesRecipesList.appendChild(row);
+    });
+  }
+
+  // Render shopping list
+  refs.shoppingList.innerHTML = "";
+
+  if (state.coursesEntries.length === 0) {
+    refs.shoppingList.innerHTML = '<p class="empty-state">Ajoute des recettes pour générer la liste de courses.</p>';
+    return;
+  }
+
+  const items = buildShoppingList();
+
+  if (items.length === 0) {
+    refs.shoppingList.innerHTML = '<p class="empty-state">Aucun ingrédient trouvé.</p>';
+    return;
+  }
+
+  const list = document.createElement("ul");
+  list.className = "shopping-list";
+
+  items.forEach((item) => {
+    const li = document.createElement("li");
+    li.className = "shopping-item";
+    const unitPart = item.unit ? ` ${item.unit}` : "";
+    li.innerHTML = `
+      <label>
+        <input type="checkbox" />
+        <span><strong>${formatQuantity(item.totalQuantity)}${unitPart}</strong> — ${item.name}</span>
+      </label>
+    `;
+    list.appendChild(li);
+  });
+
+  refs.shoppingList.appendChild(list);
+}
+
+function printShoppingList() {
+  const items = buildShoppingList();
+  if (items.length === 0) {
+    setStatus("La liste de courses est vide.", true);
+    return;
+  }
+
+  const recipeNames = state.coursesEntries
+    .map((e) => {
+      const r = getRecipeById(e.recipeId);
+      return r ? `${r.name} (${e.servings} pers.)` : "";
+    })
+    .filter(Boolean)
+    .join(", ");
+
+  const lines = items
+    .map((item) => {
+      const unitPart = item.unit ? ` ${item.unit}` : "";
+      return `<li>${formatQuantity(item.totalQuantity)}${unitPart} — ${item.name}</li>`;
+    })
+    .join("");
+
+  const win = window.open("", "_blank");
+  win.document.write(`<!DOCTYPE html><html lang="fr"><head>
+    <meta charset="UTF-8" /><title>Liste de courses</title>
+    <style>
+      body { font-family: sans-serif; padding: 2rem; }
+      h1 { font-size: 1.4rem; }
+      p { color: #555; font-size: 0.9rem; margin-bottom: 1rem; }
+      ul { list-style: none; padding: 0; }
+      li { padding: 0.3rem 0; border-bottom: 1px solid #eee; }
+    </style>
+  </head><body>
+    <h1>Liste de courses</h1>
+    <p>${recipeNames}</p>
+    <ul>${lines}</ul>
+  </body></html>`);
+  win.document.close();
+  win.print();
+}
+
 function updateScaledIngredientQuantities(recipe) {
   const ingredientsList = refs.recipeDetail.querySelector(".ingredients-list");
   if (!ingredientsList) {
@@ -1130,6 +1321,7 @@ function renderAll() {
   renderDayEntries();
   renderMenuOptions();
   renderMenuPreview();
+  renderCoursesTab();
 }
 
 function createIngredientRow(data = { name: "", quantity: "", unit: "", alimentId: "", measureId: "", measureLabel: "" }) {
@@ -1690,6 +1882,11 @@ function bindEvents() {
     // Quick add aliment events
     refs.cancelQuickAddAlimentBtn.addEventListener("click", closeAddAlimentQuickDialog);
     refs.quickAddAlimentForm.addEventListener("submit", handleAddAlimentQuickSubmit);
+
+  // Courses events
+  refs.addCoursesEntryBtn.addEventListener("click", addCoursesEntry);
+  refs.clearCoursesBtn.addEventListener("click", clearCoursesList);
+  refs.printShoppingListBtn.addEventListener("click", printShoppingList);
 }
 
 function switchTab(tabName) {
@@ -1703,17 +1900,20 @@ function switchTab(tabName) {
   const showKcal = tabName === "kcal";
   const showDay = tabName === "day";
   const showMenu = tabName === "menu";
+  const showCourses = tabName === "courses";
 
   refs.recipesTab.classList.toggle("hidden", !showRecipes);
   refs.kcalTab.classList.toggle("hidden", !showKcal);
   refs.dayTab.classList.toggle("hidden", !showDay);
   refs.menuTab.classList.toggle("hidden", !showMenu);
+  refs.coursesTab.classList.toggle("hidden", !showCourses);
 
   // Keep native hidden attribute in sync for environments where CSS may fail/cached stale.
   refs.recipesTab.hidden = !showRecipes;
   refs.kcalTab.hidden = !showKcal;
   refs.dayTab.hidden = !showDay;
   refs.menuTab.hidden = !showMenu;
+  refs.coursesTab.hidden = !showCourses;
 
   state.currentTab = tabName;
 

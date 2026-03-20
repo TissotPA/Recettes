@@ -599,6 +599,61 @@ ol {
   gap: 0.5rem;
 }
 
+/* ── Courses tab ──────────────────────────────────────────────────────────── */
+
+.courses-add-grid {
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  margin-bottom: 1rem;
+  align-items: end;
+}
+
+.shopping-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.shopping-item {
+  border: 1px solid #e6e9f1;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.6);
+  padding: 0.55rem 0.8rem;
+  transition: background 0.15s ease;
+}
+
+.shopping-item label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  margin: 0;
+  font-weight: 400;
+}
+
+.shopping-item input[type="checkbox"] {
+  width: 1.15rem;
+  height: 1.15rem;
+  accent-color: var(--accent);
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.shopping-item:has(input:checked) {
+  opacity: 0.5;
+}
+
+.shopping-item:has(input:checked) span {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+  display: grid;
+  gap: 0.5rem;
+}
+
 .checkbox-inline {
   display: flex;
   align-items: center;

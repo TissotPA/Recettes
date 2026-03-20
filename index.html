@@ -48,6 +48,7 @@
       <button class="tab-btn" data-tab="kcal">KCAL</button>
       <button class="tab-btn" data-tab="day">Journée</button>
       <button class="tab-btn" data-tab="menu">Menu</button>
+      <button class="tab-btn" data-tab="courses">Courses</button>
     </nav>
 
     <section class="content-grid" id="recipesTab">
@@ -153,6 +154,40 @@
 
         <h3>Repas de la journée</h3>
         <div id="dayEntriesList" class="day-entries-list"></div>
+      </section>
+    </section>
+
+    <section class="content-grid hidden" id="coursesTab" hidden>
+      <section class="panel">
+        <div class="inline-title-row">
+          <h2>Courses</h2>
+          <button id="clearCoursesBtn" class="btn btn-small" type="button">Vider la liste</button>
+        </div>
+
+        <div class="courses-add-grid">
+          <label>
+            Recette
+            <select id="coursesRecipeSelect">
+              <option value="">Sélectionner une recette</option>
+            </select>
+          </label>
+
+          <label>
+            Nombre de personnes
+            <input id="coursesServingsInput" type="number" min="1" step="1" value="4" />
+          </label>
+
+          <button id="addCoursesEntryBtn" class="btn btn-primary" type="button">Ajouter</button>
+        </div>
+
+        <h3>Recettes sélectionnées</h3>
+        <div id="coursesRecipesList" class="day-entries-list"></div>
+
+        <div class="inline-title-row" style="margin-top: 1.2rem;">
+          <h3>Liste de courses</h3>
+          <button id="printShoppingListBtn" class="btn btn-small" type="button">🖨 Imprimer</button>
+        </div>
+        <div id="shoppingList"></div>
       </section>
     </section>
 
