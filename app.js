@@ -2153,35 +2153,47 @@ async function saveAlimentToGitHub(forcePrompt = false) {
       { headers: { Authorization: `Bearer ${pat}`, Accept: "application/vnd.github+json" } }
     );
 
+    if (shaRes.status === 401) {
+      clearPat();
+      setStatus("Clé invalide. Clique à nouveau sur Enregistrer pour réessayer.", true);
+      return;
+    }
+
+    if (!shaRes.ok && shaRes.status !== 404) {
+      throw new Error(`Lecture impossible (code ${shaRes.status})`);
+    }
+
     let sha = null;
     if (shaRes.ok) {
       const shaData = await shaRes.json();
       sha = shaData.sha;
     }
 
-    const content = btoa(JSON.stringify(state.aliments, null, 2));
-
-    const putOptions = {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${pat}`,
-        Accept: "application/vnd.github+json"
-      },
-      body: JSON.stringify({
-        message: `Mise à jour des aliments - ${new Date().toLocaleString("fr-FR")}`,
-        content,
-        ...(sha && { sha })
-      })
-    };
+    const jsonStr = JSON.stringify(state.aliments, null, 2) + "\n";
+    const content = btoa(unescape(encodeURIComponent(jsonStr)));
+    const now = new Date().toLocaleString("fr-FR");
 
     const putRes = await fetch(
-      `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_ALIMENTS_FILE}?ref=${GITHUB_BRANCH}`,
-      putOptions
+      `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_ALIMENTS_FILE}`,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${pat}`,
+          Accept: "application/vnd.github+json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          message: `${now} - Modification de aliments.json`,
+          content,
+          ...(sha && { sha }),
+          branch: GITHUB_BRANCH
+        })
+      }
     );
 
     if (putRes.status === 401) {
       clearPat();
-      setStatus("Clé invalide. Réessayez.", true);
+      setStatus("Clé invalide. Clique à nouveau sur Enregistrer pour réessayer.", true);
       return;
     }
 
@@ -2196,6 +2208,103 @@ async function saveAlimentToGitHub(forcePrompt = false) {
   }
 }
 
+async function githubRequest(path, pat, options = {}) {
+  const response = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}${path}`, {
+    ...options,
+    headers: {
+      Authorization: `Bearer ${pat}`,
+      Accept: "application/vnd.github+json",
+      ...(options.headers || {})
+    }
+  });
+
+  if (response.status === 401) {
+    clearPat();
+    throw new Error("Clé invalide. Clique à nouveau sur Enregistrer pour réessayer.");
+  }
+
+  if (!response.ok) {
+    throw new Error(`Erreur GitHub (code ${response.status})`);
+  }
+
+  return response;
+}
+
+async function saveDataFilesToGitHub(files, pat) {
+  const refResponse = await githubRequest(`/git/ref/heads/${GITHUB_BRANCH}`, pat);
+  const refData = await refResponse.json();
+  const parentCommitSha = refData.object.sha;
+
+  const commitResponse = await githubRequest(`/git/commits/${parentCommitSha}`, pat);
+  const commitData = await commitResponse.json();
+  const baseTreeSha = commitData.tree.sha;
+
+  const treeEntries = [];
+
+  for (const file of files) {
+    const blobResponse = await githubRequest("/git/blobs", pat, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        content: `${JSON.stringify(file.content, null, 2)}\n`,
+        encoding: "utf-8"
+      })
+    });
+
+    const blobData = await blobResponse.json();
+    treeEntries.push({
+      path: file.path,
+      mode: "100644",
+      type: "blob",
+      sha: blobData.sha
+    });
+  }
+
+  const treeResponse = await githubRequest("/git/trees", pat, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      base_tree: baseTreeSha,
+      tree: treeEntries
+    })
+  });
+
+  const treeData = await treeResponse.json();
+  const now = new Date().toLocaleString("fr-FR");
+  const label = files.map((file) => file.path).join(" + ");
+
+  const newCommitResponse = await githubRequest("/git/commits", pat, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      message: `${now} - Modification de ${label}`,
+      tree: treeData.sha,
+      parents: [parentCommitSha]
+    })
+  });
+
+  const newCommitData = await newCommitResponse.json();
+
+  await githubRequest(`/git/refs/heads/${GITHUB_BRANCH}`, pat, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      sha: newCommitData.sha,
+      force: false
+    })
+  });
+
+  return newCommitData.sha;
+}
+
 async function saveAllToGitHub(forcePrompt = false) {
   const hasRecipes = state.recipes.length > 0;
   const hasAliments = state.aliments.length > 0;
@@ -2205,16 +2314,46 @@ async function saveAllToGitHub(forcePrompt = false) {
     return;
   }
 
+  let pat = forcePrompt ? "" : getStoredPat();
+
+  if (!pat) {
+    try {
+      pat = await promptPat();
+    } catch (err) {
+      setStatus(err.message, true);
+      return;
+    }
+  }
+
+  const files = [];
+
   if (hasRecipes) {
-    await saveRecipesToGitHub(forcePrompt);
+    files.push({ path: GITHUB_FILE, content: state.recipes });
   }
 
   if (hasAliments) {
-    await saveAlimentToGitHub(false);
+    files.push({ path: GITHUB_ALIMENTS_FILE, content: state.aliments });
   }
 
-  if (hasRecipes && hasAliments) {
-    setStatus(`Recettes (${state.recipes.length}) et aliments (${state.aliments.length}) enregistrés.`);
+  setStatus("Enregistrement en cours…");
+
+  try {
+    await saveDataFilesToGitHub(files, pat);
+    storePat(pat);
+
+    if (hasRecipes && hasAliments) {
+      setStatus(`Recettes (${state.recipes.length}) et aliments (${state.aliments.length}) enregistrés en un seul commit.`);
+      return;
+    }
+
+    if (hasRecipes) {
+      setStatus(`${state.recipes.length} recette(s) enregistrée(s) en un seul commit.`);
+      return;
+    }
+
+    setStatus(`${state.aliments.length} aliment(s) enregistré(s) en un seul commit.`);
+  } catch (error) {
+    setStatus(`Erreur : ${error.message}`, true);
   }
 }
 
