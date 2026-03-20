@@ -727,7 +727,7 @@ ol {
 }
 
 #addAlimentDialog {
-  width: min(600px, 100% - 1rem);
+  width: min(980px, 100% - 1rem);
 }
 
 @media (max-width: 900px) {
