@@ -616,6 +616,23 @@
     "unit": "pièce"
   },
   {
+    "id": "aliment-1774082011565",
+    "name": "Comté",
+    "measures": [
+      {
+        "id": "aliment-1774082011565-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 420
+      }
+    ],
+    "isDrink": false,
+    "kcal": 420,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
     "id": "aliment-73",
     "name": "Concombre",
     "measures": [
@@ -1907,6 +1924,23 @@
     "unit": "pièce"
   },
   {
+    "id": "aliment-1774081956461",
+    "name": "pâte feuilleté",
+    "measures": [
+      {
+        "id": "aliment-1774081956461-measure-1-piece",
+        "label": "1 pièce",
+        "quantity": 1,
+        "unit": "pièce",
+        "kcal": 396
+      }
+    ],
+    "isDrink": false,
+    "kcal": 396,
+    "quantity": 1,
+    "unit": "pièce"
+  },
+  {
     "id": "aliment-48",
     "name": "Pâtes",
     "measures": [
@@ -1956,6 +1990,23 @@
     "kcal": 400,
     "quantity": 100,
     "unit": "g"
+  },
+  {
+    "id": "aliment-1774082054169",
+    "name": "Persil",
+    "measures": [
+      {
+        "id": "aliment-1774082054169-measure-1-piece",
+        "label": "1 pièce",
+        "quantity": 1,
+        "unit": "pièce",
+        "kcal": 5
+      }
+    ],
+    "isDrink": false,
+    "kcal": 5,
+    "quantity": 1,
+    "unit": "pièce"
   },
   {
     "id": "aliment-90",
