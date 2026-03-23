@@ -372,28 +372,100 @@
         "alimentId": "aliment-1774081956461",
         "measureId": "aliment-1774081956461-measure-1-piece",
         "measureLabel": "1 pièce",
-        "name": "pâte feuilleté",
         "quantity": 1,
         "unit": "pièce",
-        "kcal": 396
+        "kcal": 396,
+        "name": "pâte feuilleté"
       },
       {
         "alimentId": "aliment-40",
         "measureId": "aliment-40-measure-100-g",
         "measureLabel": "100 g",
-        "name": "Thon",
         "quantity": 230,
         "unit": "g",
-        "kcal": 331
+        "kcal": 331,
+        "name": "Thon"
       },
       {
         "alimentId": "aliment-1774082011565",
         "measureId": "aliment-1774082011565-measure-100-g",
         "measureLabel": "100 g",
-        "name": "Comté",
         "quantity": 100,
         "unit": "g",
-        "kcal": 420
+        "kcal": 420,
+        "name": "Comté"
+      },
+      {
+        "alimentId": "aliment-9",
+        "measureId": "aliment-9-measure-100-g",
+        "measureLabel": "100 g",
+        "quantity": 200,
+        "unit": "g",
+        "kcal": 680,
+        "name": "Crème fraîche"
+      },
+      {
+        "alimentId": "aliment-1774082054169",
+        "measureId": "aliment-1774082054169-measure-1-piece",
+        "measureLabel": "1 pièce",
+        "quantity": 1,
+        "unit": "pièce",
+        "kcal": 5,
+        "name": "Persil"
+      },
+      {
+        "alimentId": "aliment-14",
+        "measureId": "aliment-14-measure-100-g",
+        "measureLabel": "100 g",
+        "quantity": 200,
+        "unit": "g",
+        "kcal": 560,
+        "name": "Mozzarella"
+      }
+    ],
+    "steps": [
+      "Couper la pâte feuilleté en quatre",
+      "Ajouter une tranche de comté sur chaque part",
+      "Ajouter le mélange thon - crème - persil",
+      "Saupoudrer de mozzarella râpée",
+      "Replier les bords de la pâte",
+      "Faire cuire 25 minutes au four à 200°C"
+    ],
+    "drinks": [],
+    "_fridgeMatchCount": 0
+  },
+  {
+    "id": "recipe-1774279722553",
+    "name": "Fondue de poireaux",
+    "category": "Plat",
+    "baseServings": 4,
+    "ingredients": [
+      {
+        "alimentId": "aliment-80",
+        "measureId": "aliment-80-measure-100-g",
+        "measureLabel": "100 g",
+        "name": "Poireau",
+        "quantity": 500,
+        "unit": "g",
+        "kcal": 155
+      },
+      {
+        "alimentId": "aliment-1774279376370",
+        "measureId": "aliment-1774279376370-measure-100-g",
+        "measureLabel": "100 g",
+        "name": "Moutarde",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 152
+      },
+      {
+        "alimentId": "aliment-48",
+        "measureId": "aliment-48-measure-100-g",
+        "measureLabel": "100 g",
+        "name": "Pâtes",
+        "quantity": 320,
+        "unit": "g",
+        "kcal": 419
       },
       {
         "alimentId": "aliment-9",
@@ -405,31 +477,22 @@
         "kcal": 680
       },
       {
-        "alimentId": "aliment-1774082054169",
-        "measureId": "aliment-1774082054169-measure-1-piece",
-        "measureLabel": "1 pièce",
-        "name": "Persil",
-        "quantity": 1,
-        "unit": "pièce",
-        "kcal": 5
-      },
-      {
-        "alimentId": "aliment-14",
-        "measureId": "aliment-14-measure-100-g",
+        "alimentId": "aliment-27",
+        "measureId": "aliment-27-measure-100-g",
         "measureLabel": "100 g",
-        "name": "Mozzarella",
-        "quantity": 200,
+        "name": "Poulet blanc",
+        "quantity": 500,
         "unit": "g",
-        "kcal": 560
+        "kcal": 825
       }
     ],
     "steps": [
-      "Couper la pâte feuilleté en quatre",
-      "Ajouter une tranche de comté sur chaque part",
-      "Ajouter le mélange thon - crème - persil",
-      "Saupoudrer de mozzarella râpée",
-      "Replier les bords de la pâte",
-      "Faire cuire 25 minutes au four à 200°C"
+      "Faire cuire les pâtes dans une grande quantité d'eau salée",
+      "Faire revenir le poulet avec une cuillère à café d'huile d'olive et débarasser",
+      "Découper les poireaux en fines lamelles",
+      "Avec un peu d'eau faure, revenir les poireaux dans une poêle",
+      "Ajouter la crème et la moutarde, bien mélanger avec une louche d'eau de cuisson des pâtes",
+      "Ajouter les pâtes et le poulet pour lier la sauce"
     ],
     "drinks": [],
     "_fridgeMatchCount": 0

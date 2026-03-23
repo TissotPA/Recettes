@@ -1529,6 +1529,23 @@
     "unit": "g"
   },
   {
+    "id": "aliment-1774279376370",
+    "name": "Moutarde",
+    "measures": [
+      {
+        "id": "aliment-1774279376370-measure-100-g",
+        "label": "100 g",
+        "quantity": 100,
+        "unit": "g",
+        "kcal": 152
+      }
+    ],
+    "isDrink": false,
+    "kcal": 152,
+    "quantity": 100,
+    "unit": "g"
+  },
+  {
     "id": "aliment-14",
     "name": "Mozzarella",
     "measures": [
